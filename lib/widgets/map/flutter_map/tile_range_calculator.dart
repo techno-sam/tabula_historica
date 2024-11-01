@@ -79,26 +79,21 @@ class TileRangeCalculator {
   }) {
     return DiscreteTileRange.fromPixelBounds(
       lod: tileLOD,
-      tileSize: tileSize,
+      tileSize: tileSize * lodCalculator.getAdjustedScale(camera.zoom, tileLOD),
       pixelBounds: _calculatePixelBounds(
         camera,
-        camera.blockPosCenter,
-        camera.zoom,
         tileLOD,
       ),
     );
   }
 
   Bounds<double> _calculatePixelBounds(
-      MapCamera camera,
-      Point<double> center,
-      double viewingZoom,
-      int tileLOD,
-      ) {
-    final scale = lodCalculator.getAdjustedScale(viewingZoom, tileLOD);
-    final pixelCenter = camera.project(center, tileLOD, lodCalculator).floor().toDoublePoint();
-    final halfSize = camera.size.toPoint() / (scale * 2);
+    MapCamera camera,
+    int tileLOD,
+  ) {
+    final pixelCenter = const Point(0.0, 0.0) - camera.getOffset(const Point(0, 0)).floor().toDoublePoint();
+    final halfSize = camera.size.toPoint() / 2;
 
-    return Bounds(pixelCenter - halfSize, pixelCenter + halfSize);
+    return Bounds(pixelCenter, pixelCenter + halfSize*2);
   }
 }

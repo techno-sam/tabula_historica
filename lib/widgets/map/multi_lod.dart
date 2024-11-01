@@ -41,6 +41,8 @@ import 'flutter_map/tile_builder.dart';
 import 'flutter_map/tile_error_evict_callback.dart';
 import 'flutter_map/tile_update_event.dart';
 
+const double? debugPadding = null;
+
 class MultiLODMap extends StatelessWidget {
   const MultiLODMap({super.key});
 
@@ -66,10 +68,25 @@ class MultiLODMap extends StatelessWidget {
 
         return Center(
           child: CameraProvider(
+            key: const ValueKey("camera_provider"),
             child: _CameraController(
-              child: _MultiLODMap(
-                lods: lods,
-                tileBuilder: tile_builder.coordinateAndLoadingTimeDebugTileBuilder,
+              child: Stack(
+                children: [
+                  if (debugPadding != null)
+                    Padding(
+                        padding: EdgeInsets.all(debugPadding!),
+                        child: Container(
+                            color: Colors.black.withOpacity(0.5),
+                            child: const SizedBox.expand()
+                        )
+                    ),
+                  _MultiLODMap(
+                    lods: lods,
+                    tileBuilder: tile_builder.coordinateAndLoadingTimeDebugTileBuilder,
+                    errorImage: const NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
+                    evictErrorTileStrategy: EvictErrorTileStrategy.notVisibleRespectMargin,
+                  ),
+                ]
               ),
             )
           ),
@@ -110,11 +127,11 @@ class _CameraProviderState extends SingleChildState<CameraProvider> {
           _camera = MapCamera(
             blockPosCenter: const Point(0, 0),
             zoom: log2(3/4),
-            size: Size(constraints.maxWidth, constraints.maxHeight)
+            size: Size(constraints.maxWidth - (debugPadding??0)*2, constraints.maxHeight - (debugPadding??0)*2)
           );
           _initialized = true;
         } else {
-          _camera.size = Size(constraints.maxWidth, constraints.maxHeight);
+          _camera.size = Size(constraints.maxWidth - (debugPadding??0)*2, constraints.maxHeight - (debugPadding??0)*2);
         }
 
         return ChangeNotifierProvider.value(value: _camera, child: child);
@@ -125,33 +142,45 @@ class _CameraProviderState extends SingleChildState<CameraProvider> {
 
 class _CameraController extends SingleChildStatelessWidget {
 
-  const _CameraController({super.key, super.child});
+  final int tileSize;
+
+  const _CameraController({
+    super.key,
+    super.child,
+    this.tileSize = 256,
+  });
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
     final camera = MapCamera.of(context, listen: false);
 
     void _applyScaleChange(double dScale, Offset center, Size windowSize) {
-      double uiInteractionScale = pow(2, camera.zoom).toDouble();
+      
+      if (debugPadding != null) {
+        center = Offset(center.dx - debugPadding!, center.dy - debugPadding!);
+      }
 
       double centerX = camera.blockPosCenter.x;
       double centerZ = camera.blockPosCenter.y;
       double scale = camera.zoom;
+      double uiInteractionScale = pow(2, scale).toDouble();
 
       double xUnderCursor = centerX + (center.dx - windowSize.width / 2) /
-          (256 * uiInteractionScale); // todo dynamic tile size
+          (tileSize * uiInteractionScale);
       double zUnderCursor = centerZ + (center.dy - windowSize.height / 2) /
-          (256 * uiInteractionScale); // todo dynamic tile size
+          (tileSize * uiInteractionScale);
 
       scale += dScale;
-      scale = scale.clamp(log2(1 / 16), log2(64));
+      scale = scale.clamp(log2(1 / 8), log2(128));
+
+      uiInteractionScale = pow(2, scale).toDouble();
 
       //print("Scale: $_scale");
 
       centerX = xUnderCursor - (center.dx - windowSize.width / 2) /
-          (256 * uiInteractionScale); // todo dynamic tile size
+          (tileSize * uiInteractionScale);
       centerZ = zUnderCursor - (center.dy - windowSize.height / 2) /
-          (256 * uiInteractionScale); // todo dynamic tile size
+          (tileSize * uiInteractionScale);
 
       camera.blockPosCenter = Point(centerX, centerZ);
       camera.zoom = scale;
@@ -162,15 +191,15 @@ class _CameraController extends SingleChildStatelessWidget {
         if (details.down) {
           double unadjustedScale = pow(2, camera.zoom).toDouble();
           Point<double> offset = Point(
-            details.delta.dx / (256 * unadjustedScale), // todo dynamic tile size
-            details.delta.dy / (256 * unadjustedScale) // todo dynamic tile size
+            details.delta.dx / (tileSize * unadjustedScale),
+            details.delta.dy / (tileSize * unadjustedScale)
           );
           camera.blockPosCenter = camera.blockPosCenter - offset;
         }
       },
       onPointerSignal: (details) {
         if (details is PointerScrollEvent) {
-          _applyScaleChange(-details.scrollDelta.dy / 300, details.position, camera.size);
+          _applyScaleChange(-details.scrollDelta.dy / 150, details.position, camera.size);
         }
       },
       onPointerPanZoomUpdate: (details) {
@@ -193,13 +222,8 @@ class LODCalculator {
   factory LODCalculator({required backend.LODs lods}) {
     return LODCalculator._(minLOD: lods.minLOD, maxLOD: lods.maxLOD);
   }
-  
-  double getAdjustedScale(double scale, int tileLOD) {
-    int converted = maxLOD - (tileLOD - minLOD);
-    return pow(2, scale - converted).toDouble();
-  }
 
-  double getAdjustedFromLODScale(double scale, int lodScale) {
+  double getAdjustedScale(double scale, int lodScale) {
     int clamped = lodScale.clamp(minLOD, maxLOD);
     return pow(2, scale - clamped).toDouble();
   }
@@ -207,13 +231,8 @@ class LODCalculator {
   int getLodScale(double scale) => (scale + 0.1).round().clamp(minLOD, maxLOD);
 
   (double, int) getLod(double scale) {
-    int lodScale = getLodScale(scale);
-    //lodScale = maxLOD;
-    int lod = (maxLOD - lodScale) + minLOD;
-    // lod - minLod = maxLod - lodScale
-    // lodScale + lod - minLod = maxLod
-    // lodScale = maxLod + minLod - lod
-    double adjustedScale = getAdjustedFromLODScale(scale, lodScale);
+    int lod = getLodScale(scale);
+    double adjustedScale = getAdjustedScale(scale, lod);
     return (adjustedScale, lod);
   }
 }
@@ -300,8 +319,6 @@ class _MultiLODMapState extends State<_MultiLODMap> {
 
   StreamSubscription<TileUpdateEvent>? _tileUpdateSubscription;
 
-  double get _uiInteractionScale => pow(2, MapCamera.of(context, listen: false).zoom).toDouble();
-
   @override
   void initState() {
     super.initState();
@@ -345,11 +362,16 @@ class _MultiLODMapState extends State<_MultiLODMap> {
     final camera = MapCamera.of(context);
 
     final (double adjustedScale, int lod) = lodCalculator.getLod(camera.zoom);
-    final double unadjustedScale = _uiInteractionScale; // fixme make this properly camera-based
+    final double unadjustedScale = pow(2, camera.zoom).toDouble();
 
+    var projected = camera.getOffset(const Point(0, 0));
     // transform so that the (_centerX, _centerZ) block position is in the center of the screen, taking _scale into account
-    final double offsetX = camera.size.width / 2 - camera.blockPosCenter.x * widget.tileSize * unadjustedScale;
-    final double offsetY = camera.size.height / 2 - camera.blockPosCenter.y * widget.tileSize * unadjustedScale;
+    final double offsetX = projected.x + (debugPadding??0);//camera.size.width / 2 - camera.blockPosCenter.x * widget.tileSize * unadjustedScale;
+    final double offsetY = projected.y + (debugPadding??0);//camera.size.height / 2 - camera.blockPosCenter.y * widget.tileSize * unadjustedScale;
+
+    //print("Camera: ${camera.blockPosCenter}, ${camera.zoom}");
+    //print("Size: ${camera.size}");
+    //print("Projected: $projected");
 
     final visibleTileRange = _tileRangeCalculator.calculate(
         camera: camera, tileLOD: lod);
@@ -397,18 +419,26 @@ class _MultiLODMapState extends State<_MultiLODMap> {
         ))
         .toList();
 
+    if (tiles.isNotEmpty) {
+      int minimalFoundLOD = tiles.map((t) => t.tileImage.coordinates.lod)
+          .reduce(min);
+      int maximalFoundLOD = tiles.map((t) => t.tileImage.coordinates.lod)
+          .reduce(max);
+
+      print("LOD: $lod, $minimalFoundLOD, $maximalFoundLOD");
+    }
+
     // Sort in render order. In reverse:
     //   1. Tiles at the current zoom.
     //   2. Tiles at the current zoom +/- 1.
     //   3. Tiles at the current zoom +/- 2.
     //   4. ...etc
     int renderOrder(Tile a, Tile b) {
-      final (lodA, lodB) = (a.tileImage.coordinates.lod, b.tileImage.coordinates
-          .lod);
+      final (lodA, lodB) = (a.tileImage.coordinates.lod, b.tileImage.coordinates.lod);
       final cmp = (lodB - lod).abs().compareTo((lodA - lod).abs());
       if (cmp == 0) {
         // When compare parent/child tiles of equal distance, prefer higher res images.
-        return lodB.compareTo(lodA);
+        return lodA.compareTo(lodB);
       }
       return cmp;
     }
@@ -464,8 +494,7 @@ class _MultiLODMapState extends State<_MultiLODMap> {
 
   /// Load new tiles in the visible bounds and prune those outside.
   void _loadAndPruneInVisibleBounds(MapCamera camera) {
-    final tileZoom = camera.zoom;
-    var tileLOD = lodCalculator.getLod(tileZoom).$2;
+    var tileLOD = lodCalculator.getLod(camera.zoom).$2;
     final visibleTileRange = _tileRangeCalculator.calculate(
       camera: camera,
       tileLOD: tileLOD,

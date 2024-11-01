@@ -115,7 +115,7 @@ final class TileImageView {
         positionCoordinates.x,
         positionCoordinates.y,
         positionCoordinates.lod,
-        positionCoordinates.lod + 5,
+        positionCoordinates.lod - 5,
       );
       if (!retainedAncestor) {
         _retainChildren(
@@ -123,7 +123,7 @@ final class TileImageView {
           positionCoordinates.x,
           positionCoordinates.y,
           positionCoordinates.lod,
-          positionCoordinates.lod - 2,
+          positionCoordinates.lod + 2,
         );
       }
     }
@@ -142,15 +142,14 @@ final class TileImageView {
 
       retain.add(positionCoordinates);
 
-      final TileImage? tile =
-      _tileImages[positionCoordinates];
+      final TileImage? tile = _tileImages[positionCoordinates];
       if (tile == null || !tile.readyToDisplay) {
         final retainedAncestor = _retainAncestor(
           retain,
           positionCoordinates.x,
           positionCoordinates.y,
           positionCoordinates.lod,
-          positionCoordinates.lod + 5,
+          positionCoordinates.lod - 5,
         );
         if (!retainedAncestor) {
           _retainChildren(
@@ -158,7 +157,7 @@ final class TileImageView {
             positionCoordinates.x,
             positionCoordinates.y,
             positionCoordinates.lod,
-            positionCoordinates.lod - 2,
+            positionCoordinates.lod + 2,
           );
         }
       }
@@ -174,11 +173,11 @@ final class TileImageView {
       int x,
       int y,
       int lod,
-      int maxLod,
+      int minLod,
       ) {
     final x2 = (x / 2).floor();
     final y2 = (y / 2).floor();
-    final lod2 = lod + 1;
+    final lod2 = lod - 1;
     final coords2 = TileCoordinates(x: x2, y: y2, lod: lod2);
 
     final tile = _tileImages[coords2];
@@ -191,8 +190,8 @@ final class TileImageView {
       }
     }
 
-    if (lod2 < maxLod) {
-      return _retainAncestor(retain, x2, y2, lod2, maxLod);
+    if (lod2 > minLod) {
+      return _retainAncestor(retain, x2, y2, lod2, minLod);
     }
 
     return false;
@@ -205,10 +204,10 @@ final class TileImageView {
       int x,
       int y,
       int lod,
-      int minLod,
+      int maxLod,
       ) {
     for (final (i, j) in const [(0, 0), (0, 1), (1, 0), (1, 1)]) {
-      final lod2 = lod - 1;
+      final lod2 = lod + 1;
       final coords = TileCoordinates(x: 2 * x + i, y: 2 * y + j, lod: lod2);
 
       final tile = _tileImages[coords];
@@ -221,8 +220,8 @@ final class TileImageView {
         }
       }
 
-      if (lod2 > minLod) {
-        _retainChildren(retain, i, j, lod2, minLod);
+      if (lod2 < maxLod) {
+        _retainChildren(retain, i, j, lod2, maxLod);
       }
     }
   }

@@ -163,12 +163,12 @@ class DiscreteTileRange extends TileRange {
   }
 
   /// Check if a [Point] is inside of the bounds of the [DiscreteTileRange].
-  bool contains(Point<int> point) {
+  bool contains(TileCoordinates point) {
     bool containsCoordinate(int value, int min, int max) {
       return value >= min && value <= max;
     }
 
-    return containsCoordinate(point.x, min.x, max.x) &&
+    return point.lod == lod && containsCoordinate(point.x, min.x, max.x) &&
         containsCoordinate(point.y, min.y, max.y);
   }
 

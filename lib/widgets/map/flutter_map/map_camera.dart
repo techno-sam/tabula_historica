@@ -96,9 +96,15 @@ class MapCamera extends ChangeNotifier {
     notifyListeners();
   }
 
-  Point<double> project(Point<double> blockPos, int tileLOD, LODCalculator calculator) {
-    Point<double> offset = blockPos - blockPosCenter;
-    return (size.toPoint() / 2) + (offset * calculator.getAdjustedScale(zoom, tileLOD));
+  Point<double> getOffset(Point<double> blockPos) {
+    Point<double> offset = blockPosCenter - blockPos;
+    return (size.toPoint() / 2) - (offset * pow(2, zoom).toDouble() * 256);
+  }
+
+  Point<double> getBlockPos(Point<double> screenSpace) {
+    Point<double> offset = (size.toPoint() / 2) - screenSpace;
+    Point<double> blockPos = blockPosCenter - (offset / (pow(2, zoom).toDouble() * 256));
+    return blockPos;
   }
 
   static MapCamera of(BuildContext context, {bool listen = true}) {

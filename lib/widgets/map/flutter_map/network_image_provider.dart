@@ -118,8 +118,10 @@ class MapNetworkImageProvider extends ImageProvider<MapNetworkImageProvider> {
 
   Future<Codec> _load(
       MapNetworkImageProvider key,
-      ImageDecoderCallback decode) {
+      ImageDecoderCallback decode) async {
     startedLoading();
+
+    //await Future<void>.delayed(const Duration(milliseconds: 250));
 
     return httpClient
         .readBytes(
