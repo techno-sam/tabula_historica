@@ -77,6 +77,9 @@ class TileImageManager {
   bool get allLoaded =>
       _tiles.values.none((tile) => tile.loadFinishedAt == null);
 
+  /// Check if all visible tile images are loaded
+  bool allVisibleTilesLoaded(DiscreteTileRange visibleRange) => _tiles.values.none((tile) => visibleRange.contains(tile.coordinates) && tile.loadFinishedAt == null);
+
   /// Filter tiles to only tiles that would be visible on screen. Specifically:
   ///   1. Tiles in the visible range at the target zoom level.
   ///   2. Tiles at non-target zoom level that would cover up holes that would
@@ -126,6 +129,12 @@ class TileImageManager {
     return notLoaded;
   }
 
+  void clearAllTiles() {
+    for (final coordinates in [..._positionCoordinates]) {
+      _remove(coordinates, evictImageFromCache: (_) => true);
+    }
+  }
+
   /// All removals should be performed by calling this method to ensure that
   /// disposal is performed correctly.
   void _remove(
@@ -169,7 +178,8 @@ class TileImageManager {
   }
 
   /// evict tiles that have an error and prune tiles that are no longer needed.
-  void evictAndPrune({
+  /// Returns a list of [TileCoordinates] that were pruned.
+  Iterable<TileCoordinates> evictAndPrune({
     required DiscreteTileRange visibleRange,
     required int pruneBuffer,
     required EvictErrorTileStrategy evictStrategy,
@@ -182,7 +192,7 @@ class TileImageManager {
     );
 
     _evictErrorTiles(pruningState, evictStrategy);
-    _prune(pruningState, evictStrategy);
+    return _prune(pruningState, evictStrategy);
   }
 
   void _evictErrorTiles(
@@ -206,12 +216,13 @@ class TileImageManager {
   }
 
   /// Prune tiles from the [TileImageManager].
-  void prune({
+  /// Returns a list of [TileCoordinates] that were pruned.
+  Iterable<TileCoordinates> prune({
     required DiscreteTileRange visibleRange,
     required int pruneBuffer,
     required EvictErrorTileStrategy evictStrategy,
   }) {
-    _prune(
+    return _prune(
       TileImageView(
         tileImages: _tiles,
         positionCoordinates: _positionCoordinates,
@@ -223,12 +234,16 @@ class TileImageManager {
   }
 
   /// Prune tiles from the [TileImageManager].
-  void _prune(
+  /// Returns a list of [TileCoordinates] that were pruned.
+  Iterable<TileCoordinates> _prune(
       TileImageView tileRemovalState,
       EvictErrorTileStrategy evictStrategy,
       ) {
+    final out = <TileCoordinates>[];
     for (final coordinates in tileRemovalState.staleTiles) {
       _removeWithEvictionStrategy(coordinates, evictStrategy);
+      out.add(coordinates);
     }
+    return out;
   }
 }

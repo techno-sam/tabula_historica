@@ -48,7 +48,6 @@
  */
 
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:track_map/widgets/map/flutter_map/extensions/point.dart';

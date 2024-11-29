@@ -54,7 +54,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:track_map/widgets/map/flutter_map/extensions/point.dart';
 import 'package:track_map/widgets/map/flutter_map/tile_update_event.dart';
-import 'package:track_map/widgets/map/multi_lod.dart';
 
 class MapCamera extends ChangeNotifier {
   Point<double> _blockPosCenter;
@@ -64,6 +63,9 @@ class MapCamera extends ChangeNotifier {
   final _mapEventStreamController = StreamController<TileUpdateEvent>.broadcast();
   Stream<TileUpdateEvent> get updateStream => _mapEventStreamController.stream;
 
+  int _batchDepth = 0;
+  bool _notifyOnExit = false;
+
   MapCamera({required Point<double> blockPosCenter, required double zoom, required Size size})
       : _blockPosCenter = blockPosCenter,
         _zoom = zoom,
@@ -72,6 +74,18 @@ class MapCamera extends ChangeNotifier {
   Point<double> get blockPosCenter => _blockPosCenter;
   double get zoom => _zoom;
   Size get size => _size;
+
+  void asBatchOperation(void Function() operation) {
+    _batchDepth++;
+    operation();
+    _batchDepth--;
+    if (_batchDepth == 0 && _notifyOnExit) {
+      _notifyUpdate();
+      _notifyOnExit = false;
+    }
+  }
+
+  bool get isInBatchOperation => _batchDepth > 0;
 
   set blockPosCenter(Point<double> blockPosCenter){
     if (_blockPosCenter == blockPosCenter) return;
@@ -92,6 +106,10 @@ class MapCamera extends ChangeNotifier {
   }
 
   void _notifyUpdate() {
+    if (isInBatchOperation) {
+      _notifyOnExit = true;
+      return;
+    }
     _mapEventStreamController.add(TileUpdateEvent(camera: this));
     notifyListeners();
   }

@@ -50,6 +50,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:track_map/logger.dart';
 
 import 'tile_coordinates.dart';
 
@@ -169,7 +170,6 @@ class TileImage extends ChangeNotifier {
   // finishes. If fading is disabled or a loading error occurred this TileImage
   // becomes readyToDisplay immediately.
   void _display() {
-    final previouslyLoaded = loadFinishedAt != null;
     loadFinishedAt = DateTime.now();
 
     if (loadError) {
@@ -198,13 +198,13 @@ class TileImage extends ChangeNotifier {
     if (evictImageFromCache) {
       try {
         imageProvider.evict().catchError((Object e) {
-          debugPrint(e.toString());
+          logger.e("Failed to evict image from cache", error: e);
           return false;
         });
       } catch (e) {
         // This may be never called because catchError will handle errors, however
         // we want to avoid random crashes like in #444 / #536
-        debugPrint(e.toString());
+        logger.e("Unexpected error when evicting image from cache", error: e);
       }
     }
 

@@ -50,69 +50,94 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/rendering.dart';
-import 'package:http/http.dart';
-import 'package:http/retry.dart';
 import 'package:track_map/widgets/map/flutter_map/base_tile_provider.dart';
-import 'package:track_map/widgets/map/flutter_map/network_image_provider.dart';
+import 'package:track_map/widgets/map/flutter_map/tile_coordinates.dart';
 
-import 'tile_coordinates.dart';
+import 'cancellable_network_image_provider.dart';
 
-/// [TileProvider] to fetch tiles from the network
+/// [TileProvider] that fetches tiles from the network, with the capability to
+/// cancel unnecessary HTTP tile requests
 ///
-/// By default, a [RetryClient] is used to retry failed requests. 'dart:http'
-/// or 'dart:io' might be needed to override this.
+/// {@template fmctp-desc}
+///
+/// Tiles that are removed/pruned before they are fully loaded do not need to
+/// complete (down)loading, and therefore do not need to complete the HTTP
+/// interaction. Cancelling these unnecessary tile requests early could:
+///
+/// - Reduce tile loading durations (particularly on the web)
+/// - Reduce users' (cellular) data and cache space consumption
+/// - Reduce costly tile requests to tile servers*
+/// - Improve performance by reducing CPU and IO work
+///
+/// This provider uses '[dio](https://pub.dev/packages/dio)', which supports
+/// aborting unnecessary HTTP requests in-flight, after they have already been
+/// sent.
+///
+/// Although HTTP request abortion is supported on all platforms, it is
+/// especially useful on the web - and therefore recommended for web apps. This
+/// is because the web platform has a limited number of simulatous HTTP requests,
+/// and so closing the requests allows new requests to be made for new tiles.
+/// On other platforms, the other benefits may still occur, but may not be as
+/// visible as on the web.
+///
+/// Once HTTP request abortion is
+/// [added to Dart's 'native' 'http' package (which already has a PR opened)](https://github.com/dart-lang/http/issues/424),
+/// `NetworkTileProvider` will be updated to take advantage of it, replacing and
+/// deprecating this provider. This tile provider is currently a seperate package
+/// and not the default due to the reliance on the additional Dio dependency.
+///
+/// ---
 ///
 /// On the web, the 'User-Agent' header cannot be changed as specified in
 /// [TileLayer.tileProvider]'s documentation, due to a Dart/browser limitation.
 ///
-/// Does not support cancellation of tile loading via
-/// [TileProvider.getImageWithCancelLoadingSupport], as abortion of in-flight
-/// HTTP requests on the web is
-/// [not yet supported in Dart](https://github.com/dart-lang/http/issues/424).
-class NetworkTileProvider extends TileProvider {
-  /// [TileProvider] to fetch tiles from the network
+/// The [silenceExceptions] argument controls whether to ignore exceptions and
+/// errors that occur whilst fetching tiles over the network, and just return a
+/// transparent tile.
+/// {@endtemplate}
+base class CancellableNetworkTileProvider extends TileProvider {
+  /// Create a [CancellableNetworkTileProvider] to fetch tiles from the network,
+  /// with cancellation support
   ///
-  /// By default, a [RetryClient] is used to retry failed requests. 'dart:http'
-  /// or 'dart:io' might be needed to override this.
-  ///
-  /// On the web, the 'User-Agent' header cannot be changed, as specified in
-  /// [TileLayer.tileProvider]'s documentation, due to a Dart/browser limitation.
-  ///
-  /// Does not support cancellation of tile loading via
-  /// [TileProvider.getImageWithCancelLoadingSupport], as abortion of in-flight
-  /// HTTP requests on the web is
-  /// [not yet supported in Dart](https://github.com/dart-lang/http/issues/424).
-  NetworkTileProvider({
+  /// {@macro fmctp-desc}
+  CancellableNetworkTileProvider({
     super.headers,
-    BaseClient? httpClient,
+    Dio? dioClient,
     this.silenceExceptions = false,
-  }) : _httpClient = httpClient ?? RetryClient(Client());
+  }) : _dioClient = dioClient ?? Dio();
 
   /// Whether to ignore exceptions and errors that occur whilst fetching tiles
   /// over the network, and just return a transparent tile
   final bool silenceExceptions;
 
-  /// Long living client used to make all tile requests by
-  /// [MapNetworkImageProvider] for the duration that this provider is
-  /// alive
-  final BaseClient _httpClient;
+  /// Long living client used to make all tile requests by [CancellableNetworkImageProvider]
+  /// for the duration that this provider is alive
+  final Dio _dioClient;
 
   /// Each [Completer] is completed once the corresponding tile has finished
   /// loading
   ///
-  /// Used to avoid disposing of [_httpClient] whilst HTTP requests are still
+  /// Used to avoid disposing of [_dioClient] whilst HTTP requests are still
   /// underway.
   ///
   /// Does not include tiles loaded from session cache.
   final _tilesInProgress = HashMap<TileCoordinates, Completer<void>>();
 
   @override
-  ImageProvider getImage(TileCoordinates coordinates) =>
-      MapNetworkImageProvider(
+  bool get supportsCancelLoading => true;
+
+  @override
+  ImageProvider getImageWithCancelLoadingSupport(
+      TileCoordinates coordinates,
+      Future<void> cancelLoading,
+      ) =>
+      CancellableNetworkImageProvider(
         url: getTileUrl(coordinates),
         headers: headers,
-        httpClient: _httpClient,
+        dioClient: _dioClient,
+        cancelLoading: cancelLoading,
         silenceExceptions: silenceExceptions,
         startedLoading: () => _tilesInProgress[coordinates] = Completer(),
         finishedLoadingBytes: () {
@@ -126,7 +151,7 @@ class NetworkTileProvider extends TileProvider {
     if (_tilesInProgress.isNotEmpty) {
       await Future.wait(_tilesInProgress.values.map((c) => c.future));
     }
-    _httpClient.close();
+    _dioClient.close();
     super.dispose();
   }
 }

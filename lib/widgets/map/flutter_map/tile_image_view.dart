@@ -220,7 +220,7 @@ final class TileImageView {
         }
       }
 
-      if (lod2 < maxLod) {
+      if (lod2 <= maxLod) {
         _retainChildren(retain, i, j, lod2, maxLod);
       }
     }

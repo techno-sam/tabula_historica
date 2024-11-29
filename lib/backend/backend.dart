@@ -18,8 +18,8 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:track_map/logger.dart';
 import 'package:track_map/widgets/map/data_structures.dart';
 import 'package:track_map/widgets/map/flutter_map/tile_coordinates.dart';
 
@@ -47,9 +47,7 @@ class Connection {
   Future<http.Response> get(Uri uri) async {
     var resolved = apiUri.resolveUri(uri);
 
-    if (kDebugMode) {
-      print("Resolved URI: $resolved");
-    }
+    logger.t("Resolved URI: $resolved");
 
     return _client.get(
       resolved

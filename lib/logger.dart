@@ -16,25 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:logger/logger.dart';
 
-import 'package:flutter/material.dart';
-
-extension ColorManipulation on Color {
-  Color darken([double factor = 0.1]) {
-    assert(factor >= 0 && factor <= 1);
-
-    final hsl = HSLColor.fromColor(this);
-    final hslDark = hsl.withLightness((hsl.lightness - factor).clamp(0.0, 1.0));
-
-    return hslDark.toColor();
-  }
-
-  Color lighten([double factor = 0.1]) {
-    assert(factor >= 0 && factor <= 1);
-
-    final hsl = HSLColor.fromColor(this);
-    final hslLight = hsl.withLightness((hsl.lightness + factor).clamp(0.0, 1.0));
-
-    return hslLight.toColor();
-  }
-}
+final logger = Logger(level: Level.info);

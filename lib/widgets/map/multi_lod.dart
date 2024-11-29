@@ -22,11 +22,14 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:track_map/backend/backend.dart' as backend;
+import 'package:track_map/logger.dart';
 import 'package:track_map/widgets/map/flutter_map/map_camera.dart';
-import 'package:track_map/widgets/map/flutter_map/network_tile_provider.dart';
+import 'package:track_map/widgets/map/flutter_map/providers/cancellable/cancellable_network_tile_provider.dart';
+import 'package:track_map/widgets/map/flutter_map/providers/regular/network_tile_provider.dart';
 import 'package:track_map/widgets/map/flutter_map/tile.dart';
 import 'package:track_map/widgets/map/flutter_map/tile_bounds_at_zoom.dart';
 import 'package:track_map/widgets/map/flutter_map/tile_coordinates.dart';
@@ -82,6 +85,7 @@ class MultiLODMap extends StatelessWidget {
                     ),
                   _MultiLODMap(
                     lods: lods,
+                    tileProvider: CancellableNetworkTileProvider(),
                     tileBuilder: tile_builder.coordinateAndLoadingTimeDebugTileBuilder,
                     errorImage: const NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
                     evictErrorTileStrategy: EvictErrorTileStrategy.notVisibleRespectMargin,
@@ -154,7 +158,7 @@ class _CameraController extends SingleChildStatelessWidget {
   Widget buildWithChild(BuildContext context, Widget? child) {
     final camera = MapCamera.of(context, listen: false);
 
-    void _applyScaleChange(double dScale, Offset center, Size windowSize) {
+    void $applyScaleChange(double dScale, Offset center, Size windowSize) {
       
       if (debugPadding != null) {
         center = Offset(center.dx - debugPadding!, center.dy - debugPadding!);
@@ -182,30 +186,47 @@ class _CameraController extends SingleChildStatelessWidget {
       centerZ = zUnderCursor - (center.dy - windowSize.height / 2) /
           (tileSize * uiInteractionScale);
 
-      camera.blockPosCenter = Point(centerX, centerZ);
-      camera.zoom = scale;
+      camera.asBatchOperation(() {
+        camera.blockPosCenter = Point(centerX, centerZ);
+        camera.zoom = scale;
+      });
     }
 
-    return Listener(
-      onPointerMove: (details) {
-        if (details.down) {
-          double unadjustedScale = pow(2, camera.zoom).toDouble();
-          Point<double> offset = Point(
-            details.delta.dx / (tileSize * unadjustedScale),
-            details.delta.dy / (tileSize * unadjustedScale)
-          );
-          camera.blockPosCenter = camera.blockPosCenter - offset;
+    final List<Offset> communicatedCenter = [const Offset(0, 0)];
+
+    return KeyboardListener(
+      focusNode: FocusNode()..requestFocus(),
+      onKeyEvent: (event) {
+        if (event is KeyDownEvent && event.logicalKey.keyLabel == "D") {
+          // zoom to max zoom
+          $applyScaleChange(1000, communicatedCenter[0], camera.size);
         }
       },
-      onPointerSignal: (details) {
-        if (details is PointerScrollEvent) {
-          _applyScaleChange(-details.scrollDelta.dy / 150, details.position, camera.size);
-        }
-      },
-      onPointerPanZoomUpdate: (details) {
-        _applyScaleChange(details.panDelta.dy / 100, details.localPosition, camera.size);
-      },
-      child: child
+      child: Listener(
+        onPointerHover: (details) {
+          communicatedCenter[0] = details.localPosition;
+        },
+        onPointerMove: (details) {
+          communicatedCenter[0] = details.localPosition;
+          if (details.down) {
+            double unadjustedScale = pow(2, camera.zoom).toDouble();
+            Point<double> offset = Point(
+              details.delta.dx / (tileSize * unadjustedScale),
+              details.delta.dy / (tileSize * unadjustedScale)
+            );
+            camera.blockPosCenter = camera.blockPosCenter - offset;
+          }
+        },
+        onPointerSignal: (details) {
+          if (details is PointerScrollEvent) {
+            $applyScaleChange(-details.scrollDelta.dy / 150, details.position, camera.size); // fixme should this use localPosition?
+          }
+        },
+        onPointerPanZoomUpdate: (details) {
+          $applyScaleChange(details.panDelta.dy / 100, details.localPosition, camera.size);
+        },
+        child: child
+      ),
     );
   }
 
@@ -319,6 +340,8 @@ class _MultiLODMapState extends State<_MultiLODMap> {
 
   StreamSubscription<TileUpdateEvent>? _tileUpdateSubscription;
 
+  Set<TileCoordinates> _displayedTiles = {};
+
   @override
   void initState() {
     super.initState();
@@ -362,7 +385,7 @@ class _MultiLODMapState extends State<_MultiLODMap> {
     final camera = MapCamera.of(context);
 
     final (double adjustedScale, int lod) = lodCalculator.getLod(camera.zoom);
-    final double unadjustedScale = pow(2, camera.zoom).toDouble();
+    //final double unadjustedScale = pow(2, camera.zoom).toDouble();
 
     var projected = camera.getOffset(const Point(0, 0));
     // transform so that the (_centerX, _centerZ) block position is in the center of the screen, taking _scale into account
@@ -419,13 +442,15 @@ class _MultiLODMapState extends State<_MultiLODMap> {
         ))
         .toList();
 
+    _displayedTiles = tiles.map((t) => t.positionCoordinates).toSet();
+
     if (tiles.isNotEmpty) {
       int minimalFoundLOD = tiles.map((t) => t.tileImage.coordinates.lod)
           .reduce(min);
       int maximalFoundLOD = tiles.map((t) => t.tileImage.coordinates.lod)
           .reduce(max);
 
-      print("LOD: $lod, $minimalFoundLOD, $maximalFoundLOD");
+      logger.t("LOD: $lod, min $minimalFoundLOD, max $maximalFoundLOD");
     }
 
     // Sort in render order. In reverse:
@@ -443,7 +468,14 @@ class _MultiLODMapState extends State<_MultiLODMap> {
       return cmp;
     }
 
-    return Stack(children: tiles..sort(renderOrder));
+    return Stack(children: [
+      Stack(children: tiles..sort(renderOrder)),
+      ElevatedButton.icon(onPressed: () {
+        _tileImageManager.clearAllTiles();
+        //_loadAndPruneInVisibleBounds(camera);
+        setState(() {});
+      }, icon: const Icon(Icons.refresh), label: const Text("Reload")),
+    ]);
   }
 
   TileImage _createTileImage({
@@ -462,11 +494,19 @@ class _MultiLODMapState extends State<_MultiLODMap> {
       imageProvider: imageProvider,
       onLoadError: _onTileLoadError,
       onLoadComplete: (coordinates) {
-        if (pruneAfterLoad) _pruneIfAllTilesLoaded(coordinates);
+        if (pruneAfterLoad) _pruneIfAllVisibleTilesLoaded(coordinates);
       },
       errorImage: widget.errorImage,
       cancelLoading: cancelLoading,
     );
+  }
+
+  void _rebuildIfDisplayedTilesPruned(Iterable<TileCoordinates> prunedTiles) {
+    if (prunedTiles.any(_displayedTiles.contains)) {
+      logger.t("Rebuilding due to pruned tiles");
+      _displayedTiles.clear();
+      setState(() {});
+    }
   }
 
   /// Load and/or prune tiles according to the visible bounds of the [event]
@@ -484,11 +524,11 @@ class _MultiLODMapState extends State<_MultiLODMap> {
     }
 
     if (event.prune) {
-      _tileImageManager.evictAndPrune(
+      _rebuildIfDisplayedTilesPruned(_tileImageManager.evictAndPrune(
         visibleRange: visibleTileRange,
         pruneBuffer: widget.panBuffer + widget.keepBuffer,
         evictStrategy: widget.evictErrorTileStrategy,
-      );
+      ));
     }
   }
 
@@ -507,11 +547,11 @@ class _MultiLODMapState extends State<_MultiLODMap> {
     );
 
 
-    _tileImageManager.evictAndPrune(
+    _rebuildIfDisplayedTilesPruned(_tileImageManager.evictAndPrune(
       visibleRange: visibleTileRange,
       pruneBuffer: max(widget.panBuffer, widget.keepBuffer),
       evictStrategy: widget.evictErrorTileStrategy,
-    );
+    ));
   }
 
   // For all valid TileCoordinates in the [tileLoadRange], expanded by the
@@ -559,31 +599,35 @@ class _MultiLODMapState extends State<_MultiLODMap> {
   }
 
   void _onTileLoadError(TileImage tile, Object error, StackTrace? stackTrace) {
-    debugPrint(error.toString());
+    logger.e("Failed to load tile", error: error);
     widget.errorTileCallback?.call(tile, error, stackTrace);
   }
 
-  void _pruneIfAllTilesLoaded(TileCoordinates coordinates) {
-    if (!_tileImageManager.containsTileAt(coordinates) ||
-        !_tileImageManager.allLoaded) {
+  void _pruneIfAllVisibleTilesLoaded(TileCoordinates coordinates) {
+    if (!_tileImageManager.containsTileAt(coordinates)) {
       return;
     }
 
-
-    _pruneWithCurrentCamera();
-  }
-
-  void _pruneWithCurrentCamera() {
     final camera = MapCamera.of(context, listen: false);
     final visibleTileRange = _tileRangeCalculator.calculate(
       camera: camera,
       tileLOD: lodCalculator.getLod(camera.zoom).$2,
     );
+
+    if (!_tileImageManager.allVisibleTilesLoaded(visibleTileRange)) {
+      return;
+    }
+
+    _pruneWithCurrentCamera(visibleTileRange);
+  }
+
+  void _pruneWithCurrentCamera(final DiscreteTileRange visibleTileRange) {
     _tileImageManager.prune(
       visibleRange: visibleTileRange,
       pruneBuffer: max(widget.panBuffer, widget.keepBuffer),
       evictStrategy: widget.evictErrorTileStrategy,
     );
+    setState(() {});
   }
 }
 
