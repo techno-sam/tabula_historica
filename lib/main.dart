@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:track_map/screens/map_screen.dart';
+import 'package:track_map/screens/rdp_drawing_screen.dart';
 import 'backend/backend.dart' as backend;
 
 void main() {
@@ -51,7 +52,8 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
-          secondary: Colors.amber
+          secondary: Colors.amber,
+          secondaryContainer: Colors.amberAccent.shade100
         ),
         useMaterial3: true,
       ),
@@ -97,9 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: theme.colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: Center(
@@ -111,9 +114,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: theme.textTheme.headlineMedium,
             ),
-            const LODInfo()
+            const LabeledCard(label: "LODs", child: LODInfo()),
+            const LabeledCard(label: "Experiments", child: ScreenDirectory(screens: [
+              ("Map", MapScreen()),
+              ("Drawing", RDPDrawingScreen()),
+            ])),
           ],
         ),
       ),
@@ -121,6 +128,32 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class LabeledCard extends StatelessWidget {
+  const LabeledCard({super.key, required this.label, required this.child});
+
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      color: theme.colorScheme.secondaryContainer,
+      elevation: 2.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(label, style: theme.textTheme.titleMedium),
+            child,
+          ],
+        ),
       ),
     );
   }
@@ -171,5 +204,38 @@ class LODInfo extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class ScreenDirectory extends StatelessWidget {
+  final List<(String, Widget)> screens;
+
+  const ScreenDirectory({super.key, required this.screens});
+
+  @override
+  Widget build(BuildContext context) {
+    final connection = context.watch<backend.Connection>();
+
+    return Column(children: screens.map((entry) {
+      return Card(
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute<void>(
+              builder: (BuildContext context) {
+                return Provider(
+                    create: (BuildContext context) => connection,
+                    child: entry.$2
+                );
+              }
+            ));
+          },
+          customBorder: Theme.of(context).cardTheme.shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(entry.$1),
+          ),
+        ),
+      );
+    }).toList());
   }
 }
