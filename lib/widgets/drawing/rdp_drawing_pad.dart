@@ -16,12 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:track_map/backend/annotations.dart';
-import 'package:track_map/logger.dart';
+
+import '../../backend/annotations.dart';
+import '../../logger.dart';
 
 class RDPDrawingPad extends StatelessWidget {
   const RDPDrawingPad({super.key});

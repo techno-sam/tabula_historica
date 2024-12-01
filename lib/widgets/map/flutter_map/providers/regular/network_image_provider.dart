@@ -52,8 +52,10 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+
 import 'package:http/http.dart';
-import 'package:track_map/widgets/map/flutter_map/base_tile_provider.dart';
+
+import '../../base_tile_provider.dart';
 
 /// Dedicated [ImageProvider] to fetch tiles from the network
 @immutable

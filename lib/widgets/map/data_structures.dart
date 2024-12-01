@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:track_map/extensions/iterable_creation.dart';
+import '../../extensions/iterable_creation.dart';
 
 class LODMap<V> implements Map<int, V> {
   static const _sentinel = Object();

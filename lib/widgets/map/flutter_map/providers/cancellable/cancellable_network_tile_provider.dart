@@ -52,8 +52,8 @@ import 'dart:collection';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/rendering.dart';
-import 'package:track_map/widgets/map/flutter_map/base_tile_provider.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_coordinates.dart';
+import '../../base_tile_provider.dart';
+import '../../tile_coordinates.dart';
 
 import 'cancellable_network_image_provider.dart';
 

@@ -51,8 +51,9 @@ import 'dart:math' as math hide Point;
 import 'dart:math' show Point;
 
 import 'package:meta/meta.dart';
-import 'package:track_map/widgets/map/flutter_map/extensions/point.dart';
-import 'package:track_map/widgets/map/flutter_map/bounds.dart';
+
+import 'extensions/point.dart';
+import 'bounds.dart';
 
 import 'tile_coordinates.dart';
 

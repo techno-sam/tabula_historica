@@ -19,9 +19,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:track_map/logger.dart';
-import 'package:track_map/widgets/map/data_structures.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_coordinates.dart';
+import '../logger.dart';
+import '../widgets/map/data_structures.dart';
+import '../widgets/map/flutter_map/tile_coordinates.dart';
 
 class LodEntry {
   final int minX;

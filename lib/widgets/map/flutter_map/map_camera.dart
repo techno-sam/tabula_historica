@@ -52,8 +52,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:track_map/widgets/map/flutter_map/extensions/point.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_update_event.dart';
+
+import 'extensions/point.dart';
+import 'tile_update_event.dart';
 
 class MapCamera extends ChangeNotifier {
   Point<double> _blockPosCenter;

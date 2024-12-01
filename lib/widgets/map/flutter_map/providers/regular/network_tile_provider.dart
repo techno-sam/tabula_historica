@@ -53,8 +53,8 @@ import 'dart:collection';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
-import 'package:track_map/widgets/map/flutter_map/base_tile_provider.dart';
-import 'package:track_map/widgets/map/flutter_map/providers/regular/network_image_provider.dart';
+import '../../base_tile_provider.dart';
+import 'network_image_provider.dart';
 
 import '../../tile_coordinates.dart';
 

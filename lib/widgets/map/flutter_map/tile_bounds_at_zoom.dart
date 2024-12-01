@@ -48,7 +48,7 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:track_map/backend/backend.dart';
+import '../../../backend/backend.dart';
 
 import 'tile_coordinates.dart';
 import 'tile_range.dart';

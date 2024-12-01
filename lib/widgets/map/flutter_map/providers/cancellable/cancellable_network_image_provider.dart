@@ -51,10 +51,12 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:track_map/logger.dart';
-import 'package:track_map/widgets/map/flutter_map/base_tile_provider.dart';
+
+import '../../../../../logger.dart';
+import '../../base_tile_provider.dart';
 
 class CancellableNetworkImageProvider
     extends ImageProvider<CancellableNetworkImageProvider> {

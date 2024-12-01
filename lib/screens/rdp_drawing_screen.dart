@@ -17,7 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:track_map/widgets/drawing/rdp_drawing_pad.dart';
+
+import '../widgets/drawing/rdp_drawing_pad.dart';
 
 class RDPDrawingScreen extends StatelessWidget {
   const RDPDrawingScreen({super.key});

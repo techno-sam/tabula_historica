@@ -23,22 +23,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:track_map/backend/backend.dart' as backend;
-import 'package:track_map/logger.dart';
-import 'package:track_map/widgets/map/flutter_map/map_camera.dart';
-import 'package:track_map/widgets/map/flutter_map/providers/cancellable/cancellable_network_tile_provider.dart';
-import 'package:track_map/widgets/map/flutter_map/providers/regular/network_tile_provider.dart';
-import 'package:track_map/widgets/map/flutter_map/tile.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_bounds_at_zoom.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_coordinates.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_image.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_image_manager.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_range.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_range_calculator.dart';
-import 'package:track_map/widgets/map/flutter_map/tile_builder.dart' as tile_builder;
 
+import '../../backend/backend.dart' as backend;
+import '../../logger.dart';
+
+import 'flutter_map/map_camera.dart';
+import 'flutter_map/providers/cancellable/cancellable_network_tile_provider.dart';
+import 'flutter_map/providers/regular/network_tile_provider.dart';
+import 'flutter_map/tile.dart';
+import 'flutter_map/tile_bounds_at_zoom.dart';
+import 'flutter_map/tile_coordinates.dart';
+import 'flutter_map/tile_image.dart';
+import 'flutter_map/tile_image_manager.dart';
+import 'flutter_map/tile_range.dart';
+import 'flutter_map/tile_range_calculator.dart';
+import 'flutter_map/tile_builder.dart' as tile_builder;
 import 'flutter_map/base_tile_provider.dart';
 import 'flutter_map/tile_builder.dart';
 import 'flutter_map/tile_error_evict_callback.dart';

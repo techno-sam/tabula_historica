@@ -50,7 +50,8 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:track_map/logger.dart';
+
+import '../../../logger.dart';
 
 import 'tile_coordinates.dart';
 

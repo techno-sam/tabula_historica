@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:track_map/widgets/map/multi_lod.dart';
+import '../widgets/map/multi_lod.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({
