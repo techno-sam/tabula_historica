@@ -20,6 +20,7 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:track_map/backend/annotations.dart';
 import 'package:track_map/logger.dart';
 
 class RDPDrawingPad extends StatelessWidget {
@@ -49,7 +50,7 @@ class _DrawingPad extends StatefulWidget {
 }
 
 class _DrawingPadState extends State<_DrawingPad> {
-  final List<List<Offset>> _lines = [];
+  final List<Line> _lines = [];
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class _DrawingPadState extends State<_DrawingPad> {
             });
           } else {
             setState(() {
-              _lines.add([event.localPosition]);
+              _lines.add(Line(points: [event.localPosition], strokeWidth: 3.0, color: Colors.greenAccent));
             });
           }
         },
@@ -78,13 +79,13 @@ class _DrawingPadState extends State<_DrawingPad> {
           if (event.buttons & kSecondaryMouseButton != 0) return;
 
           setState(() {
-            _lines.last.add(event.localPosition);
+            _lines.last.points.add(event.localPosition);
           });
         },
         child: ClipRect(
           clipBehavior: Clip.hardEdge,
           child: CustomPaint(
-            painter: LinesPainter(lines: _lines)
+            painter: CatmullRomPainter(lines: _lines)
           ),
         ),
       ),
@@ -92,82 +93,74 @@ class _DrawingPadState extends State<_DrawingPad> {
   }
 }
 
-class LinesPainter extends CustomPainter {
-  final List<List<Offset>> lines;
+const bool _debugOriginal = false;
+const bool _debugSimplified = false;
 
-  LinesPainter({super.repaint, required this.lines});
+class CatmullRomPainter extends CustomPainter {
+  final List<Line> lines;
+
+  CatmullRomPainter({super.repaint, required this.lines});
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint mainPaint = Paint()
-      ..color = Colors.blue
-      ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    Paint pointPaint = Paint.from(mainPaint)
-      ..color = Colors.deepPurpleAccent.shade100;
+    Paint originalPaint = Paint.from(mainPaint)
+      ..color = Colors.blue.withOpacity(0.8)
+      ..strokeWidth = 2.0;
+
+    Paint originalPointPaint = Paint.from(mainPaint)
+      ..color = Colors.deepPurpleAccent.shade100.withOpacity(0.5)
+      ..strokeWidth = 2.0;
 
     Paint rdpPaint = Paint.from(mainPaint)
       ..color = Colors.red
       ..strokeWidth = 1.0;
 
-    Paint rdpPointPaint = Paint.from(pointPaint)
-      ..color = Colors.orangeAccent.shade100;
+    Paint rdpPointPaint = Paint.from(mainPaint)
+      ..color = Colors.orangeAccent.shade100
+      ..strokeWidth = 2.0;
 
-    Paint bezierRdpPaint = Paint.from(rdpPaint)
-      ..color = Colors.greenAccent
-      ..strokeWidth = 4.0;
-
-    mainPaint.color = mainPaint.color.withOpacity(0.8);
-    pointPaint.color = pointPaint.color.withOpacity(0.5);
-
-    for (List<Offset> line in lines) {
+    for (Line line in lines) {
       if (line.isEmpty) continue;
 
-      // draw points
-      for (Offset point in line) {
-        canvas.drawCircle(Offset(point.dx, point.dy), 3.0, pointPaint);
+      Line simplified = line.simplified(2.0);
+
+      if (_debugOriginal) {
+        // draw points
+        for (Offset point in line) {
+          canvas.drawCircle(
+              Offset(point.dx, point.dy), 3.0, originalPointPaint);
+        }
+
+        Path path = Path();
+        path.moveTo(line.first.dx, line.first.dy);
+        for (Offset point in line.skip(1)) {
+          path.lineTo(point.dx, point.dy);
+        }
+        canvas.drawPath(path, originalPaint);
       }
 
-      Path path = Path();
-      path.moveTo(line.first.dx, line.first.dy);
-      for (Offset point in line.skip(1)) {
-        path.lineTo(point.dx, point.dy);
-      }
-      canvas.drawPath(path, mainPaint);
+      if (_debugSimplified) {
+        for (Offset point in simplified) {
+          canvas.drawCircle(point, 3.0, rdpPointPaint);
+        }
 
-      List<Offset> simplified = rdpSimplify(line, 2.0);
-      for (Offset point in simplified) {
-        canvas.drawCircle(point, 3.0, rdpPointPaint);
+        Path rdpPath = Path();
+        rdpPath.moveTo(simplified.first.dx, simplified.first.dy);
+        for (Offset point in simplified.skip(1)) {
+          rdpPath.lineTo(point.dx, point.dy);
+        }
+        canvas.drawPath(rdpPath, rdpPaint);
       }
 
-      Path rdpPath = Path();
-      rdpPath.moveTo(simplified.first.dx, simplified.first.dy);
-      for (Offset point in simplified.skip(1)) {
-        rdpPath.lineTo(point.dx, point.dy);
-      }
-      canvas.drawPath(rdpPath, rdpPaint);
-
-      _drawCatmullRom(simplified, canvas, bezierRdpPaint, alpha: 0.15, tension: 0.3);
+      mainPaint
+        ..strokeWidth = line.strokeWidth
+        ..color = line.color;
+      _drawCatmullRom(simplified.points, canvas, mainPaint, alpha: 0.25, tension: 0.3);
     }
-  }
-
-  void _drawBezierThroughPoints(List<Offset> points, Canvas canvas, Paint paint) {
-    if (points.length < 2) return;
-
-    Path path = Path();
-    path.moveTo(points.first.dx, points.first.dy);
-
-    for (int i = 1; i < points.length - 1; i++) {
-      final p0 = points[i];
-      final p1 = points[i + 1];
-
-      path.quadraticBezierTo(p0.dx, p0.dy, (p0.dx + p1.dx) / 2, (p0.dy + p1.dy) / 2);
-    }
-    path.lineTo(points.last.dx, points.last.dy);
-
-    canvas.drawPath(path, paint);
   }
 
   /// Draw a Catmull-Rom spline through the given points. The spline is drawn onto [canvas] with the given [paint].
@@ -225,52 +218,5 @@ class LinesPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant LinesPainter oldDelegate) => true;
-}
-
-List<Offset> rdpSimplify(List<Offset> original, double epsilon) {
-  if (original.length < 3) return original;
-
-  // Find the point with the maximum distance
-  double dmax = 0;
-  int index = 0;
-  int end = original.length - 1;
-  for (int i = 1; i < end; i++) {
-    double d = perpendicularDistance(original[i], original.first, original.last);
-    if (d > dmax) {
-      index = i;
-      dmax = d;
-    }
-  }
-
-  // If max distance is greater than epsilon, recursively simplify
-  if (dmax > epsilon) {
-    List<Offset> recResults1 = rdpSimplify(original.sublist(0, index + 1), epsilon);
-    List<Offset> recResults2 = rdpSimplify(original.sublist(index), epsilon);
-
-    // build the result list
-    List<Offset> result = recResults1.sublist(0, recResults1.length - 1) + recResults2;
-    return result;
-  } else {
-    return [original.first, original.last];
-  }
-}
-
-double perpendicularDistance(Offset point, Offset lineStart, Offset lineEnd) {
-  double dx = lineEnd.dx - lineStart.dx;
-  double dy = lineEnd.dy - lineStart.dy;
-
-  // Normalize
-  double mag = sqrt(dx * dx + dy * dy);
-  dx /= mag;
-  dy /= mag;
-
-  double pvx = point.dx - lineStart.dx;
-  double pvy = point.dy - lineStart.dy;
-
-  double pvdot = dx * pvx + dy * pvy;
-  double ax = pvx - pvdot * dx;
-  double ay = pvy - pvdot * dy;
-
-  return sqrt(ax * ax + ay * ay);
+  bool shouldRepaint(covariant CatmullRomPainter oldDelegate) => true;
 }
