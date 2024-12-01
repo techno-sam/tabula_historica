@@ -71,8 +71,7 @@ class MultiLODMap extends StatelessWidget {
 
         return Center(
           child: CameraProvider(
-            key: const ValueKey("camera_provider"),
-            child: _CameraController(
+            child: _MapController(
               child: Stack(
                 children: [
                   if (debugPadding != null)
@@ -144,11 +143,11 @@ class _CameraProviderState extends SingleChildState<CameraProvider> {
   }
 }
 
-class _CameraController extends SingleChildStatelessWidget {
+class _MapController extends SingleChildStatelessWidget {
 
   final int tileSize;
 
-  const _CameraController({
+  const _MapController({
     super.key,
     super.child,
     this.tileSize = 256,
@@ -636,155 +635,3 @@ double _distanceSq(TileCoordinates coordinates, Point<double> center) {
   final dy = coordinates.y - center.y;
   return dx * dx + dy * dy;
 }
-
-    /*
-
-    //final Random random = Random(_seed);
-    
-    List<Widget> tiles = [];
-
-    for (int x = widget.lods[lod]!.minX; x <= widget.lods[lod]!.maxX; x++) {
-      for (int z = widget.lods[lod]!.minZ; z <= widget.lods[lod]!.maxZ; z++) {
-        double left = x * widget.tileSize * adjustedScale + offsetX;
-        double top = z * widget.tileSize * adjustedScale + offsetY;
-        double width = widget.tileSize * adjustedScale;
-        double height = widget.tileSize * adjustedScale;
-
-        // add a tile if this would be visible
-        if (left + width >= 0 && left <= camera.size.width && top+height >= 0 && top <= camera.size.height) {
-          tiles.add(Positioned(
-            key: ValueKey(("map_tile", lod, x, z)),
-            left: left.floorToDouble(),
-            top: top.floorToDouble(),
-            width: width.ceilToDouble(),
-            height: height.ceilToDouble(),
-            child: _MapTile(lod: lod, x: x, z: z)/*Container(
-              color: Colors.primaries.choose(random),
-              child: _MapTile(lod: lod, x: x, z: z),
-            ),*/
-          ));
-
-          tiles.add(
-            Positioned(
-              key: ValueKey(("map_tile_text", lod, x, z)),
-              left: left.floorToDouble(),
-              top: top.floorToDouble(),
-              width: width.ceilToDouble(),
-              height: height.ceilToDouble(),
-              child: Center(
-                child: Text(
-                  'LOD $lod\n($x, $z)',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ),
-            ),
-          );
-        }
-      }
-    }
-
-    //print("Tile count: ${tiles.length}");
-
-    /*tiles.add(Positioned(
-      left: 0,
-      top: 0,
-      width: size.width,
-      height: size.height,
-      child: Container(
-        color: Colors.cyanAccent.withOpacity(0.5),
-        child: const Center(
-          child: Placeholder()
-        )
-      ),
-    ));*/
-
-    return Listener(
-      onPointerMove: (details) {
-        if (details.down) {
-          setState(() {
-            _centerX -= details.delta.dx / (widget.tileSize * unadjustedScale);
-            _centerZ -= details.delta.dy / (widget.tileSize * unadjustedScale);
-          });
-        }
-      },
-      onPointerSignal: (details) {
-        if (details is PointerScrollEvent) {
-          _applyScaleChange(-details.scrollDelta.dy / 300, details.position, camera.size);
-        }
-      },
-      onPointerPanZoomUpdate: (details) {
-        _applyScaleChange(details.panDelta.dy / 100, details.localPosition, camera.size);
-      },
-      child: Stack(
-        children: [
-          Container(
-            color: Colors.indigo.darken(0.35),
-            child: SizedBox(
-              width: camera.size.width,
-              height: camera.size.height,
-            )
-          ),
-          ...tiles
-        ],
-      )
-    );
-  }
-}
-
-class _MapTile extends StatelessWidget {
-  const _MapTile({
-    super.key,
-    required this.lod,
-    required this.x,
-    required this.z,
-  });
-
-  final int lod;
-  final int x;
-  final int z;
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.network(
-      key: ValueKey(("map_tile_image", lod, x, z)),
-      'http://localhost:80/map_data/$lod/x$x/z$z.png',
-      width: tileSize.toDouble(),
-      height: tileSize.toDouble(),
-      fit: BoxFit.fill,
-      filterQuality: FilterQuality.none,
-      cacheWidth: tileSize,
-      cacheHeight: tileSize,
-      isAntiAlias: false,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        } else {
-          return Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-              color: Colors.green,
-            ),
-          );
-          /*return const Center(
-            child: Placeholder(color: Colors.green),
-          );*/
-        }
-      },
-      errorBuilder: (context, error, stackTrace) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(Icons.error, color: Colors.red),
-            const SizedBox(width: 8),
-            Flexible(child: Text('Error loading tile: $error', style: const TextStyle(color: Colors.red))),
-          ],
-        );
-      }
-    );
-  }
-}*/
