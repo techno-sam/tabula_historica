@@ -1,5 +1,5 @@
 /*
- * Doodle Tracks
+ * Tabula Historica
  * Copyright (C) 2024  Sam Wagenaar
  *
  * This program is free software: you can redistribute it and/or modify
