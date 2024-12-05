@@ -26,9 +26,12 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:track_map/extensions/pointer_event.dart';
+import 'package:track_map/widgets/tool/toolbar.dart';
 
 import '../../backend/backend.dart' as backend;
 import '../../logger.dart';
+import '../../models/tools/tool_selection.dart';
 
 import 'flutter_map/map_camera.dart';
 import 'flutter_map/providers/cancellable/cancellable_network_tile_provider.dart';
@@ -60,47 +63,60 @@ class MultiLODMap extends StatelessWidget {
     final client = context.watch<backend.Connection>();
 
     return FutureBuilder(
-      future: client.getLODs(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        future: client.getLODs(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
 
-        var lods = snapshot.data;
-        if (lods == null) {
-          return const Text('Null data');
-        }
+          var lods = snapshot.data;
+          if (lods == null) {
+            return const Text('Null data');
+          }
 
-        return Center(
-          child: _CameraProvider(
-            child: _MapController(
-              child: Stack(
-                children: [
-                  if (_debugPadding != null)
-                    Padding(
-                        padding: EdgeInsets.all(_debugPadding!),
-                        child: Container(
-                            color: Colors.black.withOpacity(0.5),
-                            child: const SizedBox.expand()
-                        )
-                    ),
-                  _MultiLODMap(
-                    lods: lods,
-                    tileProvider: CancellableNetworkTileProvider(),
-                    tileBuilder: tile_builder.coordinateAndLoadingTimeDebugTileBuilder,
-                    errorImage: const NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
-                    evictErrorTileStrategy: EvictErrorTileStrategy.notVisibleRespectMargin,
-                  ),
-                ]
+          return Center(
+            child: MultiProvider(
+              providers: [
+                const _CameraProvider(),
+                ChangeNotifierProvider(create: (_) => ToolSelection()),
+              ],
+              child: _MapController(
+                child: Stack(
+                    children: [
+                      if (_debugPadding != null)
+                        Padding(
+                            padding: EdgeInsets.all(_debugPadding!),
+                            child: Container(
+                                color: Colors.black.withOpacity(0.5),
+                                child: const SizedBox.expand(),
+                            ),
+                        ),
+                      _MultiLODMap(
+                        lods: lods,
+                        tileProvider: CancellableNetworkTileProvider(),
+                        tileBuilder: tile_builder
+                            .coordinateAndLoadingTimeDebugTileBuilder,
+                        errorImage: const NetworkImage(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
+                        evictErrorTileStrategy: EvictErrorTileStrategy
+                            .notVisibleRespectMargin,
+                      ),
+                      // UI elements
+                      const Positioned(
+                        top: 4,
+                        right: 4,
+                        child: Toolbar(),
+                      ),
+                    ]
+                ),
               ),
-            )
-          ),
-        );
-      }
+            ),
+          );
+        }
     );
   }
 }

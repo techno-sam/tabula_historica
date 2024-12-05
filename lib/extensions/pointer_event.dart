@@ -16,26 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
-import 'package:track_map/extensions/color_manipulation.dart';
-import '../widgets/map/multi_lod.dart';
+import 'package:flutter/gestures.dart';
 
-class MapScreen extends StatelessWidget {
-  const MapScreen({
-    super.key,
-  });
+extension ButtonTypes on PointerEvent {
+  bool get hasPrimaryButton => buttons & kPrimaryMouseButton != 0;
+  bool get hasSecondaryButton => buttons & kSecondaryMouseButton != 0;
+  bool get hasMiddleButton => buttons & kMiddleMouseButton != 0;
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: theme.colorScheme.secondary,
-        title: const Text('Demo Map'),
-      ),
-      backgroundColor: const Color(0xFFFCF5E5).lighten(0.025), // parchment
-      body: const MultiLODMap(),
-    );
+  bool matches({bool? primary, bool? secondary, bool? middle}) {
+    if (primary != null && primary != hasPrimaryButton) {
+      return false;
+    }
+    if (secondary != null && secondary != hasSecondaryButton) {
+      return false;
+    }
+    if (middle != null && middle != hasMiddleButton) {
+      return false;
+    }
+    return true;
   }
 }

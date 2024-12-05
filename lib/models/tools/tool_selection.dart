@@ -17,25 +17,31 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:track_map/extensions/color_manipulation.dart';
-import '../widgets/map/multi_lod.dart';
+import 'package:provider/provider.dart';
 
-class MapScreen extends StatelessWidget {
-  const MapScreen({
-    super.key,
-  });
+enum Tool {
+  pan("Pan", Icons.pan_tool_outlined, Icons.pan_tool),
+  draw("Draw", Icons.draw_outlined, Icons.draw),
+  ;
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+  final IconData icon;
+  final IconData selectedIcon;
+  final String name;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: theme.colorScheme.secondary,
-        title: const Text('Demo Map'),
-      ),
-      backgroundColor: const Color(0xFFFCF5E5).lighten(0.025), // parchment
-      body: const MultiLODMap(),
-    );
+  const Tool(this.name, this.icon, [IconData? selectedIcon]) : selectedIcon = selectedIcon ?? icon;
+}
+
+class ToolSelection extends ChangeNotifier {
+  Tool _selectedTool = Tool.pan;
+
+  Tool get selectedTool => _selectedTool;
+
+  void selectTool(Tool tool) {
+    _selectedTool = tool;
+    notifyListeners();
+  }
+
+  static ToolSelection of(BuildContext context, {bool listen = true}) {
+    return Provider.of(context, listen: listen);
   }
 }

@@ -23,3 +23,29 @@ extension RangeableInt on int {
     }
   }
 }
+
+extension Separatable<T> on Iterable<T> {
+  Iterable<T> withSeparator(T separator) sync* {
+    final iterator = this.iterator;
+    if (!iterator.moveNext()) {
+      return;
+    }
+    yield iterator.current;
+    while (iterator.moveNext()) {
+      yield separator;
+      yield iterator.current;
+    }
+  }
+
+  Iterable<T> withFactorySeparator(T Function() separator) sync* {
+    final iterator = this.iterator;
+    if (!iterator.moveNext()) {
+      return;
+    }
+    yield iterator.current;
+    while (iterator.moveNext()) {
+      yield separator();
+      yield iterator.current;
+    }
+  }
+}

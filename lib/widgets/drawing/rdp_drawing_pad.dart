@@ -19,7 +19,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../backend/annotations.dart';
+import '../../models/annotations.dart';
 import '../../logger.dart';
 
 class RDPDrawingPad extends StatelessWidget {
