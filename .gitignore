@@ -45,3 +45,5 @@ app.*.map.json
 # Miscellaneous personal
 /run_in_chrome.sh
 /run_in_chrome_release.sh
+/run_in_browser.sh
+/run_in_browser_release.sh
