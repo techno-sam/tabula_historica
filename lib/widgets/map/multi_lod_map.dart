@@ -83,7 +83,7 @@ class _MultiLODMap extends StatefulWidget {
     // Tile Provider Setup
     if (!kIsWeb) {
       this.tileProvider.headers.putIfAbsent(
-          'User-Agent', () => 'doodle_tracks ($userAgentPackageName)');
+          'User-Agent', () => 'tabula_historica ($userAgentPackageName)');
     }
   }
 

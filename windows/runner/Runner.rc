@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "track_map" "\0"
+            VALUE "CompanyName", "io.github.slimeistdev" "\0"
+            VALUE "FileDescription", "tabula_historica" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "track_map" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "track_map.exe" "\0"
-            VALUE "ProductName", "track_map" "\0"
+            VALUE "InternalName", "tabula_historica" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 io.github.slimeistdev. All rights reserved." "\0"
+            VALUE "OriginalFilename", "tabula_historica.exe" "\0"
+            VALUE "ProductName", "tabula_historica" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

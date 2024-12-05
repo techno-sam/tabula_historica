@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:track_map/extensions/iterables.dart';
+import 'package:tabula_historica/extensions/iterables.dart';
 
 import '../../models/tools/tool_selection.dart';
 

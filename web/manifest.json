@@ -1,6 +1,6 @@
 {
-    "name": "track_map",
-    "short_name": "track_map",
+    "name": "tabula_historica",
+    "short_name": "tabula_historica",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
