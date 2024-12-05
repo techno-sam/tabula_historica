@@ -17,8 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:tabula_historica/extensions/iterables.dart';
 
+import '../../extensions/iterables.dart';
 import '../../models/tools/tool_selection.dart';
 
 class _FunctionalWidgetStateProperty<T> extends WidgetStateProperty<T> {

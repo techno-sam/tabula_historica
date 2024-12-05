@@ -26,9 +26,9 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:tabula_historica/extensions/pointer_event.dart';
-import 'package:tabula_historica/widgets/tool/toolbar.dart';
 
+import '../../extensions/pointer_event.dart';
+import '../tool/toolbar.dart';
 import '../../backend/backend.dart' as backend;
 import '../../logger.dart';
 import '../../models/tools/tool_selection.dart';
