@@ -22,6 +22,7 @@ import 'package:provider/provider.dart';
 enum Tool {
   pan("Pan", Icons.pan_tool_outlined, Icons.pan_tool),
   draw("Draw", Icons.draw_outlined, Icons.draw),
+  references("References", Icons.photo_outlined, Icons.photo),
   ;
 
   final IconData icon;
