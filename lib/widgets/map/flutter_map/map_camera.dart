@@ -53,8 +53,25 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../multi_lod.dart';
 import 'extensions/point.dart';
 import 'tile_update_event.dart';
+
+class MapCameraSnapshot {
+  final Point<double> blockPosCenter;
+  final double zoom;
+  final Size size;
+
+  MapCameraSnapshot._({required this.blockPosCenter, required this.zoom, required this.size});
+
+  factory MapCameraSnapshot._fromCamera(MapCamera camera) {
+    return MapCameraSnapshot._(
+      blockPosCenter: camera.blockPosCenter,
+      zoom: camera.zoom,
+      size: camera.size,
+    );
+  }
+}
 
 class MapCamera extends ChangeNotifier {
   Point<double> _blockPosCenter;
@@ -72,9 +89,19 @@ class MapCamera extends ChangeNotifier {
         _zoom = zoom,
         _size = size;
 
+  factory MapCamera.fromSnapshot(MapCameraSnapshot snapshot) {
+    return MapCamera(
+      blockPosCenter: snapshot.blockPosCenter,
+      zoom: snapshot.zoom,
+      size: snapshot.size,
+    );
+  }
+
   Point<double> get blockPosCenter => _blockPosCenter;
   double get zoom => _zoom;
   Size get size => _size;
+
+  MapCameraSnapshot get snapshot => MapCameraSnapshot._fromCamera(this);
 
   void asBatchOperation(void Function() operation) {
     _batchDepth++;
@@ -117,17 +144,23 @@ class MapCamera extends ChangeNotifier {
 
   Point<double> getOffset(Point<double> blockPos) {
     Point<double> offset = blockPosCenter - blockPos;
-    return (size.toPoint() / 2) - (offset * pow(2, zoom).toDouble() * 256);
+    return (size.toPoint() / 2) - (offset * pow(2, zoom).toDouble() / 32);
   }
 
   Point<double> getBlockPos(Point<double> screenSpace) {
     Point<double> offset = (size.toPoint() / 2) - screenSpace;
-    Point<double> blockPos = blockPosCenter - (offset / (pow(2, zoom).toDouble() * 256));
+    Point<double> blockPos = blockPosCenter - (offset / (pow(2, zoom).toDouble() / 32));
     return blockPos;
   }
 
   static MapCamera of(BuildContext context, {bool listen = true}) {
     return Provider.of(context, listen: listen);
+  }
+
+  @override
+  void dispose() {
+    _mapEventStreamController.close();
+    super.dispose();
   }
 
   @override

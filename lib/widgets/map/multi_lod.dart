@@ -26,6 +26,7 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:tabula_historica/widgets/map/widgets/map_surface_positioned.dart';
 
 import '../../extensions/pointer_event.dart';
 import '../tool/toolbar.dart';
@@ -105,6 +106,7 @@ class MultiLODMap extends StatelessWidget {
                         evictErrorTileStrategy: EvictErrorTileStrategy
                             .notVisibleRespectMargin,
                       ),
+                      const MapSurfacePositioned(x: -32, y: 2),
                       // UI elements
                       const Positioned(
                         top: 4,
@@ -134,6 +136,33 @@ class _CameraProviderState extends SingleChildState<_CameraProvider> {
 
   bool _initialized = false;
 
+  void _onCameraInitialized() {
+    _camera.addListener(_onCameraUpdate);
+  }
+
+  void _onCameraUpdate() {
+    PageStorage.maybeOf(context)?.writeState(
+        context,
+        _camera.snapshot,
+        identifier: const ValueKey('MapCameraProvider#snapshot')
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    MapCameraSnapshot? snapshot = PageStorage.maybeOf(context)?.readState(
+        context,
+        identifier: const ValueKey('MapCameraProvider#snapshot')
+    );
+    if (snapshot != null) {
+      _camera = MapCamera.fromSnapshot(snapshot);
+      _initialized = true;
+      _onCameraInitialized();
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -155,6 +184,7 @@ class _CameraProviderState extends SingleChildState<_CameraProvider> {
             size: Size(constraints.maxWidth - (_debugPadding??0)*2, constraints.maxHeight - (_debugPadding??0)*2)
           );
           _initialized = true;
+          _onCameraInitialized();
         } else {
           _camera.size = Size(constraints.maxWidth - (_debugPadding??0)*2, constraints.maxHeight - (_debugPadding??0)*2);
         }

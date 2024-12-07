@@ -49,3 +49,9 @@ extension Separatable<T> on Iterable<T> {
     }
   }
 }
+
+extension TupleToMap<K, V> on Iterable<(K, V)> {
+  Map<K, V> tupleToMap() {
+    return Map.fromEntries(map((e) => MapEntry(e.$1, e.$2)));
+  }
+}

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'screens/map_screen.dart';
 import 'screens/rdp_drawing_screen.dart';
 import 'backend/backend.dart' as backend;
@@ -58,8 +59,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Provider(
-          create: (BuildContext context) => backend.Connection(apiUri: Uri.parse('http://localhost:80/map_data/')),
-          child: const MyHomePage(title: 'Flutter Demo Home Page')
+        create: (BuildContext context) => backend.Connection(apiUri: Uri.parse('http://localhost:80/map_data/')),
+        child: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
   }
