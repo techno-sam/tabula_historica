@@ -37,6 +37,10 @@ class ToolSelection extends ChangeNotifier {
 
   Tool get selectedTool => _selectedTool;
 
+  ToolSelection();
+
+  ToolSelection.initial(Tool tool) : _selectedTool = tool;
+
   void selectTool(Tool tool) {
     _selectedTool = tool;
     notifyListeners();

@@ -42,6 +42,7 @@ dependencies:
   dio: ^5.7.0
   logger: ^2.5.0
   collection: ^1.18.0
+  flutter_box_transform: ^0.4.6
 
 dev_dependencies:
   flutter_test:

@@ -115,3 +115,7 @@ extension OffsetToPointExtension on Offset {
 extension SizeToPointExtensions on Size {
   Point<double> toPoint() => Point(width, height);
 }
+
+extension PointToOffsetExtensions on Point<double> {
+  Offset toOffset() => Offset(x, y);
+}

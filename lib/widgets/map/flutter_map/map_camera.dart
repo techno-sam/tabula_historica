@@ -53,7 +53,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../multi_lod.dart';
+import '../../../math.dart';
 import 'extensions/point.dart';
 import 'tile_update_event.dart';
 
@@ -96,6 +96,9 @@ class MapCamera extends ChangeNotifier {
       size: snapshot.size,
     );
   }
+
+  final double minZoom = log2(1 / 8);
+  final double maxZoom = log2(128);
 
   Point<double> get blockPosCenter => _blockPosCenter;
   double get zoom => _zoom;
@@ -149,7 +152,7 @@ class MapCamera extends ChangeNotifier {
 
   Point<double> getBlockPos(Point<double> screenSpace) {
     Point<double> offset = (size.toPoint() / 2) - screenSpace;
-    Point<double> blockPos = blockPosCenter - (offset / (pow(2, zoom).toDouble() / 32));
+    Point<double> blockPos = blockPosCenter - (offset / (pow(2, zoom).toDouble()) * 32);
     return blockPos;
   }
 

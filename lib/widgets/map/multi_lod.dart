@@ -26,15 +26,19 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:tabula_historica/widgets/map/widgets/map_surface_positioned.dart';
+import 'package:tabula_historica/widgets/transform/playground.dart';
 
+import '../../math.dart';
+import '../transform/map_surface_transformable.dart';
+import 'widgets/map_surface_positioned.dart';
 import '../../extensions/pointer_event.dart';
 import '../tool/toolbar.dart';
 import '../../backend/backend.dart' as backend;
 import '../../logger.dart';
 import '../../models/tools/tool_selection.dart';
-
 import 'flutter_map/map_camera.dart';
+
+import 'flutter_map/extensions/point.dart';
 import 'flutter_map/providers/cancellable/cancellable_network_tile_provider.dart';
 import 'flutter_map/providers/regular/network_tile_provider.dart';
 import 'flutter_map/tile.dart';
@@ -81,20 +85,20 @@ class MultiLODMap extends StatelessWidget {
 
           return Center(
             child: MultiProvider(
-              providers: [
-                const _CameraProvider(),
-                ChangeNotifierProvider(create: (_) => ToolSelection()),
+              providers: const [
+                _CameraProvider(),
+                _ToolSelectionProvider(),
               ],
               child: _MapController(
                 child: Stack(
                     children: [
                       if (_debugPadding != null)
                         Padding(
-                            padding: EdgeInsets.all(_debugPadding!),
-                            child: Container(
-                                color: Colors.black.withOpacity(0.5),
-                                child: const SizedBox.expand(),
-                            ),
+                          padding: EdgeInsets.all(_debugPadding!),
+                          child: Container(
+                            color: Colors.black.withOpacity(0.5),
+                            child: const SizedBox.expand(),
+                          ),
                         ),
                       _MultiLODMap(
                         lods: lods,
@@ -106,13 +110,22 @@ class MultiLODMap extends StatelessWidget {
                         evictErrorTileStrategy: EvictErrorTileStrategy
                             .notVisibleRespectMargin,
                       ),
-                      const MapSurfacePositioned(x: -32, y: 2),
+                      //const DebugMapSurfacePositioned(x: -32, y: 16, baseScale: 1, which: false),
+                      MapSurfacePositioned(
+                          x: -32, y: 16, baseScale: 1, child: ElevatedButton(
+                        onPressed: () {
+                          logger.i("Button pressed");
+                        },
+                        child: const Text("Press me"),
+                      )),
                       // UI elements
                       const Positioned(
                         top: 4,
                         right: 4,
                         child: Toolbar(),
                       ),
+                      for (int i = 0; i < 4; i++)
+                        const MapTransformableImage(),
                     ]
                 ),
               ),
@@ -196,7 +209,55 @@ class _CameraProviderState extends SingleChildState<_CameraProvider> {
 }
 
 
-double log2(num x) => log(x) / ln2;
+class _ToolSelectionProvider extends SingleChildStatefulWidget {
+  const _ToolSelectionProvider({super.key, super.child});
+
+  @override
+  State<_ToolSelectionProvider> createState() => _ToolSelectionProviderState();
+}
+
+class _ToolSelectionProviderState extends SingleChildState<_ToolSelectionProvider> {
+  late final ToolSelection _toolSelection;
+
+  void _onToolSelectionInitialized() {
+    _toolSelection.addListener(_onToolSelectionUpdate);
+  }
+
+  void _onToolSelectionUpdate() {
+    PageStorage.maybeOf(context)?.writeState(
+        context,
+        _toolSelection.selectedTool,
+        identifier: const ValueKey('ToolSelectionProvider#selectedTool')
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Tool? snapshot = PageStorage.maybeOf(context)?.readState(
+        context,
+        identifier: const ValueKey('ToolSelectionProvider#selectedTool')
+    );
+    if (snapshot != null) {
+      _toolSelection = ToolSelection.initial(snapshot);
+    } else {
+      _toolSelection = ToolSelection();
+    }
+    _onToolSelectionInitialized();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _toolSelection.dispose();
+  }
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget? child) =>
+      ChangeNotifierProvider.value(value: _toolSelection, child: child);
+}
+
 
 class LODCalculator {
   final int minLOD;

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabula_historica/screens/transform_playground.dart';
 
 import 'screens/map_screen.dart';
 import 'screens/rdp_drawing_screen.dart';
@@ -121,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const LabeledCard(label: "Experiments", child: ScreenDirectory(screens: [
               ("Map", MapScreen()),
               ("Drawing", RDPDrawingScreen()),
+              ("Transform", TransformPlaygroundScreen()),
             ])),
           ],
         ),

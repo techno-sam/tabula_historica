@@ -40,19 +40,19 @@ class _MapController extends SingleChildStatelessWidget {
     double uiInteractionScale = pow(2, scale).toDouble();
 
     double xUnderCursor = centerX + (center.dx - camera.size.width / 2) /
-        (tileSize * uiInteractionScale);
+        (uiInteractionScale / 32);
     double zUnderCursor = centerZ + (center.dy - camera.size.height / 2) /
-        (tileSize * uiInteractionScale);
+        (uiInteractionScale / 32);
 
     scale += deltaScale;
-    scale = scale.clamp(log2(1 / 8), log2(128));
+    scale = scale.clamp(camera.minZoom, camera.maxZoom);
 
     uiInteractionScale = pow(2, scale).toDouble();
 
     centerX = xUnderCursor - (center.dx - camera.size.width / 2) /
-        (tileSize * uiInteractionScale);
+        (uiInteractionScale / 32);
     centerZ = zUnderCursor - (center.dy - camera.size.height / 2) /
-        (tileSize * uiInteractionScale);
+        (uiInteractionScale / 32);
 
     camera.asBatchOperation(() {
       camera.blockPosCenter = Point(centerX, centerZ);
@@ -68,7 +68,8 @@ class _MapController extends SingleChildStatelessWidget {
     final List<Offset> communicatedCenter = [const Offset(0, 0)];
 
     return KeyboardListener(
-      focusNode: FocusNode()..requestFocus(),
+      focusNode: FocusNode()
+        ..requestFocus(),
       onKeyEvent: (event) {
         if (event is KeyDownEvent && event.logicalKey.keyLabel == "D") {
           // zoom to max zoom
@@ -76,27 +77,35 @@ class _MapController extends SingleChildStatelessWidget {
         }
       },
       child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (details) {
+            logger.d("Clicked block pos ${camera.getBlockPos(
+                details.localPosition.toPoint())}");
+          },
           onPointerHover: (details) {
             communicatedCenter[0] = details.localPosition;
           },
           onPointerMove: (details) {
             communicatedCenter[0] = details.localPosition;
-            if (details.down && (toolSelection.selectedTool == Tool.pan || details.matches(primary: false, secondary: true))) {
+            if (details.down && (toolSelection.selectedTool == Tool.pan ||
+                details.matches(primary: false, secondary: true))) {
               double unadjustedScale = pow(2, camera.zoom).toDouble();
               Point<double> offset = Point(
-                  details.delta.dx / (tileSize * unadjustedScale),
-                  details.delta.dy / (tileSize * unadjustedScale)
+                  details.delta.dx / unadjustedScale,
+                  details.delta.dy / unadjustedScale
               );
-              camera.blockPosCenter = camera.blockPosCenter - offset;
+              camera.blockPosCenter = camera.blockPosCenter - offset * 32;
             }
           },
           onPointerSignal: (details) {
             if (details is PointerScrollEvent) {
-              _applyScaleChange(-details.scrollDelta.dy / 150, details.position, camera); // fixme should this use localPosition?
+              _applyScaleChange(
+                  -details.scrollDelta.dy / 150, details.localPosition, camera);
             }
           },
           onPointerPanZoomUpdate: (details) {
-            _applyScaleChange(details.panDelta.dy / 100, details.localPosition, camera);
+            _applyScaleChange(
+                details.panDelta.dy / 100, details.localPosition, camera);
           },
           child: child
       ),

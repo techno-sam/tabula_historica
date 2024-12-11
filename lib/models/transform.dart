@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:ui';
+
 abstract class Transform2DView {
   factory Transform2DView(Transform2DView transform) =>
       _Transform2DViewImpl(transform);
@@ -95,4 +97,17 @@ class _Transform2DViewImpl implements Transform2DView {
 
   @override
   Map<String, dynamic> toJson() => _wrapped.toJson();
+}
+
+extension ViewConvenienceExtension on Transform2DView {
+  Offset get translation => Offset(translationX, translationY);
+}
+
+extension ConvenienceExtension on Transform2D {
+  Offset get translation => Offset(translationX, translationY);
+
+  set translation(Offset value) {
+    translationX = value.dx;
+    translationY = value.dy;
+  }
 }
