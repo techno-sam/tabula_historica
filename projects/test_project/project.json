@@ -1,6 +1,7 @@
 {
   "references": [
     {
+      "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a31",
       "image": {
         "path": "references/demo_ref.png",
         "width": 1920,
