@@ -58,11 +58,11 @@ class Transform2D implements Transform2DView {
 
   factory Transform2D.fromJson(Map<String, dynamic> json) {
     return Transform2D(
-        translationX: json["translation"]["x"],
-        translationY: json["translation"]["y"],
-        scaleX: json["scale"]["x"],
-        scaleY: json["scale"]["y"],
-        rotation: json["rotation"]);
+        translationX: (json["translation"]["x"] as num).toDouble(),
+        translationY: (json["translation"]["y"] as num).toDouble(),
+        scaleX: (json["scale"]["x"] as num).toDouble(),
+        scaleY: (json["scale"]["y"] as num).toDouble(),
+        rotation: (json["rotation"] as num).toDouble());
   }
 
   @override

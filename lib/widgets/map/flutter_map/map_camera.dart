@@ -53,7 +53,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../math.dart';
+import '../../../util/math.dart';
 import 'extensions/point.dart';
 import 'tile_update_event.dart';
 

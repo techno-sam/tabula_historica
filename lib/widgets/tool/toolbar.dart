@@ -40,7 +40,7 @@ class Toolbar extends StatelessWidget {
 
     return Card.outlined(
       elevation: 1,
-      color: theme.colorScheme.surfaceContainerLow,
+      color: theme.colorScheme.surfaceContainerLowest,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         child: Row(

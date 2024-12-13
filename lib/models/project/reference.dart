@@ -19,11 +19,16 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:uuid/uuid.dart';
+
+import 'foundation/needs_save.dart';
 import 'foundation/project_path.dart';
 import '../transform.dart';
+import 'history_manager.dart';
 import 'loading_context.dart';
 
-class Reference {
+class Reference with NeedsSave {
+  final String _uuid;
   ProjectPath image;
   Point<int> imageDimensions;
   String title;
@@ -31,8 +36,10 @@ class Reference {
   BlendMode blendMode;
   final Transform2D _transform;
   late final Transform2DView _transformView = Transform2DView(_transform);
+  get uuid => _uuid;
 
   Reference({
+    String? uuid,
     required this.image,
     required this.imageDimensions,
     String? title,
@@ -40,17 +47,19 @@ class Reference {
     this.blendMode = BlendMode.srcOver,
     Transform2D? transform
   })
-      : title = title ?? "Unnamed Reference",
+      : _uuid = uuid ?? const Uuid().v4(),
+        title = title ?? "Unnamed Reference",
         _transform = transform ?? Transform2D();
 
   Transform2DView get transform => _transformView;
 
   factory Reference.fromJson(LoadingContext ctx, Map<String, dynamic> json) {
     return Reference(
+        uuid: json["uuid"],
         image: ProjectPath(projectRoot: ctx.projectRoot, path: json["image"]["path"]),
         imageDimensions: Point<int>(json["image"]["width"], json["image"]["height"]),
         title: json["title"],
-        opacity: json["opacity"],
+        opacity: (json["opacity"] as num).toDouble(),
         blendMode: BlendMode.values.where((e) => e.name == json["blendMode"]).first,
         transform: Transform2D.fromJson(json["transform"])
     );
@@ -58,6 +67,7 @@ class Reference {
 
   Map<String, dynamic> toJson() {
     return {
+      "uuid": _uuid,
       "image": {
         "path": image.path,
         "width": imageDimensions.x,
@@ -126,5 +136,11 @@ class Reference {
     );
 
     return scaled;
+  }
+
+  // fixme add history support
+  void updateTransformImmediate(HistoryManager history, void Function(Transform2D) updater) {
+    updater(_transform);
+    markDirty();
   }
 }

@@ -18,32 +18,65 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabula_historica/models/tools/references_state.dart';
 
 enum Tool {
   pan("Pan", Icons.pan_tool_outlined, Icons.pan_tool),
   draw("Draw", Icons.draw_outlined, Icons.draw),
-  references("References", Icons.photo_outlined, Icons.photo),
+  references("References", Icons.photo_outlined, Icons.photo, ephemeralState: ReferencesState.new),
   ;
 
   final IconData icon;
   final IconData selectedIcon;
   final String name;
+  final dynamic Function()? ephemeralState;
 
-  const Tool(this.name, this.icon, [IconData? selectedIcon]) : selectedIcon = selectedIcon ?? icon;
+  const Tool(this.name, this.icon, this.selectedIcon, {this.ephemeralState});
 }
 
 class ToolSelection extends ChangeNotifier {
+  dynamic _ephemeralState;
+
   Tool _selectedTool = Tool.pan;
 
   Tool get selectedTool => _selectedTool;
 
-  ToolSelection();
+  dynamic get ephemeralState => _ephemeralState;
 
-  ToolSelection.initial(Tool tool) : _selectedTool = tool;
+  ToolSelection() {
+    _createState();
+  }
+
+  ToolSelection.initial(Tool tool) : _selectedTool = tool {
+    _createState();
+  }
 
   void selectTool(Tool tool) {
+    if (_selectedTool == tool) {
+      return;
+    }
     _selectedTool = tool;
+    _createState();
     notifyListeners();
+  }
+
+  void _createState() {
+    if (_ephemeralState is ChangeNotifier) {
+      (_ephemeralState as ChangeNotifier).dispose();
+    }
+    _ephemeralState = _selectedTool.ephemeralState?.call();
+    if (_ephemeralState is ChangeNotifier) {
+      (_ephemeralState as ChangeNotifier).addListener(notifyListeners);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_ephemeralState is ChangeNotifier) {
+      (_ephemeralState as ChangeNotifier).dispose();
+    }
+    _ephemeralState = null;
+    super.dispose();
   }
 
   static ToolSelection of(BuildContext context, {bool listen = true}) {

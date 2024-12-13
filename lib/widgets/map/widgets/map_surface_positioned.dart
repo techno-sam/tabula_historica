@@ -20,7 +20,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../flutter_map/extensions/point.dart';
 import '../flutter_map/map_camera.dart';
 
 class MapSurfacePositioned extends StatelessWidget {

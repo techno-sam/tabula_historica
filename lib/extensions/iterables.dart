@@ -55,3 +55,13 @@ extension TupleToMap<K, V> on Iterable<(K, V)> {
     return Map.fromEntries(map((e) => MapEntry(e.$1, e.$2)));
   }
 }
+
+extension MapSingleValue<K, V> on Map<K, V> {
+  T? mapSingle<T>(K key, T Function(V) mapper) {
+    final value = this[key];
+    if (value == null) {
+      return null;
+    }
+    return mapper(value);
+  }
+}

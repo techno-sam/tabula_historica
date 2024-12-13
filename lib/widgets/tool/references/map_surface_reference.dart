@@ -21,54 +21,51 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
-import 'package:tabula_historica/models/tools/tool_selection.dart';
 
-import '../../logger.dart';
-import '../../models/transform.dart';
-import '../map/flutter_map/extensions/point.dart';
-import '../map/flutter_map/map_camera.dart';
+import '../../../models/project/history_manager.dart';
+import '../../../models/project/reference.dart';
+import '../../../models/tools/tool_selection.dart';
+import '../../../models/tools/references_state.dart';
+import '../../../models/transform.dart';
+import '../../map/flutter_map/extensions/point.dart';
+import '../../map/flutter_map/map_camera.dart';
 
-class MapTransformableImage extends StatefulWidget {
-  const MapTransformableImage({super.key});
+class MapTransformableReference extends StatefulWidget {
+
+  final Reference reference;
+
+  const MapTransformableReference({super.key, required this.reference});
 
   @override
-  State<MapTransformableImage> createState() => _MapTransformableImageState();
+  State<MapTransformableReference> createState() => _MapTransformableReferenceState();
 }
 
-class _MapTransformableImageState extends State<MapTransformableImage> {
-
-  final Transform2D _transform = Transform2D()
-    ..translationX = -32
-    ..translationY = 16;
-
-  late final int _random;
+class _MapTransformableReferenceState extends State<MapTransformableReference> {
 
   bool _activelyResizing = false;
   bool _activelyDragging = false;
 
   bool get _activelyTransforming => _activelyResizing || _activelyDragging;
 
-  @override
-  void initState() {
-    super.initState();
-
-    _random = Random().nextInt(100);
-  }
+  Transform2DView get _transformView => widget.reference.transform;
 
   @override
   Widget build(BuildContext context) {
     final camera = MapCamera.of(context);
     final toolSelection = ToolSelection.of(context);
+    final history = HistoryManager.of(context);
 
-    final selected = toolSelection.selectedTool == Tool.references;
+    final selected = toolSelection.selectedTool == Tool.references &&
+        toolSelection.ephemeralState is ReferencesState &&
+        toolSelection.ephemeralState.isReferenceSelected(widget.reference);
 
     const width = 800;
     const height = 450;
 
-    final projectedCenter = camera.getOffset(_transform.translation.toPoint());
+    final projectedCenter = camera.getOffset(_transformView.translation.toPoint());
     final cameraScale     = pow(2, camera.zoom).toDouble() / 32;
-    final scaledWidth     = width  * _transform.scaleX * cameraScale;
-    final scaledHeight    = height * _transform.scaleY * cameraScale;
+    final scaledWidth     = width  * _transformView.scaleX * cameraScale;
+    final scaledHeight    = height * _transformView.scaleY * cameraScale;
 
     final rect = Rect.fromCenter(
         center: projectedCenter.toOffset(),
@@ -101,9 +98,12 @@ class _MapTransformableImageState extends State<MapTransformableImage> {
 
       onChanged: (result, details) {
         setState(() {
-          _transform.translation = camera.getBlockPos(result.rect.center.toPoint()).toOffset();
-          _transform.scaleX = result.rect.width / width / cameraScale;
-          _transform.scaleY = result.rect.height / height / cameraScale;
+          // fixme make a history commit change instead
+          widget.reference.updateTransformImmediate(history, (transform) {
+            transform.translation = camera.getBlockPos(result.rect.center.toPoint()).toOffset();
+            transform.scaleX = result.rect.width / width / cameraScale;
+            transform.scaleY = result.rect.height / height / cameraScale;
+          });
         });
       },
 
@@ -155,9 +155,11 @@ class _MapTransformableImageState extends State<MapTransformableImage> {
         onDoubleTap: enabled ? () {
           // Reset aspect ratio
           setState(() {
-            final averageScale = (_transform.scaleX + _transform.scaleY) / 2;
-            _transform.scaleX = averageScale;
-            _transform.scaleY = averageScale;
+            final averageScale = (_transformView.scaleX + _transformView.scaleY) / 2;
+            widget.reference.updateTransformImmediate(history, (transform) {
+              transform.scaleX = averageScale;
+              transform.scaleY = averageScale;
+            });
           });
         } : null,
         child: Container(
@@ -171,8 +173,8 @@ class _MapTransformableImageState extends State<MapTransformableImage> {
               width: 2,
             ),
           ),
-          child: Image.network(
-            "https://picsum.photos/$width/$height?random=$_random",
+          child: Image.file(
+            widget.reference.image.toFile(),
             width: rect.width,
             height: rect.height,
             fit: BoxFit.fill,

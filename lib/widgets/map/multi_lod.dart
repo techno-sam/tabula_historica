@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -26,10 +27,12 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:tabula_historica/widgets/transform/playground.dart';
+import 'package:tabula_historica/widgets/project/all_references.dart';
+import 'package:tabula_historica/widgets/tool/references/reference_sidebar.dart';
+import 'package:tabula_historica/widgets/tool/tool_specific.dart';
 
-import '../../math.dart';
-import '../transform/map_surface_transformable.dart';
+import '../providers/project.dart';
+import '../../util/math.dart';
 import 'widgets/map_surface_positioned.dart';
 import '../../extensions/pointer_event.dart';
 import '../tool/toolbar.dart';
@@ -83,51 +86,63 @@ class MultiLODMap extends StatelessWidget {
             return const Text('Null data');
           }
 
+          final theme = Theme.of(context);
+
           return Center(
             child: MultiProvider(
-              providers: const [
-                _CameraProvider(),
-                _ToolSelectionProvider(),
+              providers: [
+                const _CameraProvider(),
+                const _ToolSelectionProvider(),
+                ProjectProvider(rootDir: Directory("/home/sam/AppDev/tabula_historica/projects/test_project"))
               ],
-              child: _MapController(
-                child: Stack(
-                    children: [
-                      if (_debugPadding != null)
-                        Padding(
-                          padding: EdgeInsets.all(_debugPadding!),
-                          child: Container(
-                            color: Colors.black.withOpacity(0.5),
-                            child: const SizedBox.expand(),
+              child: Stack(
+                children: [
+                  _MapController(
+                    child: Stack(
+                        children: [
+                          if (_debugPadding != null)
+                            Padding(
+                              padding: EdgeInsets.all(_debugPadding!),
+                              child: Container(
+                                color: Colors.black.withOpacity(0.5),
+                                child: const SizedBox.expand(),
+                              ),
+                            ),
+                          _MultiLODMap(
+                            lods: lods,
+                            tileProvider: CancellableNetworkTileProvider(),
+                            tileBuilder: tile_builder
+                                .coordinateAndLoadingTimeDebugTileBuilder,
+                            errorImage: const NetworkImage(
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
+                            evictErrorTileStrategy: EvictErrorTileStrategy
+                                .notVisibleRespectMargin,
                           ),
-                        ),
-                      _MultiLODMap(
-                        lods: lods,
-                        tileProvider: CancellableNetworkTileProvider(),
-                        tileBuilder: tile_builder
-                            .coordinateAndLoadingTimeDebugTileBuilder,
-                        errorImage: const NetworkImage(
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
-                        evictErrorTileStrategy: EvictErrorTileStrategy
-                            .notVisibleRespectMargin,
-                      ),
-                      //const DebugMapSurfacePositioned(x: -32, y: 16, baseScale: 1, which: false),
-                      MapSurfacePositioned(
-                          x: -32, y: 16, baseScale: 1, child: ElevatedButton(
-                        onPressed: () {
-                          logger.i("Button pressed");
-                        },
-                        child: const Text("Press me"),
-                      )),
-                      // UI elements
-                      const Positioned(
-                        top: 4,
-                        right: 4,
-                        child: Toolbar(),
-                      ),
-                      for (int i = 0; i < 4; i++)
-                        const MapTransformableImage(),
-                    ]
-                ),
+                          /******************************/
+                          /* Surface positioned widgets */
+                          /******************************/
+                          //const DebugMapSurfacePositioned(x: -32, y: 16, baseScale: 1, which: false),
+                          MapSurfacePositioned(
+                              x: -32, y: 16, baseScale: 1, child: ElevatedButton(
+                            onPressed: () {
+                              logger.i("Button pressed");
+                            },
+                            child: const Text("Press me"),
+                          )),
+                          const AllReferences(),
+                          /***************/
+                          /* UI elements */
+                          /***************/
+                          const Positioned(
+                            top: 4,
+                            right: 4,
+                            child: Toolbar(),
+                          ),
+                        ]
+                    ),
+                  ),
+                  const ReferenceSidebar(),
+                ],
               ),
             ),
           );
