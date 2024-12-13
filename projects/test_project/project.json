@@ -3,17 +3,61 @@
     {
       "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a31",
       "image": {
-        "path": "references/demo_ref.png",
+        "path": "references/demo_ref_1.png",
         "width": 1920,
         "height": 906
       },
-      "title": "Demo Reference",
+      "title": "Demo Reference 1",
       "opacity": 1.0,
       "blendMode": "srcOver",
       "transform": {
         "translation": {
           "x": 0,
           "y": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a32",
+      "image": {
+        "path": "references/demo_ref_2.png",
+        "width": 1920,
+        "height": 906
+      },
+      "title": "Demo Reference 2",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 100,
+          "y": 10.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a33",
+      "image": {
+        "path": "references/demo_ref_3.png",
+        "width": 1920,
+        "height": 906
+      },
+      "title": "Demo Reference 3",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 200,
+          "y": 20.0
         },
         "scale": {
           "x": 1.0,
