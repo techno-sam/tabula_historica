@@ -32,7 +32,7 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
     return {};
   }
 
-  static HistoryManager of(BuildContext context) {
-    return Provider.of(context, listen: false);
+  static HistoryManager of(BuildContext context, {bool listen = false}) {
+    return Provider.of(context, listen: listen);
   }
 }

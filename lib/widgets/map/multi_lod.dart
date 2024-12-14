@@ -27,20 +27,20 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:tabula_historica/widgets/project/all_references.dart';
-import 'package:tabula_historica/widgets/tool/references/reference_sidebar.dart';
-import 'package:tabula_historica/widgets/tool/tool_specific.dart';
 
-import '../providers/project.dart';
-import '../../util/math.dart';
-import 'widgets/map_surface_positioned.dart';
-import '../../extensions/pointer_event.dart';
-import '../tool/toolbar.dart';
 import '../../backend/backend.dart' as backend;
+import '../../extensions/pointer_event.dart';
 import '../../logger.dart';
+import '../../models/project/project.dart';
 import '../../models/tools/tool_selection.dart';
-import 'flutter_map/map_camera.dart';
+import '../../util/math.dart';
+import '../project/all_references.dart';
+import '../providers/project.dart';
+import '../tool/references/reference_sidebar.dart';
+import '../tool/toolbar.dart';
+import 'widgets/map_surface_positioned.dart';
 
+import 'flutter_map/map_camera.dart';
 import 'flutter_map/extensions/point.dart';
 import 'flutter_map/providers/cancellable/cancellable_network_tile_provider.dart';
 import 'flutter_map/providers/regular/network_tile_provider.dart';
@@ -86,14 +86,12 @@ class MultiLODMap extends StatelessWidget {
             return const Text('Null data');
           }
 
-          final theme = Theme.of(context);
-
           return Center(
             child: MultiProvider(
               providers: [
+                ProjectProvider(rootDir: Directory("/home/sam/AppDev/tabula_historica/projects/test_project")),
                 const _CameraProvider(),
                 const _ToolSelectionProvider(),
-                ProjectProvider(rootDir: Directory("/home/sam/AppDev/tabula_historica/projects/test_project"))
               ],
               child: Stack(
                 children: [
@@ -125,7 +123,7 @@ class MultiLODMap extends StatelessWidget {
                           MapSurfacePositioned(
                               x: -32, y: 16, baseScale: 1, child: ElevatedButton(
                             onPressed: () {
-                              logger.i("Button pressed");
+                              logger.d("Button pressed");
                             },
                             child: const Text("Press me"),
                           )),
@@ -241,8 +239,8 @@ class _ToolSelectionProviderState extends SingleChildState<_ToolSelectionProvide
   void _onToolSelectionUpdate() {
     PageStorage.maybeOf(context)?.writeState(
         context,
-        _toolSelection.selectedTool,
-        identifier: const ValueKey('ToolSelectionProvider#selectedTool')
+        _toolSelection.snapshot,
+        identifier: const ValueKey('ToolSelectionProvider#selectedToolSnapshot')
     );
   }
 
@@ -250,13 +248,16 @@ class _ToolSelectionProviderState extends SingleChildState<_ToolSelectionProvide
   void initState() {
     super.initState();
 
-    Tool? snapshot = PageStorage.maybeOf(context)?.readState(
+    ToolSelectionSnapshot? snapshot = PageStorage.maybeOf(context)?.readState(
         context,
-        identifier: const ValueKey('ToolSelectionProvider#selectedTool')
+        identifier: const ValueKey('ToolSelectionProvider#selectedToolSnapshot')
     );
     if (snapshot != null) {
-      _toolSelection = ToolSelection.initial(snapshot);
+      logger.d("Snapshot found, restoring ToolSelection from $snapshot");
+      final project = context.read<Project>();
+      _toolSelection = ToolSelection.initial(project, snapshot);
     } else {
+      logger.d("No snapshot found, creating new ToolSelection");
       _toolSelection = ToolSelection();
     }
     _onToolSelectionInitialized();

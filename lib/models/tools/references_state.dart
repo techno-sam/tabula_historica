@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:tabula_historica/models/project/project.dart';
 
 import '../project/reference.dart';
+import 'tool_selection.dart';
 
-class ReferencesState extends ChangeNotifier {
+class ReferencesState extends ChangeNotifier implements EphemeralState {
   WeakReference<Reference>? _selectedReference;
 
   bool isReferenceSelected(Reference reference) {
@@ -33,5 +36,32 @@ class ReferencesState extends ChangeNotifier {
     }
     _selectedReference = WeakReference(reference);
     notifyListeners();
+  }
+
+  void deselect() {
+    if (_selectedReference?.target == null) {
+      return;
+    }
+    _selectedReference = null;
+    notifyListeners();
+  }
+
+  @override
+  void restoreFromJson(Project project, Map<String, dynamic> json) {
+    final selectedReferenceUuid = json['selectedReference'] as String?;
+    if (selectedReferenceUuid != null) {
+      final reference = project.references.references
+          .firstWhereOrNull((element) => element.uuid == selectedReferenceUuid);
+      if (reference != null) {
+        _selectedReference = WeakReference(reference);
+      }
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'selectedReference': _selectedReference?.target?.uuid,
+    };
   }
 }

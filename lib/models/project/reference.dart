@@ -36,7 +36,7 @@ class Reference with NeedsSave {
   BlendMode blendMode;
   final Transform2D _transform;
   late final Transform2DView _transformView = Transform2DView(_transform);
-  get uuid => _uuid;
+  String get uuid => _uuid;
 
   Reference({
     String? uuid,

@@ -56,8 +56,8 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
     final history = HistoryManager.of(context);
 
     final selected = toolSelection.selectedTool == Tool.references &&
-        toolSelection.ephemeralState is ReferencesState &&
-        toolSelection.ephemeralState.isReferenceSelected(widget.reference);
+        toolSelection.mapStateOr((ReferencesState state) =>
+            state.isReferenceSelected(widget.reference), false);
 
     const width = 800;
     const height = 450;

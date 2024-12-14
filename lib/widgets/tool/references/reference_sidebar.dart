@@ -16,10 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_scroll_shadow/flutter_scroll_shadow.dart';
+import 'package:provider/provider.dart';
+import 'package:tabula_historica/models/project/history_manager.dart';
+import 'package:tabula_historica/models/project/project.dart';
+import 'package:tabula_historica/widgets/misc/select_editable_text.dart';
 
 import '../../../logger.dart';
+import '../../../models/project/reference.dart';
+import '../../../models/tools/references_state.dart';
 import '../../../models/tools/tool_selection.dart';
 import '../tool_specific.dart';
 
@@ -82,28 +91,159 @@ class _ReferenceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final history = HistoryManager.of(context);
+    final referenceList = ReferenceList.of(context);
 
     return ScrollShadow(
       color: (theme.dividerTheme.color ?? theme.colorScheme.outlineVariant).withOpacity(0.8),
       child: ReorderableListView.builder(
         restorationId: "reference_list",
         itemBuilder: (context, index) {
-          return ListTile(
-            key: ValueKey(index),
-            title: Row(
+          final reference = referenceList[index];
+          if (index == referenceList.length - 1) {
+            return _ReferenceListTile(
+              key: ObjectKey(reference.uuid),
+              reference: reference,
+              index: index,
+            );
+          }
+          return DecoratedBox(
+            key: ObjectKey(reference.uuid),
+            position: DecorationPosition.foreground,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: Divider.createBorderSide(context),
+              ),
+            ),
+            child: Column(
               children: [
-                const Icon(Icons.child_friendly, color: Colors.lightBlueAccent,),
-                const SizedBox(width: 8),
-                Text("Reference $index"),
+                _ReferenceListTile(
+                  reference: reference,
+                  index: index,
+                ),
+                const SizedBox(height: 1),
               ],
             ),
           );
         },
-        itemCount: 20,
+        itemCount: referenceList.length,
+        buildDefaultDragHandles: false,
         onReorder: (int oldIndex, int newIndex) {
-          logger.i("Reordering references from $oldIndex to $newIndex");
+          logger.d("Reordering references from $oldIndex to $newIndex");
+          referenceList.reorder(history, oldIndex, newIndex);
+        },
+        proxyDecorator: (child, index, animation) {
+          final toolSelection = ToolSelection.of(context, listen: false);
+          return AnimatedBuilder(
+            animation: animation,
+            builder: (BuildContext context, Widget? child) {
+              final double animValue = Curves.easeInOut.transform(animation.value);
+              final double elevation = lerpDouble(0, 6, animValue)!;
+              return Material(
+                elevation: elevation,
+                child: ChangeNotifierProvider.value(
+                  value: toolSelection,
+                  child: child,
+                ),
+              );
+            },
+            child: child,
+          );
         },
       ),
     );
   }
+}
+
+class _ReferenceListTile extends StatelessWidget {
+  final Reference reference;
+  final int index;
+
+  const _ReferenceListTile({super.key, required this.reference, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final toolSelection = ToolSelection.of(context);
+
+    final selected = toolSelection.selectedTool == Tool.references &&
+        toolSelection.mapStateOr((ReferencesState state) =>
+            state.isReferenceSelected(reference), false);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surfaceContainerLowest,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+        side: BorderSide(
+          color: selected ? Colors.blue : theme.colorScheme.onSurface.withOpacity(0.3),
+          width: selected ? 2 : 1,
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          toolSelection.withState((ReferencesState state) {
+            if (state.isReferenceSelected(reference)) {
+              logger.d("Deselecting reference ${reference.uuid}");
+              state.deselect();
+            } else {
+              logger.d("Selecting reference ${reference.uuid}");
+              state.selectReference(reference);
+            }
+          });
+        },
+        borderRadius: BorderRadius.circular(4),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    reference.title,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: const Icon(Icons.drag_handle),
+                  ),
+                ],
+              ),
+              const Divider(),
+              Image.file(
+                reference.image.toFile(),
+                width: 180,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+
+    /*return ListTile(
+      selected: selected,
+      selectedTileColor: Colors.blue.shade200,
+      leading: Icon(
+        Icons.image,
+        color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
+      ),
+      subtitle: const SizedBox(
+        width: 20,
+        height: 200,
+        child: Placeholder(),
+      ),
+      title: Text(
+        reference.title,
+        style: (theme.textTheme.titleMedium ?? const TextStyle())/*.copyWith(
+          color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
+        )*/,
+      ),
+      onTap: () {
+        logger.i("Selecting reference ${reference.uuid}");
+        toolSelection.withState((ReferencesState state) => state.selectReference(reference));
+      },
+    );*/
+  }
+
 }

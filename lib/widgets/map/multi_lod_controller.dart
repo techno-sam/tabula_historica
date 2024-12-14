@@ -79,7 +79,7 @@ class _MapController extends SingleChildStatelessWidget {
       child: Listener(
           behavior: HitTestBehavior.translucent,
           onPointerDown: (details) {
-            logger.d("Clicked block pos ${camera.getBlockPos(
+            logger.t("Clicked block pos ${camera.getBlockPos(
                 details.localPosition.toPoint())}");
           },
           onPointerHover: (details) {

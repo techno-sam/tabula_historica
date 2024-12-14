@@ -20,7 +20,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +40,10 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
   Iterable<Reference> get references => _references;
   Iterable<Reference> get referencesReversed => _references.reversed;
 
+  get length => _references.length;
+
+  Reference operator[](int index) => _references[index];
+
   void add(Reference reference) {
     _references.add(reference);
     markDirty();
@@ -56,17 +59,20 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
     return found;
   }
 
-  void reorder(int from, int to) {
+  void reorder(HistoryManager history, int from, int to) {
     if (from < 0 || from >= _references.length) {
       throw ArgumentError.value(from, "from", "invalid index");
     }
     if (to < 0) {
       throw ArgumentError.value(to, "to", "invalid index");
     }
+    to = min(to, _references.length);
 
     if (from == to) {
       return;
     }
+
+    // todo add history
 
     final value = _references.removeAt(from);
     if (from < to) { // account for the fact that we just shifted every item
@@ -142,9 +148,11 @@ class Project implements NeedsSave {
     historyManager.dispose();
   }
 
+  static const JsonEncoder _prettyEncoder = JsonEncoder.withIndent("  ");
+
   Future<void> save() async {
     File file = File("${root.path}/project.json");
-    await file.writeAsString(jsonEncode(toJson()));
+    await file.writeAsString(_prettyEncoder.convert(toJson()));
     markClean();
   }
 

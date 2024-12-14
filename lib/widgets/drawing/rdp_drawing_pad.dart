@@ -60,7 +60,7 @@ class _DrawingPadState extends State<_DrawingPad> {
       right: 0,
       child: Listener(
         onPointerDown: (event) {
-          logger.i("Pointer down at ${event.localPosition}, buttons: ${event.buttons}");
+          logger.d("Pointer down at ${event.localPosition}, buttons: ${event.buttons}");
 
           if (event.buttons & kSecondaryMouseButton != 0) {
             setState(() {

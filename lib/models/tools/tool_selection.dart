@@ -20,6 +20,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabula_historica/models/tools/references_state.dart';
 
+import '../project/project.dart';
+
+abstract class EphemeralState {
+  void restoreFromJson(Project project, Map<String, dynamic> json);
+  Map<String, dynamic> toJson();
+}
+
 enum Tool {
   pan("Pan", Icons.pan_tool_outlined, Icons.pan_tool),
   draw("Draw", Icons.draw_outlined, Icons.draw),
@@ -29,27 +36,44 @@ enum Tool {
   final IconData icon;
   final IconData selectedIcon;
   final String name;
-  final dynamic Function()? ephemeralState;
+  final EphemeralState Function()? ephemeralState;
 
   const Tool(this.name, this.icon, this.selectedIcon, {this.ephemeralState});
 }
 
 class ToolSelection extends ChangeNotifier {
-  dynamic _ephemeralState;
+  EphemeralState? _ephemeralState;
 
   Tool _selectedTool = Tool.pan;
 
   Tool get selectedTool => _selectedTool;
 
-  dynamic get ephemeralState => _ephemeralState;
-
   ToolSelection() {
     _createState();
   }
 
-  ToolSelection.initial(Tool tool) : _selectedTool = tool {
+  ToolSelection.initial(Project project, ToolSelectionSnapshot tool) : _selectedTool = tool.selectedTool {
     _createState();
+    if (tool.ephemeralState != null) {
+      _ephemeralState?.restoreFromJson(project, tool.ephemeralState!);
+    }
   }
+
+  void withState<ES extends EphemeralState>(void Function(ES) callback) {
+    if (_ephemeralState is ES) {
+      callback(_ephemeralState as ES);
+    }
+  }
+
+  T? mapState<T, ES extends EphemeralState>(T Function(ES) mapper) {
+    if (_ephemeralState is ES) {
+      return mapper(_ephemeralState as ES);
+    }
+    return null;
+  }
+
+  T mapStateOr<T, ES extends EphemeralState>(T Function(ES) mapper, T orElse) =>
+      mapState(mapper) ?? orElse;
 
   void selectTool(Tool tool) {
     if (_selectedTool == tool) {
@@ -79,7 +103,23 @@ class ToolSelection extends ChangeNotifier {
     super.dispose();
   }
 
+  ToolSelectionSnapshot get snapshot {
+    return ToolSelectionSnapshot(selectedTool: selectedTool, ephemeralState: _ephemeralState?.toJson());
+  }
+
   static ToolSelection of(BuildContext context, {bool listen = true}) {
     return Provider.of(context, listen: listen);
+  }
+}
+
+class ToolSelectionSnapshot {
+  final Tool selectedTool;
+  final Map<String, dynamic>? ephemeralState;
+
+  ToolSelectionSnapshot({required this.selectedTool, required this.ephemeralState});
+
+  @override
+  String toString() {
+    return 'ToolSelectionSnapshot{selectedTool: $selectedTool, ephemeralState: $ephemeralState}';
   }
 }
