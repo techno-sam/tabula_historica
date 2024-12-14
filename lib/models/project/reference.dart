@@ -17,17 +17,18 @@
  */
 
 import 'dart:math';
-import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../logger.dart';
 import 'foundation/needs_save.dart';
 import 'foundation/project_path.dart';
 import '../transform.dart';
 import 'history_manager.dart';
 import 'loading_context.dart';
 
-class Reference with NeedsSave {
+class Reference with NeedsSave, ChangeNotifier {
   final String _uuid;
   ProjectPath image;
   Point<int> imageDimensions;
@@ -142,5 +143,18 @@ class Reference with NeedsSave {
   void updateTransformImmediate(HistoryManager history, void Function(Transform2D) updater) {
     updater(_transform);
     markDirty();
+  }
+
+  // fixme add history support
+  void setTitle(HistoryManager history, String newTitle) {
+    title = newTitle;
+    logger.d("Set title of $this to $newTitle");
+    markDirty();
+  }
+
+  @override
+  void markDirty() {
+    super.markDirty();
+    notifyListeners();
   }
 }

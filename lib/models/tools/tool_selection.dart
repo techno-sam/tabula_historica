@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabula_historica/extensions/keyed_change_notifier.dart';
 import 'package:tabula_historica/models/tools/references_state.dart';
 
 import '../project/project.dart';
@@ -41,7 +42,7 @@ enum Tool {
   const Tool(this.name, this.icon, this.selectedIcon, {this.ephemeralState});
 }
 
-class ToolSelection extends ChangeNotifier {
+class ToolSelection extends ChangeNotifier with KeyedChangeNotifier {
   EphemeralState? _ephemeralState;
 
   Tool _selectedTool = Tool.pan;

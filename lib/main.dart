@@ -18,8 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabula_historica/screens/transform_playground.dart';
 
+import 'screens/transform_playground.dart';
 import 'screens/map_screen.dart';
 import 'screens/rdp_drawing_screen.dart';
 import 'backend/backend.dart' as backend;

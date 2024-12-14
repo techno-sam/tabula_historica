@@ -21,10 +21,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_scroll_shadow/flutter_scroll_shadow.dart';
 import 'package:provider/provider.dart';
+import 'package:tabula_historica/widgets/misc/scroll_shadow_axis_limiter.dart';
 
 import '../../../models/project/history_manager.dart';
 import '../../../models/project/project.dart';
 import '../../../logger.dart';
+import '../../../models/tools/references_state.dart';
 import '../../../models/tools/tool_selection.dart';
 import '../tool_specific.dart';
 import 'reference_sidebar_tile.dart';
@@ -46,7 +48,16 @@ class ReferenceSidebar extends StatelessWidget {
           width: 250,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
+            onTapUp: (details) {
+              if (details.localPosition.dy < 45) {
+                final toolSelection = ToolSelection.of(context, listen: false);
+                toolSelection.withState((ReferencesState state) {
+                  state.deselect();
+                });
+              }
+            },
             child: Card(
+              margin: EdgeInsets.zero,
               elevation: 1,
               color: theme.colorScheme.surfaceContainerLowest,
               child: Padding(
@@ -93,60 +104,66 @@ class _ReferenceList extends StatelessWidget {
 
     return ScrollShadow(
       color: (theme.dividerTheme.color ?? theme.colorScheme.outlineVariant).withOpacity(0.8),
-      child: ReorderableListView.builder(
-        restorationId: "reference_list",
-        itemBuilder: (context, index) {
-          final reference = referenceList[index];
-          if (index == referenceList.length - 1) {
-            return ReferenceListTile(
-              key: ObjectKey(reference.uuid),
-              reference: reference,
-              index: index,
-            );
-          }
-          return DecoratedBox(
-            key: ObjectKey(reference.uuid),
-            position: DecorationPosition.foreground,
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: Divider.createBorderSide(context),
-              ),
-            ),
-            child: Column(
-              children: [
-                ReferenceListTile(
-                  reference: reference,
-                  index: index,
-                ),
-                const SizedBox(height: 1),
-              ],
-            ),
-          );
-        },
-        itemCount: referenceList.length,
-        buildDefaultDragHandles: false,
-        onReorder: (int oldIndex, int newIndex) {
-          logger.d("Reordering references from $oldIndex to $newIndex");
-          referenceList.reorder(history, oldIndex, newIndex);
-        },
-        proxyDecorator: (child, index, animation) {
-          final toolSelection = ToolSelection.of(context, listen: false);
-          return AnimatedBuilder(
-            animation: animation,
-            builder: (BuildContext context, Widget? child) {
-              final double animValue = Curves.easeInOut.transform(animation.value);
-              final double elevation = lerpDouble(0, 6, animValue)!;
-              return Material(
-                elevation: elevation,
-                child: ChangeNotifierProvider.value(
-                  value: toolSelection,
-                  child: child,
-                ),
+      child: ScrollShadowAxisLimiter(
+        axis: Axis.vertical,
+        child: ReorderableListView.builder(
+          restorationId: "reference_list",
+          itemBuilder: (context, index) {
+            final reference = referenceList[index];
+            if (index == referenceList.length - 1) {
+              return ReferenceListTile(
+                key: ObjectKey(reference.uuid),
+                index: index,
+                reference: reference,
               );
-            },
-            child: child,
-          );
-        },
+            }
+            return DecoratedBox(
+              key: ObjectKey(reference.uuid),
+              position: DecorationPosition.foreground,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: Divider.createBorderSide(context),
+                ),
+              ),
+              child: Column(
+                children: [
+                  ReferenceListTile(
+                    index: index,
+                    reference: reference,
+                  ),
+                  const SizedBox(height: 1),
+                ],
+              ),
+            );
+          },
+          itemCount: referenceList.length,
+          buildDefaultDragHandles: false,
+          onReorder: (int oldIndex, int newIndex) {
+            logger.d("Reordering references from $oldIndex to $newIndex");
+            referenceList.reorder(history, oldIndex, newIndex);
+          },
+          proxyDecorator: (child, index, animation) {
+            final toolSelection = ToolSelection.of(context, listen: false);
+            return AnimatedBuilder(
+              animation: animation,
+              builder: (BuildContext context, Widget? child) {
+                final double animValue = Curves.easeInOut.transform(animation.value);
+                final double elevation = lerpDouble(0, 6, animValue)!;
+                return Material(
+                  elevation: elevation,
+                  child: MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider.value(value: history),
+                      ChangeNotifierProvider.value(value: toolSelection),
+                    ],
+                    child: child,
+                  ),
+                );
+              },
+              child: child,
+            );
+          },
+        ),
       ),
     );
   }

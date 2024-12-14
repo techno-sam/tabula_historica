@@ -17,8 +17,14 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
+import 'package:provider/provider.dart';
+import 'package:tabula_historica/main.dart';
+import 'package:tabula_historica/models/project/project.dart';
 
+import '../../misc/simple_editable_text.dart';
 import '../../../logger.dart';
+import '../../../models/project/history_manager.dart';
 import '../../../models/project/reference.dart';
 import '../../../models/tools/references_state.dart';
 import '../../../models/tools/tool_selection.dart';
@@ -31,8 +37,10 @@ class ReferenceListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    timeDilation = 1.0;
     final theme = Theme.of(context);
     final toolSelection = ToolSelection.of(context);
+    final history = HistoryManager.of(context);
 
     final selected = toolSelection.selectedTool == Tool.references &&
         toolSelection.mapStateOr((ReferencesState state) =>
@@ -49,15 +57,10 @@ class ReferenceListTile extends StatelessWidget {
         ),
       ),
       child: InkWell(
-        onTap: () {
+        onTap: selected ? null : () {
           toolSelection.withState((ReferencesState state) {
-            if (state.isReferenceSelected(reference)) {
-              logger.d("Deselecting reference ${reference.uuid}");
-              state.deselect();
-            } else {
-              logger.d("Selecting reference ${reference.uuid}");
-              state.selectReference(reference);
-            }
+            logger.d("Selecting reference ${reference.uuid}");
+            state.selectReference(reference);
           });
         },
         borderRadius: BorderRadius.circular(4),
@@ -68,9 +71,38 @@ class ReferenceListTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    reference.title,
-                    style: theme.textTheme.titleMedium,
+                  Flexible(
+                    child: selected
+                        ? SimpleEditableText(
+                            reference.title,
+                            style: theme.textTheme.titleMedium,
+                            dense: true,
+                            onChanged: (newTitle) =>
+                                reference.setTitle(history, newTitle),
+                            addPreDisposeCallback: (callback) {
+                              toolSelection.addKeyedListener(() {
+                                if (!toolSelection.mapStateOr(
+                                    (ReferencesState state) =>
+                                        state.isReferenceSelected(reference),
+                                    false)) {
+                                  callback();
+                                }
+                              }, callback);
+                            },
+                            removePreDisposeCallback: (callback) {
+                              toolSelection.removeKeyedListener(callback);
+                            },
+                          )
+                        : Container(
+                            alignment: Alignment.centerLeft,
+                            height: 20,
+                            child: Text(
+                              key: ValueKey(reference.uuid),
+                              reference.title,
+                              style: theme.textTheme.titleMedium,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                   ),
                   ReorderableDragStartListener(
                     index: index,
@@ -79,9 +111,26 @@ class ReferenceListTile extends StatelessWidget {
                 ],
               ),
               const Divider(),
-              Image.file(
-                reference.image.toFile(),
-                width: 180,
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.file(
+                    reference.image.toFile(),
+                    width: 180,
+                  ),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    transitionBuilder: (child, animation) => SizeTransition(
+                      sizeFactor: animation,
+                      fixedCrossAxisSizeFactor: 1.0,
+                      child: child,
+                    ),
+                    child: selected ? Text(
+                      reference.image.path,
+                      style: theme.textTheme.labelSmall,
+                    ) : const SizedBox(),
+                  ),
+                ],
               )
             ],
           ),

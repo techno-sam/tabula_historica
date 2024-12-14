@@ -100,6 +100,14 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
   @override
   bool get needsSave => _extraNeedsSave || _references.any((e) => e.needsSave);
 
+  @override
+  void dispose() {
+    for (var e in _references) {
+      e.dispose();
+    }
+    super.dispose();
+  }
+
   static ReferenceList of(BuildContext context, {bool listen = true}) {
     return Provider.of(context, listen: listen);
   }
