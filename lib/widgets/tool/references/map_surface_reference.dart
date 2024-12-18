@@ -21,6 +21,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/project/history_manager.dart';
 import '../../../models/project/reference.dart';
@@ -29,6 +30,7 @@ import '../../../models/tools/references_state.dart';
 import '../../../models/transform.dart';
 import '../../map/flutter_map/extensions/point.dart';
 import '../../map/flutter_map/map_camera.dart';
+import '../../misc/blend_mask.dart';
 
 class MapTransformableReference extends StatefulWidget {
 
@@ -59,8 +61,8 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
         toolSelection.mapStateOr((ReferencesState state) =>
             state.isReferenceSelected(widget.reference), false);
 
-    const width = 800;
-    const height = 450;
+    final width = widget.reference.imageDimensions.x;
+    final height = widget.reference.imageDimensions.y;
 
     final projectedCenter = camera.getOffset(_transformView.translation.toPoint());
     final cameraScale     = pow(2, camera.zoom).toDouble() / 32;
@@ -82,104 +84,122 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
         max(scaledWidth, scaledHeight) < 10))
     ;
 
-    return TransformableBox(
-      rect: rect,
-      flip: Flip.none,
-      allowContentFlipping: false,
-      allowFlippingWhileResizing: false,
-      draggable: enabled,
-      resizable: enabled,
-      constraints: BoxConstraints(
-        minWidth: (width * cameraScale) / 10.0,
-        minHeight: (height * cameraScale) / 10.0,
-      ),
-      supportedDragDevices: supportedDragDevices,
-      supportedResizeDevices: supportedDragDevices,
+    return ChangeNotifierProvider.value(
+      value: widget.reference,
+      child: TransformableBox(
+        rect: rect,
+        flip: Flip.none,
+        allowContentFlipping: false,
+        allowFlippingWhileResizing: false,
+        draggable: enabled,
+        resizable: enabled,
+        constraints: BoxConstraints(
+          minWidth: (width * cameraScale) / 10.0,
+          minHeight: (height * cameraScale) / 10.0,
+        ),
+        supportedDragDevices: supportedDragDevices,
+        supportedResizeDevices: supportedDragDevices,
 
-      onChanged: (result, details) {
-        setState(() {
-          // fixme make a history commit change instead
-          widget.reference.updateTransformImmediate(history, (transform) {
-            transform.translation = camera.getBlockPos(result.rect.center.toPoint()).toOffset();
-            transform.scaleX = result.rect.width / width / cameraScale;
-            transform.scaleY = result.rect.height / height / cameraScale;
-          });
-        });
-      },
-
-      onResizeStart: (handle, details) {
-        bool wasTransforming = _activelyTransforming;
-        _activelyResizing = true;
-        if (wasTransforming != _activelyTransforming) {
-          setState(() {});
-        }
-      },
-      onResizeEnd: (handle, details) {
-        bool wasTransforming = _activelyTransforming;
-        _activelyResizing = false;
-        if (wasTransforming != _activelyTransforming) {
-          setState(() {});
-        }
-      },
-      onResizeCancel: (handle) {
-        bool wasTransforming = _activelyTransforming;
-        _activelyResizing = false;
-        if (wasTransforming != _activelyTransforming) {
-          setState(() {});
-        }
-      },
-
-      onDragStart: (details) {
-        bool wasTransforming = _activelyTransforming;
-        _activelyDragging = true;
-        if (wasTransforming != _activelyTransforming) {
-          setState(() {});
-        }
-      },
-      onDragEnd: (details) {
-        bool wasTransforming = _activelyTransforming;
-        _activelyDragging = false;
-        if (wasTransforming != _activelyTransforming) {
-          setState(() {});
-        }
-      },
-      onDragCancel: () {
-        bool wasTransforming = _activelyTransforming;
-        _activelyDragging = false;
-        if (wasTransforming != _activelyTransforming) {
-          setState(() {});
-        }
-      },
-
-      contentBuilder: (context, rect, flip) => GestureDetector(
-        onDoubleTap: enabled ? () {
-          // Reset aspect ratio
+        onChanged: (result, details) {
           setState(() {
-            final averageScale = (_transformView.scaleX + _transformView.scaleY) / 2;
+            // fixme make a history commit change instead
             widget.reference.updateTransformImmediate(history, (transform) {
-              transform.scaleX = averageScale;
-              transform.scaleY = averageScale;
+              transform.translation = camera.getBlockPos(result.rect.center.toPoint()).toOffset();
+              transform.scaleX = result.rect.width / width / cameraScale;
+              transform.scaleY = result.rect.height / height / cameraScale;
             });
           });
-        } : null,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: selected
-                  ? (enabled
-                    ? Colors.blue
-                    : Colors.blue.shade700)
-                  : Colors.black,
-              width: 2,
+        },
+
+        onResizeStart: (handle, details) {
+          bool wasTransforming = _activelyTransforming;
+          _activelyResizing = true;
+          if (wasTransforming != _activelyTransforming) {
+            setState(() {});
+          }
+        },
+        onResizeEnd: (handle, details) {
+          bool wasTransforming = _activelyTransforming;
+          _activelyResizing = false;
+          if (wasTransforming != _activelyTransforming) {
+            setState(() {});
+          }
+        },
+        onResizeCancel: (handle) {
+          bool wasTransforming = _activelyTransforming;
+          _activelyResizing = false;
+          if (wasTransforming != _activelyTransforming) {
+            setState(() {});
+          }
+        },
+
+        onDragStart: (details) {
+          bool wasTransforming = _activelyTransforming;
+          _activelyDragging = true;
+          if (wasTransforming != _activelyTransforming) {
+            setState(() {});
+          }
+        },
+        onDragEnd: (details) {
+          bool wasTransforming = _activelyTransforming;
+          _activelyDragging = false;
+          if (wasTransforming != _activelyTransforming) {
+            setState(() {});
+          }
+        },
+        onDragCancel: () {
+          bool wasTransforming = _activelyTransforming;
+          _activelyDragging = false;
+          if (wasTransforming != _activelyTransforming) {
+            setState(() {});
+          }
+        },
+
+        contentBuilder: (context, rect, flip) {
+          final img = Image.file(
+              widget.reference.image.toFile(),
+              width: rect.width,
+              height: rect.height,
+              fit: BoxFit.fill,
+            );
+          return GestureDetector(
+          onDoubleTap: enabled ? () {
+            // Reset aspect ratio
+            setState(() {
+              final averageScale = (_transformView.scaleX + _transformView.scaleY) / 2;
+              widget.reference.updateTransformImmediate(history, (transform) {
+                transform.scaleX = averageScale;
+                transform.scaleY = averageScale;
+              });
+            });
+          } : null,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: selected
+                    ? (enabled
+                      ? Colors.blue
+                      : Colors.blue.shade700)
+                    : Colors.black,
+                width: 2,
+              ),
+            ),
+            child: Selector(
+              selector: (BuildContext context, Reference reference) => reference.blendMode,
+              builder: (context, blendMode, child) {
+                child ??= const SizedBox();
+                return blendMode == BlendMode.srcOver
+                    ? child
+                    : BlendMask(
+                      blendMode: blendMode,
+                      child: child
+                    );
+              },
+              child: img,
             ),
           ),
-          child: Image.file(
-            widget.reference.image.toFile(),
-            width: rect.width,
-            height: rect.height,
-            fit: BoxFit.fill,
-          ),
-        ),
+        );
+        },
       ),
     );
   }

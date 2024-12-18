@@ -21,14 +21,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_scroll_shadow/flutter_scroll_shadow.dart';
 import 'package:provider/provider.dart';
-import 'package:tabula_historica/widgets/misc/scroll_shadow_axis_limiter.dart';
 
+import '../../../logger.dart';
 import '../../../models/project/history_manager.dart';
 import '../../../models/project/project.dart';
-import '../../../logger.dart';
 import '../../../models/tools/references_state.dart';
 import '../../../models/tools/tool_selection.dart';
+import '../../misc/scroll_shadow_axis_limiter.dart';
 import '../tool_specific.dart';
+import 'reference_drop_target.dart';
 import 'reference_sidebar_tile.dart';
 
 class ReferenceSidebar extends StatelessWidget {
@@ -80,6 +81,7 @@ class ReferenceSidebar extends StatelessWidget {
                       height: theme.dividerTheme.thickness ?? 0,
                       thickness: theme.dividerTheme.thickness ?? 0,
                     ),
+                    const ReferenceDropTarget(),
                   ],
                 ),
               ),

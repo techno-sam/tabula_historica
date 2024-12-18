@@ -45,7 +45,7 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
   Reference operator[](int index) => _references[index];
 
   void add(Reference reference) {
-    _references.add(reference);
+    _references.insert(0, reference);
     markDirty();
     notifyListeners();
   }
@@ -164,7 +164,8 @@ class Project implements NeedsSave {
     markClean();
   }
 
-  Future<Reference> createReference(File sourceImage, Point<int> dimensions, String? title) async {
+  // fixme history
+  Future<Reference> createReference(HistoryManager history, File sourceImage, Point<int> dimensions, String? title) async {
     String name = sourceImage.path.split("/").last;
     Directory $references = root.resolve("references");
     await $references.create(recursive: true);
@@ -182,7 +183,8 @@ class Project implements NeedsSave {
     return reference;
   }
 
-  Reference createReferenceSync(File sourceImage, Point<int> dimensions, String? title) {
+  // fixme history
+  Reference createReferenceSync(HistoryManager history, File sourceImage, Point<int> dimensions, String? title) {
     String name = sourceImage.path.split("/").last;
     Directory $references = root.resolve("references");
     $references.createSync(recursive: true);
@@ -200,14 +202,16 @@ class Project implements NeedsSave {
     return reference;
   }
 
-  Future<void> removeReference(Reference reference) async {
+  // fixme history
+  Future<void> removeReference(HistoryManager history, Reference reference) async {
     if (!references.remove(reference)) {
       throw ArgumentError("Reference not found");
     }
     await reference.image.toFile().delete();
   }
 
-  void removeReferenceSync(Reference reference) {
+  // fixme history
+  void removeReferenceSync(HistoryManager history, Reference reference) {
     if (!references.remove(reference)) {
       throw ArgumentError("Reference not found");
     }

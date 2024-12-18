@@ -18,12 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
-import 'package:provider/provider.dart';
-import 'package:tabula_historica/main.dart';
-import 'package:tabula_historica/models/project/project.dart';
+import 'package:flutter_context_menu/flutter_context_menu.dart';
 
 import '../../misc/simple_editable_text.dart';
 import '../../../logger.dart';
+import '../../../models/project/project.dart';
 import '../../../models/project/history_manager.dart';
 import '../../../models/project/reference.dart';
 import '../../../models/tools/references_state.dart';
@@ -45,6 +44,22 @@ class ReferenceListTile extends StatelessWidget {
     final selected = toolSelection.selectedTool == Tool.references &&
         toolSelection.mapStateOr((ReferencesState state) =>
             state.isReferenceSelected(reference), false);
+
+    final entries = <ContextMenuEntry>[
+      MenuHeader(text: reference.title),
+      MenuItem(
+        label: "Delete",
+        onSelected: () async {
+          logger.d("Deleting reference ${reference.uuid}");
+          await Project.of(context, listen: false).removeReference(history, reference);
+        },
+      ),
+    ];
+
+    final menu = ContextMenu(
+      entries: entries,
+      padding: const EdgeInsets.all(8),
+    );
 
     return Card(
       elevation: 0,
@@ -68,55 +83,67 @@ class ReferenceListTile extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: selected
-                        ? SimpleEditableText(
-                            reference.title,
-                            style: theme.textTheme.titleMedium,
-                            dense: true,
-                            onChanged: (newTitle) =>
-                                reference.setTitle(history, newTitle),
-                            addPreDisposeCallback: (callback) {
-                              toolSelection.addKeyedListener(() {
-                                if (!toolSelection.mapStateOr(
-                                    (ReferencesState state) =>
-                                        state.isReferenceSelected(reference),
-                                    false)) {
-                                  callback();
-                                }
-                              }, callback);
-                            },
-                            removePreDisposeCallback: (callback) {
-                              toolSelection.removeKeyedListener(callback);
-                            },
-                          )
-                        : Container(
-                            alignment: Alignment.centerLeft,
-                            height: 20,
-                            child: Text(
-                              key: ValueKey(reference.uuid),
-                              reference.title,
-                              style: theme.textTheme.titleMedium,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+              ContextMenuRegion(
+                contextMenu: menu,
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: selected
+                                ? SimpleEditableText(
+                                    reference.title,
+                                    style: theme.textTheme.titleMedium,
+                                    dense: true,
+                                    onChanged: (newTitle) =>
+                                        reference.setTitle(history, newTitle),
+                                    addPreDisposeCallback: (callback) {
+                                      toolSelection.addKeyedListener(() {
+                                        if (!toolSelection.mapStateOr(
+                                            (ReferencesState state) =>
+                                                state.isReferenceSelected(reference),
+                                            false)) {
+                                          callback();
+                                        }
+                                      }, callback);
+                                    },
+                                    removePreDisposeCallback: (callback) {
+                                      toolSelection.removeKeyedListener(callback);
+                                    },
+                                  )
+                                : Container(
+                                    alignment: Alignment.centerLeft,
+                                    height: 20,
+                                    child: Text(
+                                      key: ValueKey(reference.uuid),
+                                      reference.title,
+                                      style: theme.textTheme.titleMedium,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
                           ),
+                          ReorderableDragStartListener(
+                            index: index,
+                            child: const Icon(Icons.drag_handle),
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                    ],
                   ),
-                  ReorderableDragStartListener(
-                    index: index,
-                    child: const Icon(Icons.drag_handle),
-                  ),
-                ],
+                ),
               ),
-              const Divider(),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.file(
                     reference.image.toFile(),
                     width: 180,
+                    height: 100,
+                    fit: BoxFit.contain,
                   ),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
@@ -131,11 +158,72 @@ class ReferenceListTile extends StatelessWidget {
                     ) : const SizedBox(),
                   ),
                 ],
-              )
+              ),
+              const SizedBox(height: 8,),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  fixedCrossAxisSizeFactor: 1.0,
+                  child: child,
+                ),
+                child: selected ? _BlendModeSelector(
+                  reference: reference,
+                ) : const SizedBox(),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BlendModeSelector extends StatefulWidget {
+  final Reference reference;
+
+  const _BlendModeSelector({super.key, required this.reference});
+
+  @override
+  State<_BlendModeSelector> createState() => _BlendModeSelectorState();
+}
+
+class _BlendModeSelectorState extends State<_BlendModeSelector> {
+
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final toolSelection = ToolSelection.of(context);
+    final history = HistoryManager.of(context);
+
+    return Row(
+      children: [
+        const Text("Blend mode: "),
+        DropdownButton<BlendMode>(
+          value: widget.reference.blendMode,
+          focusNode: _focusNode,
+          onChanged: (newBlendMode) {
+            setState(() {
+              widget.reference.setBlendMode(history, newBlendMode ?? BlendMode.srcOver);
+              _focusNode.unfocus();
+            });
+          },
+          items: BlendMode.values.map((mode) {
+            return DropdownMenuItem<BlendMode>(
+              value: mode,
+              child: Text(mode.toString().split(".")[1]),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }

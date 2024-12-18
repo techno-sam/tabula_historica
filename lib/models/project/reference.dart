@@ -147,6 +147,7 @@ class Reference with NeedsSave, ChangeNotifier {
 
   // fixme add history support
   void setTitle(HistoryManager history, String newTitle) {
+    if (title == newTitle) return;
     title = newTitle;
     logger.d("Set title of $this to $newTitle");
     markDirty();
@@ -156,5 +157,13 @@ class Reference with NeedsSave, ChangeNotifier {
   void markDirty() {
     super.markDirty();
     notifyListeners();
+  }
+
+  // fixme add history support
+  void setBlendMode(HistoryManager history, BlendMode newBlendMode) {
+    if (blendMode == newBlendMode) return;
+    blendMode = newBlendMode;
+    logger.d("Set blend mode of $this to $newBlendMode");
+    markDirty();
   }
 }
