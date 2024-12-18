@@ -111,5 +111,21 @@
       }
     }
   ],
-  "historyManager": {}
+  "historyManager": {
+    "undoEntries": [
+      {
+        "type": "HistoryEntryType.example",
+        "exampleField": "Hello World"
+      },
+      {
+        "type": "HistoryEntryType.example",
+        "exampleField": "Hello World2"
+      },
+      {
+        "type": "HistoryEntryType.example",
+        "exampleField": "Hello World3"
+      }
+    ],
+    "redoEntries": []
+  }
 }

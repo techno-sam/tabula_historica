@@ -65,6 +65,10 @@ class RingStack<T extends Object> extends Iterable<T> {
   @override
   Iterator<T> get iterator => _RingStackIterator(this);
 
+  Iterator<T> get reversedIterator => _ReverseRingStackIterator(this);
+
+  Iterable<T> get reversed => _ReverseRingStackIterable(this);
+
   void push(T value) {
     assert(_size <= capacity);
     // check if we're replacing a previous value
@@ -174,6 +178,36 @@ class _RingStackIterator<T extends Object> implements Iterator<T> {
     if (_index < _stack._size) {
       _current = _stack[_index];
       _index++;
+      return true;
+    }
+    return false;
+  }
+}
+
+class _ReverseRingStackIterable<T extends Object> extends Iterable<T> {
+  final RingStack<T> _stack;
+
+  _ReverseRingStackIterable(this._stack);
+
+  @override
+  Iterator<T> get iterator => _stack.reversedIterator;
+}
+
+class _ReverseRingStackIterator<T extends Object> implements Iterator<T> {
+  final RingStack<T> _stack;
+  int _index;
+  T? _current;
+
+  _ReverseRingStackIterator(this._stack) : _index = _stack._size - 1;
+
+  @override
+  T get current => _current as T;
+
+  @override
+  bool moveNext() {
+    if (_index >= 0) {
+      _current = _stack[_index];
+      _index--;
       return true;
     }
     return false;

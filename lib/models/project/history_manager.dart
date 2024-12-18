@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 import 'package:ring_stack/ring_stack.dart';
 
 import '../../logger.dart';
+import '../../util/partial_future.dart';
 import 'project.dart';
 import 'foundation/needs_save.dart';
 
@@ -53,8 +54,8 @@ enum HistoryEntryType {
 }
 
 abstract class HistoryEntry {
-  void undo(Project project);
-  void redo(Project project);
+  Future<void> undo(Project project);
+  Future<void> redo(Project project);
 
   void assertValidOnUndoStack() {}
   void assertValidOnRedoStack() {}
@@ -118,22 +119,30 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
     };
   }
 
-  void undo(Project project) {
+  PartialFuture<bool, void> undo(Project project) {
     if (_undoStack.isNotEmpty) {
-      final entry = _undoStack.pop();
-      entry.undo(project);
-      _redoStack.push(entry);
-      notifyListeners();
+      return PartialFuture.fromComputation(() async {
+        final entry = _undoStack.pop();
+        final future = entry.undo(project);
+        _redoStack.push(entry);
+        await future;
+        notifyListeners();
+      }, true);
     }
+    return PartialFuture.value(false);
   }
 
-  void redo(Project project) {
+  PartialFuture<bool, void> redo(Project project) {
     if (_redoStack.isNotEmpty) {
-      final entry = _redoStack.pop();
-      entry.redo(project);
-      _undoStack.push(entry);
-      notifyListeners();
+      return PartialFuture.fromComputation(() async {
+        final entry = _redoStack.pop();
+        final future = entry.redo(project);
+        _undoStack.push(entry);
+        await future;
+        notifyListeners();
+      }, true);
     }
+    return PartialFuture.value(false);
   }
 
   void record(HistoryEntry entry) {
@@ -146,6 +155,25 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
   void dispose() {
     _undoStack.clear();
     super.dispose();
+  }
+
+  String debugInfo() {
+    String out = "History State:\n";
+    if (_redoStack.isNotEmpty) {
+      for (final entry in _redoStack.reversed) {
+        out += "\t$entry\n";
+      }
+      out += "-" * 20 + "\n";
+      out += "^ Redo Stack\n";
+    }
+    if (_undoStack.isNotEmpty) {
+      out += "v Undo Stack\n";
+      out += "-" * 20 + "\n";
+      for (final entry in _undoStack) {
+        out += "\t$entry\n";
+      }
+    }
+    return out;
   }
 
   static HistoryManager of(BuildContext context, {bool listen = false}) {

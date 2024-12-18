@@ -35,6 +35,8 @@ import '../../models/project/project.dart';
 import '../../models/tools/tool_selection.dart';
 import '../../util/math.dart';
 import '../project/all_references.dart';
+import '../project/history_key_handler.dart';
+import '../providers/keyboard_event.dart';
 import '../providers/project.dart';
 import '../tool/references/reference_sidebar.dart';
 import '../tool/toolbar.dart';
@@ -92,6 +94,8 @@ class MultiLODMap extends StatelessWidget {
                 ProjectProvider(rootDir: Directory("/home/sam/AppDev/tabula_historica/projects/test_project")),
                 const _CameraProvider(),
                 const _ToolSelectionProvider(),
+                const KeyboardEventProvider(),
+                const HistoryKeyHandler(),
               ],
               child: Stack(
                 children: [

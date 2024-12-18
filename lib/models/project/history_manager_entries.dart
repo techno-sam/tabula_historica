@@ -28,12 +28,12 @@ class ExampleHistoryEntry extends HistoryEntry {
   }
 
   @override
-  void undo(Project project) {
+  Future<void> undo(Project project) async {
     logger.d('Undoing example history entry $exampleField');
   }
 
   @override
-  void redo(Project project) {
+  Future<void> redo(Project project) async {
     logger.d('Redoing example history entry $exampleField');
   }
 
