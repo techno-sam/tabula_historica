@@ -51,7 +51,7 @@ class ReferenceListTile extends StatelessWidget {
         label: "Delete",
         onSelected: () async {
           logger.d("Deleting reference ${reference.uuid}");
-          await Project.of(context, listen: false).removeReference(history, reference);
+          await Project.of(context, listen: false).removeReference(reference);
         },
       ),
     ];

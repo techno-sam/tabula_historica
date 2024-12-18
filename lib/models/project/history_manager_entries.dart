@@ -18,35 +18,78 @@
 
 part of 'history_manager.dart';
 
-class ExampleHistoryEntry extends HistoryEntry {
-  final String exampleField;
+class AddReferenceHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  Map<String, dynamic>? _actualData;
 
-  ExampleHistoryEntry(this.exampleField);
+  factory AddReferenceHistoryEntry(Reference reference) {
+    return AddReferenceHistoryEntry._(reference.uuid, reference.toJson());
+  }
 
-  factory ExampleHistoryEntry.fromJson(Map<String, dynamic> json) {
-    return ExampleHistoryEntry(json['exampleField']);
+  AddReferenceHistoryEntry._(this._uuid, this._actualData);
+
+  factory AddReferenceHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return AddReferenceHistoryEntry(json['exampleField']);
   }
 
   @override
   Future<void> undo(Project project) async {
-    logger.d('Undoing example history entry $exampleField');
+    final ref = project.getReference(_uuid)!;
+    logger.d('Undoing AddReference($ref)');
+    _actualData = ref.toJson();
+    // copy over image
+    String firstTwo = ref.uuid.substring(0, 2);
+    Directory tmpStorageDir = await project.root
+        .resolve("history_storage")
+        .resolve("references")
+        .resolve(firstTwo)
+        .create(recursive: true);
+
+    await ref.image.toFile().rename(tmpStorageDir.resolveFile(ref.uuid).path);
+
+    await project.removeReference(ref);
   }
 
   @override
   Future<void> redo(Project project) async {
-    logger.d('Redoing example history entry $exampleField');
+    Reference ref = Reference.fromJson(project.loadingContext, _actualData!);
+    logger.d('Redoing AddReference($ref)');
+
+    // copy back image
+    String firstTwo = ref.uuid.substring(0, 2);
+    Directory tmpStorageDir = project.root
+        .resolve("history_storage")
+        .resolve("references")
+        .resolve(firstTwo);
+
+    await tmpStorageDir.resolveFile(ref.uuid).rename(ref.image.toFile().path);
+
+    project.references.add(ref);
+
+    if (await tmpStorageDir.list().isEmpty) {
+      await tmpStorageDir.delete();
+    }
   }
 
   @override
-  HistoryEntryType get type => HistoryEntryType.example;
+  void assertValidOnRedoStack() {
+    super.assertValidOnRedoStack();
+    assert(_actualData != null);
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.addReference;
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'exampleField': exampleField,
+    return _actualData != null ? {
+      "uuid": _uuid,
+      "actualData": _actualData,
+    } : {
+      "uuid": _uuid,
     };
   }
 
   @override
-  String toString() => 'ExampleHistoryEntry($exampleField)';
+  String toString() => 'AddReferenceHistoryEntry($_uuid)';
 }

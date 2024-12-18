@@ -72,7 +72,7 @@ class _ReferenceDropTargetState extends State<ReferenceDropTarget> {
           final decoded = await decodeImageFromList(await item.readAsBytes());
           final dimensions = Point(decoded.width, decoded.height);
           logger.d("Dimensions $dimensions");
-          await project.createReference(history, tmpFile, dimensions, "New reference");
+          await project.createReference(tmpFile, dimensions, "New reference");
           decoded.dispose();
 
           await tmpFile.delete();

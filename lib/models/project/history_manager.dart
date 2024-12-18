@@ -16,10 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ring_stack/ring_stack.dart';
 
+import 'package:tabula_historica/extensions/directory.dart';
+import 'package:tabula_historica/models/project/reference.dart';
 import '../../logger.dart';
 import '../../util/partial_future.dart';
 import 'project.dart';
@@ -31,7 +35,7 @@ const int maxHistorySize = 1000;
 const int maxRedoSize = 100;
 
 enum HistoryEntryType {
-  example(ExampleHistoryEntry.fromJson),
+  addReference(AddReferenceHistoryEntry.fromJson),
   ;
 
   final HistoryEntry Function(Map<String, dynamic> json) _fromJson;

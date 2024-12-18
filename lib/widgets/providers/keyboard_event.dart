@@ -23,7 +23,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-import '../../logger.dart';
 import '../../util/partial_future.dart';
 
 enum KeyboardEvent {

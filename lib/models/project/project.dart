@@ -20,6 +20,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -119,6 +120,8 @@ class Project implements NeedsSave {
   final HistoryManager historyManager;
   bool _extraNeedsSave = false;
 
+  LoadingContext get loadingContext => LoadingContext(projectRoot: root);
+
   Project._({
     required this.root,
     List<Reference>? references,
@@ -165,7 +168,7 @@ class Project implements NeedsSave {
   }
 
   // fixme history
-  Future<Reference> createReference(HistoryManager history, File sourceImage, Point<int> dimensions, String? title) async {
+  Future<Reference> createReference(File sourceImage, Point<int> dimensions, String? title) async {
     String name = sourceImage.path.split("/").last;
     Directory $references = root.resolve("references");
     await $references.create(recursive: true);
@@ -184,7 +187,7 @@ class Project implements NeedsSave {
   }
 
   // fixme history
-  Reference createReferenceSync(HistoryManager history, File sourceImage, Point<int> dimensions, String? title) {
+  Reference createReferenceSync(File sourceImage, Point<int> dimensions, String? title) {
     String name = sourceImage.path.split("/").last;
     Directory $references = root.resolve("references");
     $references.createSync(recursive: true);
@@ -203,19 +206,31 @@ class Project implements NeedsSave {
   }
 
   // fixme history
-  Future<void> removeReference(HistoryManager history, Reference reference) async {
+  Future<void> removeReference(Reference reference) async {
     if (!references.remove(reference)) {
       throw ArgumentError("Reference not found");
     }
-    await reference.image.toFile().delete();
+    try {
+      await reference.image.toFile().delete();
+    } on FileSystemException {
+      // may have been moved by undo system
+    }
   }
 
   // fixme history
-  void removeReferenceSync(HistoryManager history, Reference reference) {
+  void removeReferenceSync(Reference reference) {
     if (!references.remove(reference)) {
       throw ArgumentError("Reference not found");
     }
-    reference.image.toFile().deleteSync();
+    try {
+      reference.image.toFile().deleteSync();
+    } on FileSystemException {
+      // may have been moved by undo system
+    }
+  }
+
+  Reference? getReference(String uuid) {
+    return references.references.firstWhereOrNull((e) => e.uuid == uuid);
   }
 
   @override

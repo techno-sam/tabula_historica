@@ -114,16 +114,24 @@
   "historyManager": {
     "undoEntries": [
       {
-        "type": "HistoryEntryType.example",
-        "exampleField": "Hello World"
+        "type": "HistoryEntryType.addReference",
+        "uuid": "6caa99c5-4cd6-459d-ab47-0bba03c322c1"
       },
       {
-        "type": "HistoryEntryType.example",
-        "exampleField": "Hello World2"
+        "type": "HistoryEntryType.addReference",
+        "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496"
       },
       {
-        "type": "HistoryEntryType.example",
-        "exampleField": "Hello World3"
+        "type": "HistoryEntryType.addReference",
+        "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a31"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a32"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a33"
       }
     ],
     "redoEntries": []
