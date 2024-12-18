@@ -59,10 +59,10 @@ class Reference with NeedsSave, ChangeNotifier {
         uuid: json["uuid"],
         image: ProjectPath(projectRoot: ctx.projectRoot, path: json["image"]["path"]),
         imageDimensions: Point<int>(json["image"]["width"], json["image"]["height"]),
-        title: json["title"],
-        opacity: (json["opacity"] as num).toDouble(),
-        blendMode: BlendMode.values.where((e) => e.name == json["blendMode"]).first,
-        transform: Transform2D.fromJson(json["transform"])
+        title: json["title"] ?? "Unnamed Reference",
+        opacity: (json["opacity"] as num?)?.toDouble() ?? 1.0,
+        blendMode: BlendMode.values.where((e) => e.name == json["blendMode"]).firstOrNull ?? BlendMode.srcOver,
+        transform: Transform2D.fromJson(json["transform"]  ?? {})
     );
   }
 

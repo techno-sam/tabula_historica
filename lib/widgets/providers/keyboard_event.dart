@@ -23,6 +23,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../../logger.dart';
 import '../../util/partial_future.dart';
 
 enum KeyboardEvent {
@@ -120,7 +121,8 @@ class _KeyboardEventProviderState extends SingleChildState<KeyboardEventProvider
   Widget buildWithChild(BuildContext context, Widget? child) {
     return Focus(
       focusNode: _focusNode,
-      canRequestFocus: false,
+      autofocus: true,
+      canRequestFocus: true,
       child: Provider.value(
         value: _registrar,
         child: child ?? const SizedBox(),

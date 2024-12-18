@@ -46,4 +46,7 @@ class ExampleHistoryEntry extends HistoryEntry {
       'exampleField': exampleField,
     };
   }
+
+  @override
+  String toString() => 'ExampleHistoryEntry($exampleField)';
 }

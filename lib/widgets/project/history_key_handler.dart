@@ -34,6 +34,9 @@ class HistoryKeyHandler extends SingleChildStatefulWidget {
 }
 
 class _HistoryKeyHandlerState extends SingleChildState<HistoryKeyHandler> {
+
+  KeyboardEventRegistrar? _registrar;
+
   PartialFuture<KeyEventResult, void> _onUndo(bool inProgress) {
     if (inProgress) return PartialFuture.value(KeyEventResult.ignored);
 
@@ -53,24 +56,42 @@ class _HistoryKeyHandlerState extends SingleChildState<HistoryKeyHandler> {
     return PartialFuture.value(KeyEventResult.handled);
   }
 
+  void _register() {
+    _registrar!.register(KeyboardEvent.undo, _onUndo);
+    _registrar!.register(KeyboardEvent.redo, _onRedo);
+    _registrar!.register(KeyboardEvent.debug, _onDebug);
+  }
+
+  void _unregister() {
+    _registrar!.unregister(KeyboardEvent.undo, _onUndo);
+    _registrar!.unregister(KeyboardEvent.redo, _onRedo);
+    _registrar!.unregister(KeyboardEvent.debug, _onDebug);
+  }
+
   @override
   void initState() {
     super.initState();
 
-    final registrar = context.read<KeyboardEventRegistrar>();
+    _registrar = context.read<KeyboardEventRegistrar>();
+    _register();
+  }
 
-    registrar.register(KeyboardEvent.undo, _onUndo);
-    registrar.register(KeyboardEvent.redo, _onRedo);
-    registrar.register(KeyboardEvent.debug, _onDebug);
+  @override
+  void didChangeDependencies() {
+    final registrar = context.read<KeyboardEventRegistrar>();
+    if (registrar != _registrar) {
+      _unregister();
+      _registrar = registrar;
+      _register();
+    }
+
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    final registrar = context.read<KeyboardEventRegistrar>();
-
-    registrar.unregister(KeyboardEvent.undo, _onUndo);
-    registrar.unregister(KeyboardEvent.redo, _onRedo);
-    registrar.unregister(KeyboardEvent.debug, _onDebug);
+    _unregister();
+    _registrar = null;
 
     super.dispose();
   }

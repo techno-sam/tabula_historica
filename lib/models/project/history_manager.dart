@@ -70,15 +70,15 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
   final RingStack<HistoryEntry> _undoStack = RingStack(maxHistorySize);
   final RingStack<HistoryEntry> _redoStack = RingStack(maxRedoSize);
 
-  HistoryManager({Iterable<HistoryEntry>? undoEntries, Iterable<HistoryEntry>? redoEntries}) {
+  HistoryManager({List<HistoryEntry>? undoEntries, List<HistoryEntry>? redoEntries}) {
     if (undoEntries != null) {
-      for (final entry in undoEntries) {
+      for (final entry in undoEntries.reversed) {
         _undoStack.push(entry);
       }
     }
 
     if (redoEntries != null) {
-      for (final entry in redoEntries) {
+      for (final entry in redoEntries.reversed) {
         _redoStack.push(entry);
       }
     }
@@ -99,10 +99,10 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
     final undoEntries = <HistoryEntry>[];
     final redoEntries = <HistoryEntry>[];
 
-    for (final entry in json['undoEntries']) {
+    for (final entry in json['undoEntries'] ?? []) {
       undoEntries.add(HistoryEntryType.fromJson(entry));
     }
-    for (final entry in json['redoEntries']) {
+    for (final entry in json['redoEntries'] ?? []) {
       redoEntries.add(HistoryEntryType.fromJson(entry));
     }
 
@@ -121,10 +121,12 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
 
   PartialFuture<bool, void> undo(Project project) {
     if (_undoStack.isNotEmpty) {
+      markDirty();
       return PartialFuture.fromComputation(() async {
         final entry = _undoStack.pop();
         final future = entry.undo(project);
         _redoStack.push(entry);
+        markDirty();
         await future;
         notifyListeners();
       }, true);
@@ -134,10 +136,12 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
 
   PartialFuture<bool, void> redo(Project project) {
     if (_redoStack.isNotEmpty) {
+      markDirty();
       return PartialFuture.fromComputation(() async {
         final entry = _redoStack.pop();
         final future = entry.redo(project);
         _undoStack.push(entry);
+        markDirty();
         await future;
         notifyListeners();
       }, true);
@@ -148,6 +152,7 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
   void record(HistoryEntry entry) {
     _redoStack.clear(logicalDispose: true);
     _undoStack.push(entry);
+    markDirty();
     notifyListeners();
   }
 
