@@ -53,6 +53,8 @@ dependencies:
   # local ring stack
   ring_stack:
     path: ring_stack
+  keymap: ^0.0.92
+  focus_debugger: ^0.0.2
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +66,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+
+dependency_overrides:
+  focus_debugger:
+    path: ../focus_debugger
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

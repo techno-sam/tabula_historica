@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tabula_historica/extensions/color_manipulation.dart';
+import 'package:tabula_historica/widgets/providers/keyboard_event.dart';
 import '../widgets/map/multi_lod.dart';
 
 class MapScreen extends StatelessWidget {
@@ -35,7 +36,7 @@ class MapScreen extends StatelessWidget {
         title: const Text('Demo Map'),
       ),
       backgroundColor: const Color(0xFFFCF5E5).lighten(0.025), // parchment
-      body: const MultiLODMap(),
+      body: const KeyboardEventProvider(child: MultiLODMap()),
     );
   }
 }

@@ -94,7 +94,6 @@ class MultiLODMap extends StatelessWidget {
                 ProjectProvider(rootDir: Directory("/home/sam/AppDev/tabula_historica/projects/test_project")),
                 const _CameraProvider(),
                 const _ToolSelectionProvider(),
-                const KeyboardEventProvider(),
                 const HistoryKeyHandler(),
               ],
               child: Stack(
@@ -144,6 +143,16 @@ class MultiLODMap extends StatelessWidget {
                     ),
                   ),
                   const ReferenceSidebar(),
+                  Positioned(
+                    bottom: 4,
+                    left: 4,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        logger.d(debugDescribeFocusTree());
+                      },
+                      child: const Text("Dump Focus"),
+                    ),
+                  )
                 ],
               ),
             ),

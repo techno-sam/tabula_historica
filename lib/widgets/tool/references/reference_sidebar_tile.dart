@@ -190,7 +190,7 @@ class _BlendModeSelector extends StatefulWidget {
 
 class _BlendModeSelectorState extends State<_BlendModeSelector> {
 
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode(debugLabel: "BlendModeSelector");
 
   @override
   void dispose() {

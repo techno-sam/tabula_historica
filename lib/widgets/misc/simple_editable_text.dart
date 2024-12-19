@@ -44,7 +44,7 @@ class SimpleEditableText extends StatefulWidget {
 
 class _SimpleEditableTextState extends State<SimpleEditableText> {
 
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode(debugLabel: "SimpleEditableText");
   late String _text;
 
   @override

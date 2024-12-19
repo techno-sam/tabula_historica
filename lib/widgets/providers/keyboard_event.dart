@@ -20,9 +20,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:keymap/keymap.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../../logger.dart';
 import '../../util/partial_future.dart';
 
 enum KeyboardEvent {
@@ -91,6 +93,8 @@ class KeyboardEventRegistrar {
   }
 }
 
+/// MUST be placed at highest-possible level.
+/// Focus will not be able to move above this widget.
 class KeyboardEventProvider extends SingleChildStatefulWidget {
   const KeyboardEventProvider({super.key, super.child});
 
@@ -99,46 +103,65 @@ class KeyboardEventProvider extends SingleChildStatefulWidget {
 }
 
 class _KeyboardEventProviderState extends SingleChildState<KeyboardEventProvider> {
-  late final FocusNode _focusNode;
   late final KeyboardEventRegistrar _registrar;
+  late final FocusScopeNode _focusScopeNode;
+  // final GlobalKey<KeyboardWidgetState> _keyboardWidgetKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode();
     _registrar = KeyboardEventRegistrar();
+    _focusScopeNode = FocusScopeNode(debugLabel: "KeyboardEventProvider FocusScope");
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _registrar.dispose();
+    _focusScopeNode.dispose();
     super.dispose();
   }
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    return Focus(
-      focusNode: _focusNode,
-      autofocus: true,
-      canRequestFocus: true,
-      child: Provider.value(
-        value: _registrar,
-        child: child ?? const SizedBox(),
-      ),
-      onKeyEvent: (_, final KeyEvent event) {
-        if (event is! KeyDownEvent) return KeyEventResult.ignored;
-
-        if (event.logicalKey == LogicalKeyboardKey.keyZ && HardwareKeyboard.instance.isControlPressed) {
-          return _registrar.handleEvent(KeyboardEvent.undo).value;
-        } else if (event.logicalKey == LogicalKeyboardKey.keyY && HardwareKeyboard.instance.isControlPressed) {
-          return _registrar.handleEvent(KeyboardEvent.redo).value;
-        } else if (event.logicalKey == LogicalKeyboardKey.keyD && HardwareKeyboard.instance.isControlPressed) {
-          return _registrar.handleEvent(KeyboardEvent.debug).value;
+    return FocusScope(
+      debugLabel: "KeyboardEventProvider FocusScope",
+      node: _focusScopeNode,
+      onFocusChange: (hasFocus) {
+        // logger.d("Focus changed: $hasFocus ${FocusManager.instance.primaryFocus?.toStringShort()}");
+        // logger.d("My parent: ${_focusScopeNode.parent?.toStringShort()}\nMy child: ${_focusScopeNode.children.firstOrNull?.toStringShort()}");
+        if (hasFocus && FocusManager.instance.primaryFocus == _focusScopeNode) {
+          // logger.d("Focus is on self, moving focus to first child");
+          _focusScopeNode.children.firstOrNull?.requestFocus();
         }
-
-        return KeyEventResult.ignored;
       },
+      child: KeyboardWidget(
+        // key: _keyboardWidgetKey,
+        helpText: "Tabula Historica Keyboard Shortcuts",
+        bindings: [
+          KeyAction(
+            LogicalKeyboardKey.keyZ,
+            "Undo",
+            () => _registrar.handleEvent(KeyboardEvent.undo),
+            isControlPressed: true,
+          ),
+          KeyAction(
+            LogicalKeyboardKey.keyY,
+            "Redo",
+            () => _registrar.handleEvent(KeyboardEvent.redo),
+            isControlPressed: true,
+          ),
+          KeyAction(
+            LogicalKeyboardKey.keyD,
+            "Debug History",
+            () => _registrar.handleEvent(KeyboardEvent.debug),
+            isControlPressed: true,
+          ),
+        ],
+        child: Provider.value(
+          value: _registrar,
+          child: child ?? const SizedBox(),
+        ),
+      ),
     );
   }
 }
