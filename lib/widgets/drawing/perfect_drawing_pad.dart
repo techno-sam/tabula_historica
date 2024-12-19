@@ -55,7 +55,7 @@ class _PerfectDrawingPadState extends State<PerfectDrawingPad> {
           color: Colors.red.withValues(alpha: 0.2),
           border: Border.all(color: Colors.greenAccent, width: 2),
         ),*/
-        child: toolSelection.selectedTool == Tool.draw
+        child: toolSelection.selectedTool == Tool.structures
             ? Listener(
                 behavior: HitTestBehavior.opaque,
                 onPointerDown: (PointerDownEvent event) {
@@ -90,7 +90,7 @@ class _PerfectDrawingPadState extends State<PerfectDrawingPad> {
             : customPaint,
       ),
     );
-    return toolSelection.selectedTool == Tool.draw ? out : IgnorePointer(child: out);
+    return toolSelection.selectedTool == Tool.structures ? out : IgnorePointer(child: out);
   }
 
   static void _transformPoints(List<List<PointVector>> lines, MapCamera camera) {

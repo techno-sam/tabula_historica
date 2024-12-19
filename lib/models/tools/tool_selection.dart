@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabula_historica/extensions/keyed_change_notifier.dart';
 import 'package:tabula_historica/models/tools/references_state.dart';
+import 'package:tabula_historica/models/tools/structures_state.dart';
 
 import '../project/project.dart';
 
@@ -30,7 +31,7 @@ abstract class EphemeralState {
 
 enum Tool {
   pan("Pan", Icons.pan_tool_outlined, Icons.pan_tool),
-  draw("Draw", Icons.draw_outlined, Icons.draw),
+  structures("Structures", Icons.draw_outlined, Icons.draw, ephemeralState: StructuresState.new),
   references("References", Icons.photo_outlined, Icons.photo, ephemeralState: ReferencesState.new),
   ;
 
