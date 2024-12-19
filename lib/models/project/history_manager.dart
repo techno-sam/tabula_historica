@@ -50,6 +50,7 @@ enum HistoryEntryType {
   modifyReferenceTitle(ModifyReferenceTitleHistoryEntry.fromJson),
   modifyReferenceBlendMode(ModifyReferenceBlendModeHistoryEntry.fromJson),
   modifyReferenceTransform(ModifyReferenceTransformHistoryEntry.fromJson),
+  modifyReferenceOpacity(ModifyReferenceOpacityHistoryEntry.fromJson),
   ;
 
   final HistoryEntry Function(Map<String, dynamic> json) _fromJson;

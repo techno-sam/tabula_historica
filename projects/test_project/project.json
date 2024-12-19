@@ -7,7 +7,7 @@
         "width": 182,
         "height": 181
       },
-      "title": "Me",
+      "title": "Slimeist",
       "opacity": 1.0,
       "blendMode": "srcOver",
       "transform": {
@@ -91,6 +91,12 @@
   ],
   "historyManager": {
     "undoEntries": [
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496",
+        "oldTitle": "Me",
+        "newTitle": "Slimeist"
+      },
       {
         "type": "HistoryEntryType.modifyReferenceTransform",
         "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496",

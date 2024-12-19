@@ -197,6 +197,38 @@ class Reference with NeedsSave, ChangeNotifier {
     markDirty();
   }
 
+  double? _opacityStart;
+  void recordOpacityStart() {
+    _opacityStart = opacity;
+    logger.d("Recorded opacity change start for $this");
+  }
+
+  void updateOpacityIntermediate(double newOpacity, {bool discardStart = false}) {
+    if (discardStart) {
+      _opacityStart = null;
+    }
+    opacity = newOpacity;
+    markDirty();
+    logger.t("Updated intermediate opacity of $this");
+  }
+
+  void cancelOpacity() {
+    if (_opacityStart == null) return;
+    opacity = _opacityStart!;
+    _opacityStart = null;
+    markDirty();
+    logger.d("Cancelled opacity change of $this");
+  }
+
+  void commitOpacity(HistoryManager history) {
+    if (_opacityStart == null) return;
+    if (opacity != _opacityStart) {
+      history.record(ModifyReferenceOpacityHistoryEntry(uuid, _opacityStart!, opacity));
+    }
+    _opacityStart = null;
+    logger.d("Committed opacity change of $this");
+  }
+
   @override
   void markDirty() {
     super.markDirty();

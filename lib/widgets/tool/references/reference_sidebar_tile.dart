@@ -173,6 +173,36 @@ class ReferenceListTile extends StatelessWidget {
                   reference: reference,
                 ) : const SizedBox(),
               ),
+              const SizedBox(height: 8,),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  fixedCrossAxisSizeFactor: 1.0,
+                  child: child,
+                ),
+                child: selected ? Column(
+                  children: [
+                    Text("Opacity:", style: theme.textTheme.labelLarge,),
+                    Slider(
+                      value: reference.opacity,
+                      onChangeStart: (_) {
+                        reference.recordOpacityStart();
+                      },
+                      onChanged: (newOpacity) {
+                        reference.updateOpacityIntermediate(newOpacity);
+                      },
+                      onChangeEnd: (_) {
+                        reference.commitOpacity(history);
+                      },
+                      min: 0.0,
+                      max: 1.0,
+                      divisions: 20,
+                      label: "${(reference.opacity * 100).floor()}%",
+                    ),
+                  ],
+                ) : const SizedBox(),
+              ),
             ],
           ),
         ),
@@ -202,11 +232,13 @@ class _BlendModeSelectorState extends State<_BlendModeSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final history = HistoryManager.of(context);
 
     return Row(
       children: [
-        const Text("Blend mode: "),
+        Text("Blend mode:", style: theme.textTheme.labelLarge),
+        const SizedBox(width: 8),
         DropdownButton<BlendMode>(
           value: widget.reference.blendMode,
           focusNode: _focusNode,

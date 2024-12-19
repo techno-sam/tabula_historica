@@ -22,6 +22,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:provider/provider.dart';
+import 'package:tabula_historica/extensions/numeric.dart';
 
 import '../../../models/project/history_manager.dart';
 import '../../../models/project/reference.dart';
@@ -193,13 +194,16 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
               ),
             ),
             child: Selector(
-              selector: (BuildContext context, Reference reference) => reference.blendMode,
-              builder: (context, blendMode, child) {
+              selector: (BuildContext context, Reference reference) => (reference.blendMode, reference.opacity),
+              builder: (context, data, child) {
+                final blendMode = data.$1;
+                final opacity = data.$2;
                 child ??= const SizedBox();
-                return blendMode == BlendMode.srcOver
+                return (blendMode == BlendMode.srcOver && !opacity.differs(1.0, 0.001))
                     ? child
                     : BlendMask(
                       blendMode: blendMode,
+                      opacity: opacity,
                       child: child
                     );
               },

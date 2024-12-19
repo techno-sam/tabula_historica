@@ -383,3 +383,48 @@ class ModifyReferenceTransformHistoryEntry extends HistoryEntry {
     return "ModifyReferenceTransformHistoryEntry($_uuid, ${changes.join(", ")})";
   }
 }
+
+class ModifyReferenceOpacityHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final double _oldOpacity;
+  final double _newOpacity;
+
+  ModifyReferenceOpacityHistoryEntry(this._uuid, this._oldOpacity, this._newOpacity);
+
+  factory ModifyReferenceOpacityHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyReferenceOpacityHistoryEntry(
+      json['uuid'],
+      (json['oldOpacity'] as num).toDouble(),
+      (json['newOpacity'] as num).toDouble()
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.updateOpacityIntermediate(_oldOpacity, discardStart: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.updateOpacityIntermediate(_newOpacity, discardStart: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldOpacity': _oldOpacity,
+      'newOpacity': _newOpacity,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyReferenceOpacity;
+
+  @override
+  String toString() {
+    return "ModifyReferenceOpacityHistoryEntry($_uuid, $_oldOpacity -> $_newOpacity)";
+  }
+}
