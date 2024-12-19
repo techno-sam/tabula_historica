@@ -1,28 +1,6 @@
 {
   "references": [
     {
-      "uuid": "96813a54-cfd7-4ab1-98d8-ce410affd669",
-      "image": {
-        "path": "references/tiger_face_edit.png",
-        "width": 260,
-        "height": 260
-      },
-      "title": "Tiger!",
-      "opacity": 1.0,
-      "blendMode": "srcOver",
-      "transform": {
-        "translation": {
-          "x": 730.0642501793404,
-          "y": -205.41072718964176
-        },
-        "scale": {
-          "x": 0.9999999999999997,
-          "y": 1.0000000000000002
-        },
-        "rotation": 0.0
-      }
-    },
-    {
       "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496",
       "image": {
         "path": "references/slimeist_dev.png",
@@ -40,6 +18,28 @@
         "scale": {
           "x": 0.9999999999999993,
           "y": 1.0
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "96813a54-cfd7-4ab1-98d8-ce410affd669",
+      "image": {
+        "path": "references/tiger_face_edit.png",
+        "width": 260,
+        "height": 260
+      },
+      "title": "Tiger!",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 730.0642501793404,
+          "y": -205.41072718964176
+        },
+        "scale": {
+          "x": 0.9999999999999997,
+          "y": 1.0000000000000002
         },
         "rotation": 0.0
       }
