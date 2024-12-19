@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:tabula_historica/widgets/drawing/perfect_drawing_pad.dart';
 
 import '../../backend/backend.dart' as backend;
 import '../../extensions/pointer_event.dart';
@@ -129,6 +130,7 @@ class MultiLODMap extends StatelessWidget {
                             child: const Text("Press me"),
                           )),
                           const AllReferences(),
+                          const PerfectDrawingPad(),
                           /***************/
                           /* UI elements */
                           /***************/
@@ -141,16 +143,6 @@ class MultiLODMap extends StatelessWidget {
                     ),
                   ),
                   const ReferenceSidebar(),
-                  Positioned(
-                    bottom: 4,
-                    left: 4,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        logger.d(debugDescribeFocusTree());
-                      },
-                      child: const Text("Dump Focus"),
-                    ),
-                  )
                 ],
               ),
             ),
