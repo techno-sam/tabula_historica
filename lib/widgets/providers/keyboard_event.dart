@@ -105,7 +105,6 @@ class KeyboardEventProvider extends SingleChildStatefulWidget {
 class _KeyboardEventProviderState extends SingleChildState<KeyboardEventProvider> {
   late final KeyboardEventRegistrar _registrar;
   late final FocusScopeNode _focusScopeNode;
-  // final GlobalKey<KeyboardWidgetState> _keyboardWidgetKey = GlobalKey();
 
   @override
   void initState() {
@@ -127,15 +126,11 @@ class _KeyboardEventProviderState extends SingleChildState<KeyboardEventProvider
       debugLabel: "KeyboardEventProvider FocusScope",
       node: _focusScopeNode,
       onFocusChange: (hasFocus) {
-        // logger.d("Focus changed: $hasFocus ${FocusManager.instance.primaryFocus?.toStringShort()}");
-        // logger.d("My parent: ${_focusScopeNode.parent?.toStringShort()}\nMy child: ${_focusScopeNode.children.firstOrNull?.toStringShort()}");
         if (hasFocus && FocusManager.instance.primaryFocus == _focusScopeNode) {
-          // logger.d("Focus is on self, moving focus to first child");
           _focusScopeNode.children.firstOrNull?.requestFocus();
         }
       },
       child: KeyboardWidget(
-        // key: _keyboardWidgetKey,
         helpText: "Tabula Historica Keyboard Shortcuts",
         bindings: [
           KeyAction(

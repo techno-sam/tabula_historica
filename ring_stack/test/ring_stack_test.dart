@@ -48,7 +48,7 @@ class ContextDisposableMock implements EphemerallyDisposable<Object> {
 }
 
 
-void main() { // todo context test
+void main() {
   test('modulo works as expected', () {
     expect(5 % 3, 2);
     expect(-1 % 3, 2);
