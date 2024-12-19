@@ -18,8 +18,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../logger.dart';
-
 class SimpleEditableText extends StatefulWidget {
   final String initialText;
   final TextStyle? style;

@@ -100,7 +100,7 @@ class RingStack<T extends Object, C> extends Iterable<T> {
     // check if we're replacing a previous value
     if (_size == capacity) {
       final old = _stack[_top];
-      fullyDispose(old!, _contextSupplier?.call());
+      fullyDispose(old!, _contextSupplier.call());
     } else {
       _size++;
     }
@@ -135,9 +135,9 @@ class RingStack<T extends Object, C> extends Iterable<T> {
     for (var i = 0; i < _size; i++) {
       final T value = _stack[(_top - 1 - i) % capacity]!;
       if (logicalDispose) {
-        fullyDispose(value, _contextSupplier?.call());
+        fullyDispose(value, _contextSupplier.call());
       } else {
-        ephemeralDispose(value, _contextSupplier?.call());
+        ephemeralDispose(value, _contextSupplier.call());
       }
     }
     _size = 0;
@@ -154,9 +154,9 @@ class RingStack<T extends Object, C> extends Iterable<T> {
   }
 
   @override
-  void forEach(void Function(T element) f) {
+  void forEach(void Function(T element) action) {
     for (var i = 0; i < _size; i++) {
-      f(_stack[(_top - 1 - i) % capacity]!);
+      action(_stack[(_top - 1 - i) % capacity]!);
     }
   }
 

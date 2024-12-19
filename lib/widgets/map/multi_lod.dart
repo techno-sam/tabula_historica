@@ -23,7 +23,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -36,7 +35,6 @@ import '../../models/tools/tool_selection.dart';
 import '../../util/math.dart';
 import '../project/all_references.dart';
 import '../project/history_key_handler.dart';
-import '../providers/keyboard_event.dart';
 import '../providers/project.dart';
 import '../tool/references/reference_sidebar.dart';
 import '../tool/toolbar.dart';
@@ -105,7 +103,7 @@ class MultiLODMap extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.all(_debugPadding!),
                               child: Container(
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha: 0.5),
                                 child: const SizedBox.expand(),
                               ),
                             ),
@@ -164,7 +162,7 @@ class MultiLODMap extends StatelessWidget {
 
 
 class _CameraProvider extends SingleChildStatefulWidget {
-  const _CameraProvider({super.key, super.child});
+  const _CameraProvider();
 
   @override
   State<_CameraProvider> createState() => _CameraProviderState();
@@ -236,7 +234,7 @@ class _CameraProviderState extends SingleChildState<_CameraProvider> {
 
 
 class _ToolSelectionProvider extends SingleChildStatefulWidget {
-  const _ToolSelectionProvider({super.key, super.child});
+  const _ToolSelectionProvider();
 
   @override
   State<_ToolSelectionProvider> createState() => _ToolSelectionProviderState();

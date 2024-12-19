@@ -95,6 +95,7 @@ class ReferenceSidebar extends StatelessWidget {
 
 class _ReferenceList extends StatelessWidget {
   const _ReferenceList({
+    // ignore: unused_element
     super.key,
   });
 
@@ -105,7 +106,7 @@ class _ReferenceList extends StatelessWidget {
     final referenceList = ReferenceList.of(context);
 
     return ScrollShadow(
-      color: (theme.dividerTheme.color ?? theme.colorScheme.outlineVariant).withOpacity(0.8),
+      color: (theme.dividerTheme.color ?? theme.colorScheme.outlineVariant).withValues(alpha: 0.8),
       child: ScrollShadowAxisLimiter(
         axis: Axis.vertical,
         child: ReorderableListView.builder(
@@ -113,10 +114,12 @@ class _ReferenceList extends StatelessWidget {
           itemBuilder: (context, index) {
             final reference = referenceList[index];
             if (index == referenceList.length - 1) {
-              return ReferenceListTile(
+              return ChangeNotifierProvider.value(
                 key: ObjectKey(reference.uuid),
-                index: index,
-                reference: reference,
+                value: reference,
+                child: ReferenceListTile(
+                  index: index,
+                ),
               );
             }
             return DecoratedBox(
@@ -129,9 +132,11 @@ class _ReferenceList extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  ReferenceListTile(
-                    index: index,
-                    reference: reference,
+                  ChangeNotifierProvider.value(
+                    value: reference,
+                    child: ReferenceListTile(
+                      index: index,
+                    ),
                   ),
                   const SizedBox(height: 1),
                 ],

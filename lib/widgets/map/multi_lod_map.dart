@@ -68,13 +68,18 @@ class _MultiLODMap extends StatefulWidget {
   final EvictErrorTileStrategy evictErrorTileStrategy;
 
   _MultiLODMap({
+    // ignore: unused_element
     super.key,
     required this.lods,
+    // ignore: unused_element
     this.tileSize = 256,
+    // ignore: unused_element
     this.keepBuffer = 2,
+    // ignore: unused_element
     this.panBuffer = 1,
     this.errorImage,
     final TileProvider? tileProvider,
+    // ignore: unused_element
     this.errorTileCallback,
     this.tileBuilder,
     this.evictErrorTileStrategy = EvictErrorTileStrategy.none,

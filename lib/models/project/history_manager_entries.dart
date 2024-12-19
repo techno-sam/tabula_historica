@@ -180,9 +180,9 @@ class RemoveReferenceHistoryEntry extends _ActivatableReferenceHistoryEntry {
 }
 
 class ReorderReferenceHistoryEntry extends HistoryEntry {
+  final String _uuid;
   final int _oldIndex;
   final int _newIndex;
-  final String _uuid;
 
   ReorderReferenceHistoryEntry(this._uuid, this._oldIndex, this._newIndex);
 
@@ -226,5 +226,95 @@ class ReorderReferenceHistoryEntry extends HistoryEntry {
   @override
   String toString() {
     return "ReorderReferenceHistoryEntry($_uuid, $_oldIndex -> $_newIndex)";
+  }
+}
+
+class ModifyReferenceTitleHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final String _oldTitle;
+  final String _newTitle;
+
+  ModifyReferenceTitleHistoryEntry(this._uuid, this._oldTitle, this._newTitle);
+
+  factory ModifyReferenceTitleHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyReferenceTitleHistoryEntry(
+      json['uuid'],
+      json['oldTitle'],
+      json['newTitle']
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.setTitle(project.historyManager, _oldTitle, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.setTitle(project.historyManager, _newTitle, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldTitle': _oldTitle,
+      'newTitle': _newTitle,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyReferenceTitle;
+
+  @override
+  String toString() {
+    return "ModifyReferenceTitleHistoryEntry($_uuid, $_oldTitle -> $_newTitle)";
+  }
+}
+
+class ModifyReferenceBlendModeHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final BlendMode _oldBlendMode;
+  final BlendMode _newBlendMode;
+
+  ModifyReferenceBlendModeHistoryEntry(this._uuid, this._oldBlendMode, this._newBlendMode);
+
+  factory ModifyReferenceBlendModeHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyReferenceBlendModeHistoryEntry(
+      json['uuid'],
+      BlendMode.values.where((e) => e.name == json['oldBlendMode']).firstOrNull ?? BlendMode.srcOver,
+      BlendMode.values.where((e) => e.name == json['newBlendMode']).firstOrNull ?? BlendMode.srcOver,
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.setBlendMode(project.historyManager, _oldBlendMode, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.setBlendMode(project.historyManager, _newBlendMode, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldBlendMode': _oldBlendMode.name,
+      'newBlendMode': _newBlendMode.name,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyReferenceBlendMode;
+
+  @override
+  String toString() {
+    return "ModifyReferenceBlendModeHistoryEntry($_uuid, $_oldBlendMode -> $_newBlendMode)";
   }
 }

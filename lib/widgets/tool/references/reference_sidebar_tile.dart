@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_context_menu/flutter_context_menu.dart';
+import 'package:provider/provider.dart';
 
 import '../../misc/simple_editable_text.dart';
 import '../../../logger.dart';
@@ -29,10 +30,9 @@ import '../../../models/tools/references_state.dart';
 import '../../../models/tools/tool_selection.dart';
 
 class ReferenceListTile extends StatelessWidget {
-  final Reference reference;
   final int index;
 
-  const ReferenceListTile({super.key, required this.reference, required this.index});
+  const ReferenceListTile({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,7 @@ class ReferenceListTile extends StatelessWidget {
     final theme = Theme.of(context);
     final toolSelection = ToolSelection.of(context);
     final history = HistoryManager.of(context);
+    final reference = context.watch<Reference>();
 
     final selected = toolSelection.selectedTool == Tool.references &&
         toolSelection.mapStateOr((ReferencesState state) =>
@@ -67,7 +68,7 @@ class ReferenceListTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
         side: BorderSide(
-          color: selected ? Colors.blue : theme.colorScheme.onSurface.withOpacity(0.3),
+          color: selected ? Colors.blue : theme.colorScheme.onSurface.withValues(alpha: 0.3),
           width: selected ? 2 : 1,
         ),
       ),
@@ -95,6 +96,7 @@ class ReferenceListTile extends StatelessWidget {
                           Flexible(
                             child: selected
                                 ? SimpleEditableText(
+                                    key: ValueKey("${reference.uuid} ${reference.title}"),
                                     reference.title,
                                     style: theme.textTheme.titleMedium,
                                     dense: true,
@@ -182,7 +184,7 @@ class ReferenceListTile extends StatelessWidget {
 class _BlendModeSelector extends StatefulWidget {
   final Reference reference;
 
-  const _BlendModeSelector({super.key, required this.reference});
+  const _BlendModeSelector({required this.reference});
 
   @override
   State<_BlendModeSelector> createState() => _BlendModeSelectorState();
@@ -200,8 +202,6 @@ class _BlendModeSelectorState extends State<_BlendModeSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final toolSelection = ToolSelection.of(context);
     final history = HistoryManager.of(context);
 
     return Row(

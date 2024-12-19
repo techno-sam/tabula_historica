@@ -22,8 +22,10 @@ class _MapController extends SingleChildStatelessWidget {
   final int tileSize;
 
   const _MapController({
+    // ignore: unused_element
     super.key,
     super.child,
+    // ignore: unused_element
     this.tileSize = 256,
   });
 

@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../extensions/directory.dart';
-import '../../../models/project/history_manager.dart';
 import '../../../models/project/project.dart';
 import '../../../logger.dart';
 
@@ -41,7 +40,6 @@ class _ReferenceDropTargetState extends State<ReferenceDropTarget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final history = HistoryManager.of(context);
     final project = Project.of(context);
 
     return DropTarget(

@@ -145,11 +145,23 @@ class Reference with NeedsSave, ChangeNotifier {
     markDirty();
   }
 
-  // fixme add history support
-  void setTitle(HistoryManager history, String newTitle) {
+  void setTitle(HistoryManager history, String newTitle, {bool skipHistory = false}) {
     if (title == newTitle) return;
+    if (!skipHistory) {
+      history.record(ModifyReferenceTitleHistoryEntry(uuid, title, newTitle));
+    }
     title = newTitle;
     logger.d("Set title of $this to $newTitle");
+    markDirty();
+  }
+
+  void setBlendMode(HistoryManager history, BlendMode newBlendMode, {bool skipHistory = false}) {
+    if (blendMode == newBlendMode) return;
+    if (!skipHistory) {
+      history.record(ModifyReferenceBlendModeHistoryEntry(uuid, blendMode, newBlendMode));
+    }
+    blendMode = newBlendMode;
+    logger.d("Set blend mode of $this to $newBlendMode");
     markDirty();
   }
 
@@ -157,14 +169,6 @@ class Reference with NeedsSave, ChangeNotifier {
   void markDirty() {
     super.markDirty();
     notifyListeners();
-  }
-
-  // fixme add history support
-  void setBlendMode(HistoryManager history, BlendMode newBlendMode) {
-    if (blendMode == newBlendMode) return;
-    blendMode = newBlendMode;
-    logger.d("Set blend mode of $this to $newBlendMode");
-    markDirty();
   }
 
   @override

@@ -48,7 +48,7 @@ class MapSurfacePositioned extends StatelessWidget {
       left: projected.x - scaledHalfSize,
       top: projected.y - scaledHalfSize,
       child: Container(
-        color: Colors.lightBlueAccent.withOpacity(0.2),
+        color: Colors.lightBlueAccent.withValues(alpha: 0.2),
         child: SizedBox(
           width: scaledHalfSize*2,
           height: scaledHalfSize*2,
@@ -100,7 +100,7 @@ class DebugMapSurfacePositioned extends StatelessWidget {
               width: 2,
               height: 2,
               child: Container(
-                color: Colors.greenAccent.withOpacity(0.2),
+                color: Colors.greenAccent.withValues(alpha: 0.2),
                 child: const Icon(Icons.add, size: 1,),
               ),
             )

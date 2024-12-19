@@ -62,6 +62,7 @@ class Toolbar extends StatelessWidget {
 
 class _ToolButton extends StatelessWidget {
   const _ToolButton({
+    // ignore: unused_element
     super.key,
     required this.tool,
     required this.toolSelection,
@@ -91,7 +92,7 @@ class _ToolButton extends StatelessWidget {
             ),
             foregroundColor: _FunctionalWidgetStateProperty((states) {
               if (states.contains(WidgetState.disabled)) {
-                return theme.colorScheme.onSurface.withOpacity(0.38);
+                return theme.colorScheme.onSurface.withValues(alpha: 0.38);
               }
               if (states.contains(WidgetState.selected)) {
                 return Colors.blue;
@@ -100,9 +101,9 @@ class _ToolButton extends StatelessWidget {
             }),
             backgroundColor: _FunctionalWidgetStateProperty((states) {
               if (states.contains(WidgetState.selected)) {
-                return Colors.blue.withOpacity(0.1);
+                return Colors.blue.withValues(alpha: 0.1);
               }
-              return theme.colorScheme.onSurfaceVariant.withOpacity(0.04);
+              return theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.04);
             }),
           ),
         ),

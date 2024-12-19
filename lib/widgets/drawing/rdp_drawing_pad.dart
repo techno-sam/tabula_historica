@@ -42,7 +42,7 @@ class RDPDrawingPad extends StatelessWidget {
 }
 
 class _DrawingPad extends StatefulWidget {
-  const _DrawingPad({super.key});
+  const _DrawingPad();
 
   @override
   State<_DrawingPad> createState() => _DrawingPadState();
@@ -107,11 +107,11 @@ class CatmullRomPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     Paint originalPaint = Paint.from(mainPaint)
-      ..color = Colors.blue.withOpacity(0.8)
+      ..color = Colors.blue.withValues(alpha: 0.8)
       ..strokeWidth = 2.0;
 
     Paint originalPointPaint = Paint.from(mainPaint)
-      ..color = Colors.deepPurpleAccent.shade100.withOpacity(0.5)
+      ..color = Colors.deepPurpleAccent.shade100.withValues(alpha: 0.5)
       ..strokeWidth = 2.0;
 
     Paint rdpPaint = Paint.from(mainPaint)
