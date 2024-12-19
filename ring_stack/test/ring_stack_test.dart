@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ring_stack/ring_stack.dart';
 
 
-class DisposableMock implements LogicallyDisposable, EphemerallyDisposable {
+class DisposableMock implements LogicallyDisposable<Null>, EphemerallyDisposable<Null> {
   int _logicalDisposeCount = 0;
   int _ephemeralDisposeCount = 0;
   int value;
@@ -16,12 +16,12 @@ class DisposableMock implements LogicallyDisposable, EphemerallyDisposable {
   DisposableMock(this.value);
 
   @override
-  void disposeLogical() {
+  void disposeLogical(Null _) {
     _logicalDisposeCount++;
   }
 
   @override
-  void disposeEphemeral() {
+  void disposeEphemeral(Null _) {
     _ephemeralDisposeCount++;
   }
 
@@ -32,14 +32,30 @@ class DisposableMock implements LogicallyDisposable, EphemerallyDisposable {
 }
 
 
-void main() {
+class ContextDisposableMock implements EphemerallyDisposable<Object> {
+  int _disposeCount = 0;
+  Object? _lastContext;
+
+  bool get disposedOnce => _disposeCount == 1;
+  bool get notDisposed => _disposeCount == 0;
+  Object? get lastContext => _lastContext;
+
+  @override
+  void disposeEphemeral(Object context) {
+    _disposeCount++;
+    _lastContext = context;
+  }
+}
+
+
+void main() { // todo context test
   test('modulo works as expected', () {
     expect(5 % 3, 2);
     expect(-1 % 3, 2);
   });
 
   test('simple push and pop', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
 
@@ -56,19 +72,19 @@ void main() {
   });
 
   test('popping empty stack throws', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     expect(() => stack.pop(), throwsStateError);
   });
 
   test('popping emptied stack throws', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.pop();
     expect(() => stack.pop(), throwsStateError);
   });
 
   test('pushing over capacity replaces oldest', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
     stack.push(5);
@@ -81,7 +97,7 @@ void main() {
   });
 
   test('post-overflow indexing works', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
     stack.push(5);
@@ -93,12 +109,12 @@ void main() {
   });
 
   test('equality works', () {
-    final stack1 = RingStack<int>(3);
+    final stack1 = RingStack<int, Null>(3);
     stack1.push(2);
     stack1.push(3);
     stack1.push(5);
 
-    final stack2 = RingStack<int>(3);
+    final stack2 = RingStack<int, Null>(3);
     stack2.push(2);
     stack2.push(3);
     stack2.push(5);
@@ -108,12 +124,12 @@ void main() {
   });
 
   test('inequality works', () {
-    final stack1 = RingStack<int>(3);
+    final stack1 = RingStack<int, Null>(3);
     stack1.push(2);
     stack1.push(3);
     stack1.push(5);
 
-    final stack2 = RingStack<int>(3);
+    final stack2 = RingStack<int, Null>(3);
     stack2.push(2);
     stack2.push(3);
     stack2.push(5);
@@ -124,12 +140,12 @@ void main() {
   });
 
   test('equality after overflow works', () {
-    final stack1 = RingStack<int>(3);
+    final stack1 = RingStack<int, Null>(3);
     stack1.push(3);
     stack1.push(5);
     stack1.push(7);
 
-    final stack2 = RingStack<int>(3);
+    final stack2 = RingStack<int, Null>(3);
     stack2.push(2);
     stack2.push(3);
     stack2.push(5);
@@ -140,7 +156,7 @@ void main() {
   });
 
   test('clear works', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
     stack.push(5);
@@ -152,7 +168,7 @@ void main() {
   });
 
   test('toList works', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
     stack.push(5);
@@ -161,18 +177,18 @@ void main() {
   });
 
   test('restoration works', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
     stack.push(5);
 
-    final restored = RingStack<int>.restoreFromList(stack.toList());
+    final restored = RingStack<int, Null>.restoreFromList(stack.toList());
 
     expect(stack, restored);
   });
 
   test('forEach works', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
     stack.push(5);
@@ -187,7 +203,7 @@ void main() {
   });
 
   test('iteration works', () {
-    final stack = RingStack<int>(3);
+    final stack = RingStack<int, Null>(3);
     stack.push(2);
     stack.push(3);
     stack.push(5);
@@ -201,7 +217,7 @@ void main() {
   });
 
   test('dispose works', () {
-    final stack = RingStack<DisposableMock>(3);
+    final stack = RingStack<DisposableMock, Null>(3);
     final mock1 = DisposableMock(1);
     final mock2 = DisposableMock(2);
     final mock3 = DisposableMock(3);
@@ -241,12 +257,12 @@ void main() {
   });
 
   test('dispose works with empty stack', () {
-    final stack = RingStack<DisposableMock>(3);
+    final stack = RingStack<DisposableMock, Null>(3);
     stack.clear();
   });
 
   test('dispose works with non-disposable elements', () {
-    final stack = RingStack<Object>(3);
+    final stack = RingStack<Object, Null>(3);
     final mock1 = DisposableMock(1);
     stack.push(Object());
     stack.push(mock1);
@@ -258,7 +274,37 @@ void main() {
     expect(mock1.notDisposedLogically, isTrue);
   });
 
+  test('objects are unique', () {
+    expect(Object(), isNot(Object()));
+  });
+
+  test('dispose works with context', () {
+    final context = Object();
+    final stack = RingStack<ContextDisposableMock, Object>(2, contextSupplier: () => context);
+    final mock1 = ContextDisposableMock();
+    final mock2 = ContextDisposableMock();
+    final mock3 = ContextDisposableMock();
+
+    stack.push(mock1);
+    stack.push(mock2);
+    stack.push(mock3);
+
+    expect(mock1.disposedOnce, isTrue);
+    expect(mock1.lastContext, context);
+    expect(mock2.notDisposed, isTrue);
+    expect(mock3.notDisposed, isTrue);
+
+    stack.clear();
+
+    expect(mock1.disposedOnce, isTrue);
+    expect(mock1.lastContext, context);
+    expect(mock2.disposedOnce, isTrue);
+    expect(mock2.lastContext, context);
+    expect(mock3.disposedOnce, isTrue);
+    expect(mock3.lastContext, context);
+  });
+
   test('zero capacity throws', () {
-    expect(() => RingStack<int>(0), throwsArgumentError);
+    expect(() => RingStack<int, Null>(0), throwsArgumentError);
   });
 }

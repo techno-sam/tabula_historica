@@ -18,8 +18,11 @@
 
 import 'dart:io';
 
+import 'project.dart';
+
 class LoadingContext {
   final Directory projectRoot;
+  final Project Function() getProject;
 
-  LoadingContext({required this.projectRoot});
+  LoadingContext({required this.projectRoot, required this.getProject});
 }

@@ -26,6 +26,7 @@ import 'package:tabula_historica/extensions/directory.dart';
 import 'package:tabula_historica/models/project/reference.dart';
 import '../../logger.dart';
 import '../../util/partial_future.dart';
+import 'loading_context.dart';
 import 'project.dart';
 import 'foundation/needs_save.dart';
 
@@ -33,6 +34,12 @@ part 'history_manager_entries.dart';
 
 const int maxHistorySize = 1000;
 const int maxRedoSize = 100;
+
+class HistoryContext {
+  final Project project;
+
+  HistoryContext(this.project);
+}
 
 enum HistoryEntryType {
   addReference(AddReferenceHistoryEntry.fromJson),
@@ -71,10 +78,16 @@ abstract class HistoryEntry {
 
 class HistoryManager extends ChangeNotifier with NeedsSave {
 
-  final RingStack<HistoryEntry> _undoStack = RingStack(maxHistorySize);
-  final RingStack<HistoryEntry> _redoStack = RingStack(maxRedoSize);
+  Project Function()? _getProject;
+  late final RingStack<HistoryEntry, HistoryContext> _undoStack = RingStack(maxHistorySize, contextSupplier: _getHistoryContext);
+  late final RingStack<HistoryEntry, HistoryContext> _redoStack = RingStack(maxRedoSize, contextSupplier: _getHistoryContext);
 
-  HistoryManager({List<HistoryEntry>? undoEntries, List<HistoryEntry>? redoEntries}) {
+  HistoryContext _getHistoryContext() {
+    return HistoryContext(_getProject!());
+  }
+
+  HistoryManager({required Project Function() getProject, List<HistoryEntry>? undoEntries, List<HistoryEntry>? redoEntries}) {
+    _getProject = getProject;
     if (undoEntries != null) {
       for (final entry in undoEntries.reversed) {
         _undoStack.push(entry);
@@ -99,7 +112,7 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
     }());
   }
 
-  factory HistoryManager.fromJson(Map<String, dynamic> json) {
+  factory HistoryManager.fromJson(LoadingContext ctx, Map<String, dynamic> json) {
     final undoEntries = <HistoryEntry>[];
     final redoEntries = <HistoryEntry>[];
 
@@ -111,6 +124,7 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
     }
 
     return HistoryManager(
+      getProject: ctx.getProject,
       undoEntries: undoEntries,
       redoEntries: redoEntries,
     );
@@ -163,6 +177,8 @@ class HistoryManager extends ChangeNotifier with NeedsSave {
   @override
   void dispose() {
     _undoStack.clear();
+    _redoStack.clear();
+    _getProject = null;
     super.dispose();
   }
 

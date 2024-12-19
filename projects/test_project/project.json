@@ -1,23 +1,23 @@
 {
   "references": [
     {
-      "uuid": "6caa99c5-4cd6-459d-ab47-0bba03c322c1",
+      "uuid": "96813a54-cfd7-4ab1-98d8-ce410affd669",
       "image": {
-        "path": "references/Ultra_Bloem.png",
-        "width": 1000,
-        "height": 957
+        "path": "references/tiger_face_edit.png",
+        "width": 260,
+        "height": 260
       },
-      "title": "Bloem",
+      "title": "New reference",
       "opacity": 1.0,
       "blendMode": "srcOver",
       "transform": {
         "translation": {
-          "x": 581.6690210357482,
-          "y": -39.830670365067725
+          "x": 730.0642501793404,
+          "y": -205.41072718964176
         },
         "scale": {
-          "x": 0.24596752994312712,
-          "y": 0.24596752994312693
+          "x": 0.9999999999999997,
+          "y": 1.0000000000000002
         },
         "rotation": 0.0
       }
@@ -115,7 +115,7 @@
     "undoEntries": [
       {
         "type": "HistoryEntryType.addReference",
-        "uuid": "6caa99c5-4cd6-459d-ab47-0bba03c322c1"
+        "uuid": "96813a54-cfd7-4ab1-98d8-ce410affd669"
       },
       {
         "type": "HistoryEntryType.addReference",

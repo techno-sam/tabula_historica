@@ -18,30 +18,33 @@
 
 part of 'history_manager.dart';
 
-class AddReferenceHistoryEntry extends HistoryEntry {
+class AddReferenceHistoryEntry extends HistoryEntry implements LogicallyDisposable<HistoryContext> {
   final String _uuid;
   Map<String, dynamic>? _actualData;
 
   factory AddReferenceHistoryEntry(Reference reference) {
-    return AddReferenceHistoryEntry._(reference.uuid, reference.toJson());
+    return AddReferenceHistoryEntry._(reference.uuid, null);
   }
 
   AddReferenceHistoryEntry._(this._uuid, this._actualData);
 
   factory AddReferenceHistoryEntry.fromJson(Map<String, dynamic> json) {
-    return AddReferenceHistoryEntry(json['exampleField']);
+    return AddReferenceHistoryEntry._(
+      json['uuid'],
+      json['actualData']
+    );
   }
 
   @override
   Future<void> undo(Project project) async {
     final ref = project.getReference(_uuid)!;
-    logger.d('Undoing AddReference($ref)');
+    logger.d("Undoing AddReference($ref)");
     _actualData = ref.toJson();
     // copy over image
     String firstTwo = ref.uuid.substring(0, 2);
     Directory tmpStorageDir = await project.root
-        .resolve("history_storage")
-        .resolve("references")
+        .resolve('history_storage')
+        .resolve('references')
         .resolve(firstTwo)
         .create(recursive: true);
 
@@ -53,13 +56,13 @@ class AddReferenceHistoryEntry extends HistoryEntry {
   @override
   Future<void> redo(Project project) async {
     Reference ref = Reference.fromJson(project.loadingContext, _actualData!);
-    logger.d('Redoing AddReference($ref)');
+    logger.d("Redoing AddReference($ref)");
 
     // copy back image
     String firstTwo = ref.uuid.substring(0, 2);
     Directory tmpStorageDir = project.root
-        .resolve("history_storage")
-        .resolve("references")
+        .resolve('history_storage')
+        .resolve('references')
         .resolve(firstTwo);
 
     await tmpStorageDir.resolveFile(ref.uuid).rename(ref.image.toFile().path);
@@ -69,6 +72,8 @@ class AddReferenceHistoryEntry extends HistoryEntry {
     if (await tmpStorageDir.list().isEmpty) {
       await tmpStorageDir.delete();
     }
+
+    _actualData = null;
   }
 
   @override
@@ -83,13 +88,30 @@ class AddReferenceHistoryEntry extends HistoryEntry {
   @override
   Map<String, dynamic> toJson() {
     return _actualData != null ? {
-      "uuid": _uuid,
-      "actualData": _actualData,
+      'uuid': _uuid,
+      'actualData': _actualData,
     } : {
-      "uuid": _uuid,
+      'uuid': _uuid,
     };
   }
 
   @override
-  String toString() => 'AddReferenceHistoryEntry($_uuid)';
+  String toString() => "AddReferenceHistoryEntry($_uuid)";
+
+  @override
+  void disposeLogical(HistoryContext context) {
+    logger.d("Disposing AddReferenceHistoryEntry($_uuid)");
+
+    String firstTwo = _uuid.substring(0, 2);
+    Directory tmpStorageDir = context.project.root
+        .resolve('history_storage')
+        .resolve('references')
+        .resolve(firstTwo);
+
+    tmpStorageDir.resolveFile(_uuid).deleteSync();
+
+    if (tmpStorageDir.listSync().isEmpty) {
+      tmpStorageDir.delete();
+    }
+  }
 }

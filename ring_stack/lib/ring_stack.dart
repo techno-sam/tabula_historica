@@ -2,61 +2,87 @@ library ring_stack;
 
 /// A marker interface for classes that can be logically disposed - that is, when actually removed from a [RingStack].
 /// If a class must also be disposed when it leaves memory, use [EphemerallyDisposable].
-abstract interface class LogicallyDisposable {
+abstract interface class LogicallyDisposable<C> {
   /// Logically dispose of this object. Not called when, e.g. serialized to disk.
   /// This should be used to clean up long-lived resources, e.g. sidecar files.
   /// 
   /// Generally, this will be called after [EphemerallyDisposable.disposeEphemeral].
   /// 
   /// MUST be safe to call repeatedly.
-  void disposeLogical();
+  void disposeLogical(C context);
 }
 
 /// A marker interface for classes that should be disposed any time they leave memory.
-abstract interface class EphemerallyDisposable {
+abstract interface class EphemerallyDisposable<C> {
   /// Dispose of this object when it leaves memory.
   /// This should be used to clean up short-lived resources, e.g. HTTP connections.
   /// 
   /// Generally, this will be called before [LogicallyDisposable.disposeLogical].
   /// 
   /// MUST be safe to call repeatedly.
-  void disposeEphemeral();
+  void disposeEphemeral(C context);
 }
 
-void fullyDispose(Object obj) {
-  if (obj is EphemerallyDisposable) {
-    obj.disposeEphemeral();
+void fullyDispose<T extends Object, C>(T obj, C context) {
+  if (obj is EphemerallyDisposable<C>) {
+    obj.disposeEphemeral(context);
+  } else if (obj is EphemerallyDisposable) {
+    throw ArgumentError.value(context, "context", "Wrong context type for EphemerallyDisposable");
   }
-  if (obj is LogicallyDisposable) {
-    obj.disposeLogical();
-  }
-}
-
-void ephemeralDispose(Object obj) {
-  if (obj is EphemerallyDisposable) {
-    obj.disposeEphemeral();
+  if (obj is LogicallyDisposable<C>) {
+    obj.disposeLogical(context);
+  } else if (obj is LogicallyDisposable) {
+    throw ArgumentError.value(context, "context", "Wrong context type for LogicallyDisposable");
   }
 }
 
-class RingStack<T extends Object> extends Iterable<T> {
+void ephemeralDispose<T extends Object, C>(T obj, C context) {
+  if (obj is EphemerallyDisposable<C>) {
+    obj.disposeEphemeral(context);
+  } else if (obj is EphemerallyDisposable) {
+    throw ArgumentError.value(context, "context", "Wrong context type for EphemerallyDisposable");
+  }
+}
+
+class RingStack<T extends Object, C> extends Iterable<T> {
   final int capacity;
   late final List<T?> _stack = List.filled(capacity, null);
   int _size = 0;
   int _top = 0; // index of the *next* top element, grows upwards (so the top actual element is (_top - 1) % capacity)
 
-  RingStack(this.capacity) {
+  late final C Function() _contextSupplier;
+
+  RingStack(this.capacity, {C Function()? contextSupplier}) {
     if (capacity <= 0) {
       throw ArgumentError.value(capacity, "capacity", "Capacity must be positive");
     }
+    if (contextSupplier == null) {
+      if (C == Null) {
+        contextSupplier = (() => null) as dynamic;
+      } else {
+        throw ArgumentError.notNull("contextSupplier");
+      }
+    }
+    this._contextSupplier = contextSupplier!;
   }
 
-  RingStack.restoreFromList(List<T> list, {int? capacity}) : capacity = capacity ?? list.length {
+  RingStack.restoreFromList(List<T> list, {int? capacity, C Function()? contextSupplier}) : capacity = capacity ?? list.length {
     if (this.capacity < list.length) {
       throw ArgumentError.value(capacity, "capacity", "Capacity must be at least the length of the list");
     }
     if (this.capacity <= 0) {
       throw ArgumentError.value(capacity, "capacity", "Capacity must be positive");
     }
+
+    if (contextSupplier == null) {
+      if (C == Null) {
+        contextSupplier = (() => null) as dynamic;
+      } else {
+        throw ArgumentError.notNull("contextSupplier");
+      }
+    }
+    this._contextSupplier = contextSupplier!;
+
     for (final T v in list.reversed) {
       push(v);
     }
@@ -74,7 +100,7 @@ class RingStack<T extends Object> extends Iterable<T> {
     // check if we're replacing a previous value
     if (_size == capacity) {
       final old = _stack[_top];
-      fullyDispose(old!);
+      fullyDispose(old!, _contextSupplier?.call());
     } else {
       _size++;
     }
@@ -107,12 +133,11 @@ class RingStack<T extends Object> extends Iterable<T> {
 
   void clear({bool logicalDispose = false}) {
     for (var i = 0; i < _size; i++) {
-      final value = _stack[(_top - 1 - i) % capacity];
-      if (value is EphemerallyDisposable) {
-        value.disposeEphemeral();
-      }
-      if (logicalDispose && value is LogicallyDisposable) {
-        value.disposeLogical();
+      final T value = _stack[(_top - 1 - i) % capacity]!;
+      if (logicalDispose) {
+        fullyDispose(value, _contextSupplier?.call());
+      } else {
+        ephemeralDispose(value, _contextSupplier?.call());
       }
     }
     _size = 0;
@@ -160,8 +185,8 @@ class RingStack<T extends Object> extends Iterable<T> {
   int get hashCode => Object.hashAll(this);
 }
 
-class _RingStackIterator<T extends Object> implements Iterator<T> {
-  final RingStack<T> _stack;
+class _RingStackIterator<T extends Object, C> implements Iterator<T> {
+  final RingStack<T, C> _stack;
   int _index = 0;
   T? _current;
 
@@ -184,8 +209,8 @@ class _RingStackIterator<T extends Object> implements Iterator<T> {
   }
 }
 
-class _ReverseRingStackIterable<T extends Object> extends Iterable<T> {
-  final RingStack<T> _stack;
+class _ReverseRingStackIterable<T extends Object, C> extends Iterable<T> {
+  final RingStack<T, C> _stack;
 
   _ReverseRingStackIterable(this._stack);
 
@@ -193,8 +218,8 @@ class _ReverseRingStackIterable<T extends Object> extends Iterable<T> {
   Iterator<T> get iterator => _stack.reversedIterator;
 }
 
-class _ReverseRingStackIterator<T extends Object> implements Iterator<T> {
-  final RingStack<T> _stack;
+class _ReverseRingStackIterator<T extends Object, C> implements Iterator<T> {
+  final RingStack<T, C> _stack;
   int _index;
   T? _current;
 

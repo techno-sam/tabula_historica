@@ -166,4 +166,9 @@ class Reference with NeedsSave, ChangeNotifier {
     logger.d("Set blend mode of $this to $newBlendMode");
     markDirty();
   }
+
+  @override
+  String toString() {
+    return "Reference($title @ ${image.path}){$uuid}";
+  }
 }

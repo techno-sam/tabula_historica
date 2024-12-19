@@ -117,16 +117,18 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
 class Project implements NeedsSave {
   final Directory root;
   final ReferenceList references;
-  final HistoryManager historyManager;
+  late final HistoryManager historyManager;
   bool _extraNeedsSave = false;
 
-  LoadingContext get loadingContext => LoadingContext(projectRoot: root);
+  LoadingContext get loadingContext => LoadingContext(projectRoot: root, getProject: () => this);
 
   Project._({
     required this.root,
     List<Reference>? references,
     HistoryManager? historyManager
-  }): references = ReferenceList(references), historyManager = historyManager ?? HistoryManager();
+  }): references = ReferenceList(references) {
+    this.historyManager = historyManager ?? HistoryManager(getProject: () => this);
+  }
 
   factory Project.load(Directory root) {
     File file = File("${root.path}/project.json");
@@ -138,13 +140,19 @@ class Project implements NeedsSave {
   }
 
   factory Project._fromJson(Directory root, Map<String, dynamic> json) {
-    LoadingContext ctx = LoadingContext(projectRoot: root);
+    final tmp = <Project?>[null];
+    LoadingContext ctx = LoadingContext(
+      getProject: () => tmp[0]!,
+      projectRoot: root,
+    );
 
-    return Project._(
+    final project = Project._(
       root: root,
       references: json.mapSingle("references", (refs) => (refs as List).map((e) => Reference.fromJson(ctx, e)).toList()),
-      historyManager: json.mapSingle("historyManager", (hm) => HistoryManager.fromJson(hm))
+      historyManager: json.mapSingle("historyManager", (hm) => HistoryManager.fromJson(ctx, hm))
     );
+    tmp[0] = project;
+    return project;
   }
 
   Map<String, dynamic> toJson() {
@@ -167,7 +175,6 @@ class Project implements NeedsSave {
     markClean();
   }
 
-  // fixme history
   Future<Reference> createReference(File sourceImage, Point<int> dimensions, String? title) async {
     String name = sourceImage.path.split("/").last;
     Directory $references = root.resolve("references");
@@ -183,10 +190,11 @@ class Project implements NeedsSave {
     );
     references.add(reference);
 
+    historyManager.record(AddReferenceHistoryEntry(reference));
+
     return reference;
   }
 
-  // fixme history
   Reference createReferenceSync(File sourceImage, Point<int> dimensions, String? title) {
     String name = sourceImage.path.split("/").last;
     Directory $references = root.resolve("references");
@@ -201,6 +209,8 @@ class Project implements NeedsSave {
       title: title
     );
     references.add(reference);
+
+    historyManager.record(AddReferenceHistoryEntry(reference));
 
     return reference;
   }
