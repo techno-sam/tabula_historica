@@ -16,24 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../models/project/project.dart';
-import '../tool/references/map_surface_reference.dart';
-
-class AllReferences extends StatelessWidget {
-  const AllReferences({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final references = ReferenceList.of(context);
-
-    return Stack(children: references.referencesReversed.map((reference) {
-      return ChangeNotifierProvider.value(
-        key: ObjectKey(reference.uuid),
-        value: reference,
-        child: const MapTransformableReference(),
-      );
-    }).toList(growable: false));
-  }
+extension EpsilonDifference on double {
+  bool differs(double other, double epsilon) => (this - other).abs() > epsilon;
 }

@@ -33,10 +33,7 @@ import '../../map/flutter_map/map_camera.dart';
 import '../../misc/blend_mask.dart';
 
 class MapTransformableReference extends StatefulWidget {
-
-  final Reference reference;
-
-  const MapTransformableReference({super.key, required this.reference});
+  const MapTransformableReference({super.key});
 
   @override
   State<MapTransformableReference> createState() => _MapTransformableReferenceState();
@@ -49,25 +46,37 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
 
   bool get _activelyTransforming => _activelyResizing || _activelyDragging;
 
-  Transform2DView get _transformView => widget.reference.transform;
+  void onStartTransform() {
+    context.read<Reference>().recordTransformStart();
+  }
+
+  void onEndTransform() {
+    final history = HistoryManager.of(context);
+    context.read<Reference>().commitTransform(history);
+  }
+
+  void onCancelTransform() {
+    context.read<Reference>().cancelTransform();
+  }
 
   @override
   Widget build(BuildContext context) {
     final camera = MapCamera.of(context);
     final toolSelection = ToolSelection.of(context);
     final history = HistoryManager.of(context);
+    final reference = context.watch<Reference>();
 
     final selected = toolSelection.selectedTool == Tool.references &&
         toolSelection.mapStateOr((ReferencesState state) =>
-            state.isReferenceSelected(widget.reference), false);
+            state.isReferenceSelected(reference), false);
 
-    final width = widget.reference.imageDimensions.x;
-    final height = widget.reference.imageDimensions.y;
+    final width = reference.imageDimensions.x;
+    final height = reference.imageDimensions.y;
 
-    final projectedCenter = camera.getOffset(_transformView.translation.toPoint());
+    final projectedCenter = camera.getOffset(reference.transform.translation.toPoint());
     final cameraScale     = pow(2, camera.zoom).toDouble() / 32;
-    final scaledWidth     = width  * _transformView.scaleX * cameraScale;
-    final scaledHeight    = height * _transformView.scaleY * cameraScale;
+    final scaledWidth     = width  * reference.transform.scaleX * cameraScale;
+    final scaledHeight    = height * reference.transform.scaleY * cameraScale;
 
     final rect = Rect.fromCenter(
         center: projectedCenter.toOffset(),
@@ -85,7 +94,7 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
     ;
 
     return ChangeNotifierProvider.value(
-      value: widget.reference,
+      value: reference,
       child: TransformableBox(
         rect: rect,
         flip: Flip.none,
@@ -102,8 +111,7 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
 
         onChanged: (result, details) {
           setState(() {
-            // fixme make a history commit change instead
-            widget.reference.updateTransformImmediate(history, (transform) {
+            reference.updateTransformIntermediate((transform) {
               transform.translation = camera.getBlockPos(result.rect.center.toPoint()).toOffset();
               transform.scaleX = result.rect.width / width / cameraScale;
               transform.scaleY = result.rect.height / height / cameraScale;
@@ -115,21 +123,21 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
           bool wasTransforming = _activelyTransforming;
           _activelyResizing = true;
           if (wasTransforming != _activelyTransforming) {
-            setState(() {});
+            onStartTransform();
           }
         },
         onResizeEnd: (handle, details) {
           bool wasTransforming = _activelyTransforming;
           _activelyResizing = false;
           if (wasTransforming != _activelyTransforming) {
-            setState(() {});
+            onEndTransform();
           }
         },
         onResizeCancel: (handle) {
           bool wasTransforming = _activelyTransforming;
           _activelyResizing = false;
           if (wasTransforming != _activelyTransforming) {
-            setState(() {});
+            onCancelTransform();
           }
         },
 
@@ -137,27 +145,27 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
           bool wasTransforming = _activelyTransforming;
           _activelyDragging = true;
           if (wasTransforming != _activelyTransforming) {
-            setState(() {});
+            onStartTransform();
           }
         },
         onDragEnd: (details) {
           bool wasTransforming = _activelyTransforming;
           _activelyDragging = false;
           if (wasTransforming != _activelyTransforming) {
-            setState(() {});
+            onEndTransform();
           }
         },
         onDragCancel: () {
           bool wasTransforming = _activelyTransforming;
           _activelyDragging = false;
           if (wasTransforming != _activelyTransforming) {
-            setState(() {});
+            onCancelTransform();
           }
         },
 
         contentBuilder: (context, rect, flip) {
           final img = Image.file(
-              widget.reference.image.toFile(),
+              reference.image.toFile(),
               width: rect.width,
               height: rect.height,
               fit: BoxFit.fill,
@@ -166,8 +174,8 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
           onDoubleTap: enabled ? () {
             // Reset aspect ratio
             setState(() {
-              final averageScale = (_transformView.scaleX + _transformView.scaleY) / 2;
-              widget.reference.updateTransformImmediate(history, (transform) {
+              final averageScale = (reference.transform.scaleX + reference.transform.scaleY) / 2;
+              reference.updateTransformImmediate(history, (transform) {
                 transform.scaleX = averageScale;
                 transform.scaleY = averageScale;
               });

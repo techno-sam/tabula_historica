@@ -318,3 +318,68 @@ class ModifyReferenceBlendModeHistoryEntry extends HistoryEntry {
     return "ModifyReferenceBlendModeHistoryEntry($_uuid, $_oldBlendMode -> $_newBlendMode)";
   }
 }
+
+class ModifyReferenceTransformHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final Transform2D _oldTransform;
+  final Transform2D _newTransform;
+
+  ModifyReferenceTransformHistoryEntry._(this._uuid, this._oldTransform, this._newTransform);
+
+  ModifyReferenceTransformHistoryEntry(this._uuid, Transform2D oldTransform, Transform2D newTransform):
+        _oldTransform = oldTransform.clone(), _newTransform = newTransform.clone();
+
+  factory ModifyReferenceTransformHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyReferenceTransformHistoryEntry._(
+      json['uuid'],
+      Transform2D.fromJson(json['oldTransform']),
+      Transform2D.fromJson(json['newTransform'])
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.updateTransformIntermediate((t) => t.copyFrom(_oldTransform), discardStart: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final ref = project.getReference(_uuid)!;
+    ref.updateTransformIntermediate((t) => t.copyFrom(_newTransform), discardStart: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldTransform': _oldTransform.toJson(),
+      'newTransform': _newTransform.toJson(),
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyReferenceTransform;
+
+  @override
+  String toString() {
+    List<String> changes = [];
+    const double epsilon = 0.0001;
+    if (_oldTransform.translationX.differs(_newTransform.translationX, epsilon)) {
+      changes.add("translationX: ${_oldTransform.translationX.toStringAsFixed(2)} -> ${_newTransform.translationX.toStringAsFixed(2)}");
+    }
+    if (_oldTransform.translationY.differs(_newTransform.translationY, epsilon)) {
+      changes.add("translationY: ${_oldTransform.translationY.toStringAsFixed(2)} -> ${_newTransform.translationY.toStringAsFixed(2)}");
+    }
+    if (_oldTransform.scaleX.differs(_newTransform.scaleX, epsilon)) {
+      changes.add("scaleX: ${_oldTransform.scaleX.toStringAsFixed(2)} -> ${_newTransform.scaleX.toStringAsFixed(2)}");
+    }
+    if (_oldTransform.scaleY.differs(_newTransform.scaleY, epsilon)) {
+      changes.add("scaleY: ${_oldTransform.scaleY.toStringAsFixed(2)} -> ${_newTransform.scaleY.toStringAsFixed(2)}");
+    }
+    if (_oldTransform.rotation.differs(_newTransform.rotation, epsilon)) {
+      changes.add("rotation: ${_oldTransform.rotation.toStringAsFixed(2)} -> ${_newTransform.rotation.toStringAsFixed(2)}");
+    }
+    return "ModifyReferenceTransformHistoryEntry($_uuid, ${changes.join(", ")})";
+  }
+}

@@ -23,9 +23,11 @@ import 'package:provider/provider.dart';
 import 'package:ring_stack/ring_stack.dart';
 
 import 'package:tabula_historica/extensions/directory.dart';
+import 'package:tabula_historica/extensions/numeric.dart';
 import 'package:tabula_historica/models/project/reference.dart';
 import '../../logger.dart';
 import '../../util/partial_future.dart';
+import '../transform.dart';
 import 'loading_context.dart';
 import 'project.dart';
 import 'foundation/needs_save.dart';
@@ -47,6 +49,7 @@ enum HistoryEntryType {
   reorderReference(ReorderReferenceHistoryEntry.fromJson),
   modifyReferenceTitle(ModifyReferenceTitleHistoryEntry.fromJson),
   modifyReferenceBlendMode(ModifyReferenceBlendModeHistoryEntry.fromJson),
+  modifyReferenceTransform(ModifyReferenceTransformHistoryEntry.fromJson),
   ;
 
   final HistoryEntry Function(Map<String, dynamic> json) _fromJson;

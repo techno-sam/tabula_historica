@@ -12,12 +12,12 @@
       "blendMode": "srcOver",
       "transform": {
         "translation": {
-          "x": 448.7445718379146,
-          "y": -66.84692253567917
+          "x": 496.2850378210444,
+          "y": -85.99486625045319
         },
         "scale": {
-          "x": 0.9999999999999988,
-          "y": 1.0000000000000004
+          "x": 0.9999999999999973,
+          "y": 1.000000000000001
         },
         "rotation": 0.0
       }
@@ -92,6 +92,32 @@
   "historyManager": {
     "undoEntries": [
       {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496",
+        "oldTransform": {
+          "translation": {
+            "x": 448.7445718379146,
+            "y": -66.84692253567917
+          },
+          "scale": {
+            "x": 0.9999999999999988,
+            "y": 1.0000000000000004
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 496.2850378210444,
+            "y": -85.99486625045319
+          },
+          "scale": {
+            "x": 0.9999999999999973,
+            "y": 1.000000000000001
+          },
+          "rotation": 0.0
+        }
+      },
+      {
         "type": "HistoryEntryType.addReference",
         "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496"
       },
@@ -108,19 +134,6 @@
         "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a33"
       }
     ],
-    "redoEntries": [
-      {
-        "type": "HistoryEntryType.modifyReferenceBlendMode",
-        "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496",
-        "oldBlendMode": "srcOver",
-        "newBlendMode": "xor"
-      },
-      {
-        "type": "HistoryEntryType.modifyReferenceTitle",
-        "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496",
-        "oldTitle": "Me",
-        "newTitle": "Me (Slimeist)"
-      }
-    ]
+    "redoEntries": []
   }
 }

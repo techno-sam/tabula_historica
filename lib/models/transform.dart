@@ -73,6 +73,35 @@ class Transform2D implements Transform2DView {
       "rotation": rotation
     };
   }
+
+  Transform2D clone() {
+    return Transform2D(
+        translationX: translationX,
+        translationY: translationY,
+        scaleX: scaleX,
+        scaleY: scaleY,
+        rotation: rotation);
+  }
+
+  void copyFrom(Transform2D other) {
+    translationX = other.translationX;
+    translationY = other.translationY;
+    scaleX = other.scaleX;
+    scaleY = other.scaleY;
+    rotation = other.rotation;
+  }
+
+  @override
+  bool operator ==(covariant Transform2DView other) {
+    return translationX == other.translationX &&
+        translationY == other.translationY &&
+        scaleX == other.scaleX &&
+        scaleY == other.scaleY &&
+        rotation == other.rotation;
+  }
+
+  @override
+  int get hashCode => Object.hash(translationX, translationY, scaleX, scaleY, rotation);
 }
 
 class _Transform2DViewImpl implements Transform2DView {
@@ -97,6 +126,19 @@ class _Transform2DViewImpl implements Transform2DView {
 
   @override
   Map<String, dynamic> toJson() => _wrapped.toJson();
+
+  @override
+  bool operator ==(covariant Transform2DView other) {
+    return translationX == other.translationX &&
+        translationY == other.translationY &&
+        scaleX == other.scaleX &&
+        scaleY == other.scaleY &&
+        rotation == other.rotation;
+  }
+
+  @override
+  int get hashCode => Object.hash(translationX, translationY, scaleX, scaleY, rotation);
+
 }
 
 extension ViewConvenienceExtension on Transform2DView {

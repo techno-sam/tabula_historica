@@ -139,10 +139,42 @@ class Reference with NeedsSave, ChangeNotifier {
     return scaled;
   }
 
-  // fixme add history support
-  void updateTransformImmediate(HistoryManager history, void Function(Transform2D) updater) {
+  Transform2D? _transformStart;
+  void recordTransformStart() {
+    _transformStart = _transform.clone();
+    logger.d("Recorded transform start for $this");
+  }
+
+  void updateTransformIntermediate(void Function(Transform2D) updater, {bool discardStart = false}) {
+    if (discardStart) {
+      _transformStart = null;
+    }
     updater(_transform);
     markDirty();
+    logger.t("Updated intermediate transform of $this");
+  }
+
+  void cancelTransform() {
+    if (_transformStart == null) return;
+    _transform.copyFrom(_transformStart!);
+    _transformStart = null;
+    markDirty();
+    logger.d("Cancelled transform of $this");
+  }
+
+  void commitTransform(HistoryManager history) {
+    if (_transformStart == null) return;
+    if (_transform != _transformStart) {
+      history.record(ModifyReferenceTransformHistoryEntry(uuid, _transformStart!, _transform));
+    }
+    _transformStart = null;
+    logger.d("Committed transform of $this");
+  }
+
+  void updateTransformImmediate(HistoryManager history, void Function(Transform2D) updater) {
+    recordTransformStart();
+    updateTransformIntermediate(updater);
+    commitTransform(history);
   }
 
   void setTitle(HistoryManager history, String newTitle, {bool skipHistory = false}) {
