@@ -62,7 +62,7 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
     return idx;
   }
 
-  void reorder(HistoryManager history, int from, int to) {
+  void reorder(HistoryManager history, int from, int to, {bool skipHistory = false, String? uuid}) {
     if (from < 0 || from >= _references.length) {
       throw ArgumentError.value(from, "from", "invalid index");
     }
@@ -75,13 +75,20 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
       return;
     }
 
-    // todo add history
-
     final value = _references.removeAt(from);
-    if (from < to) { // account for the fact that we just shifted every item
+    if (uuid != null && value.uuid != uuid) {
+      _references.insert(from, value);
+      throw ArgumentError.value(uuid, "uuid", "UUID mismatch, got ${value.uuid}");
+    }
+    final int actualTo = to;
+    if (from < to - 1) { // account for the fact that we just shifted every item
       to--;
     }
     _references.insert(to, value);
+
+    if (!skipHistory) {
+      history.record(ReorderReferenceHistoryEntry(value.uuid, from, actualTo));
+    }
 
     markDirty();
     notifyListeners();

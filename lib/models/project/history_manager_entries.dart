@@ -178,3 +178,53 @@ class RemoveReferenceHistoryEntry extends _ActivatableReferenceHistoryEntry {
     ..['index'] = _index;
   }
 }
+
+class ReorderReferenceHistoryEntry extends HistoryEntry {
+  final int _oldIndex;
+  final int _newIndex;
+  final String _uuid;
+
+  ReorderReferenceHistoryEntry(this._uuid, this._oldIndex, this._newIndex);
+
+  factory ReorderReferenceHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ReorderReferenceHistoryEntry(
+      json['uuid'],
+      json['oldIndex'],
+      json['newIndex']
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    int frm = _newIndex;
+    int to = _oldIndex;
+    if (_oldIndex < _newIndex - 1) {
+      frm--;
+    } else if (_oldIndex > _newIndex + 1) {
+      to++;
+    }
+    project.references.reorder(project.historyManager, frm, to, skipHistory: true, uuid: _uuid);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    project.references.reorder(project.historyManager, _oldIndex, _newIndex, skipHistory: true, uuid: _uuid);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldIndex': _oldIndex,
+      'newIndex': _newIndex,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.reorderReference;
+
+  @override
+  String toString() {
+    return "ReorderReferenceHistoryEntry($_uuid, $_oldIndex -> $_newIndex)";
+  }
+}
