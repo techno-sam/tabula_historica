@@ -27,6 +27,7 @@ import 'package:provider/provider.dart';
 import '../../extensions/iterables.dart';
 import '../../extensions/directory.dart';
 import '../../logger.dart';
+import '../../util/string.dart';
 import 'foundation/needs_save.dart';
 import 'foundation/project_path.dart';
 import 'history_manager.dart';
@@ -187,7 +188,7 @@ class Project implements NeedsSave {
   }
 
   Future<Reference> createReference(File sourceImage, Point<int> dimensions, String? title) async {
-    String name = sourceImage.path.split("/").last;
+    String name = "${slug(6)}-${sourceImage.path.split("/").last}";
     Directory $references = root.resolve("references");
     await $references.create(recursive: true);
 
