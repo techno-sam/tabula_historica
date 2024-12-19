@@ -43,6 +43,7 @@ class HistoryContext {
 
 enum HistoryEntryType {
   addReference(AddReferenceHistoryEntry.fromJson),
+  removeReference(RemoveReferenceHistoryEntry.fromJson),
   ;
 
   final HistoryEntry Function(Map<String, dynamic> json) _fromJson;

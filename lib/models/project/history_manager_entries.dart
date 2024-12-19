@@ -18,45 +18,38 @@
 
 part of 'history_manager.dart';
 
-class AddReferenceHistoryEntry extends HistoryEntry implements LogicallyDisposable<HistoryContext> {
+Future<void> moveImageToHistoricalStorage(Project project, Reference ref) async {
+  String firstTwo = ref.uuid.substring(0, 2);
+  Directory tmpStorageDir = await project.root
+      .resolve('history_storage')
+      .resolve('references')
+      .resolve(firstTwo)
+      .create(recursive: true);
+
+  await ref.image.toFile().rename(tmpStorageDir.resolveFile(ref.uuid).path);
+}
+
+abstract class _ActivatableReferenceHistoryEntry extends HistoryEntry implements LogicallyDisposable<HistoryContext> {
   final String _uuid;
   Map<String, dynamic>? _actualData;
 
-  factory AddReferenceHistoryEntry(Reference reference) {
-    return AddReferenceHistoryEntry._(reference.uuid, null);
-  }
+  _ActivatableReferenceHistoryEntry(this._uuid, this._actualData);
 
-  AddReferenceHistoryEntry._(this._uuid, this._actualData);
-
-  factory AddReferenceHistoryEntry.fromJson(Map<String, dynamic> json) {
-    return AddReferenceHistoryEntry._(
-      json['uuid'],
-      json['actualData']
-    );
-  }
-
-  @override
-  Future<void> undo(Project project) async {
+  Future<void> _deactivate(Project project) async {
     final ref = project.getReference(_uuid)!;
-    logger.d("Undoing AddReference($ref)");
+    logger.d("Deactivating Reference($ref)");
     _actualData = ref.toJson();
-    // copy over image
-    String firstTwo = ref.uuid.substring(0, 2);
-    Directory tmpStorageDir = await project.root
-        .resolve('history_storage')
-        .resolve('references')
-        .resolve(firstTwo)
-        .create(recursive: true);
 
-    await ref.image.toFile().rename(tmpStorageDir.resolveFile(ref.uuid).path);
+    await moveImageToHistoricalStorage(project, ref);
 
-    await project.removeReference(ref);
+    project.references.remove(ref);
+
+    await project.save(); // must save to prevent desync with image storage
   }
 
-  @override
-  Future<void> redo(Project project) async {
+  Future<void> _activate(Project project, {int? index}) async {
     Reference ref = Reference.fromJson(project.loadingContext, _actualData!);
-    logger.d("Redoing AddReference($ref)");
+    logger.d("Activating Reference($ref)");
 
     // copy back image
     String firstTwo = ref.uuid.substring(0, 2);
@@ -67,23 +60,16 @@ class AddReferenceHistoryEntry extends HistoryEntry implements LogicallyDisposab
 
     await tmpStorageDir.resolveFile(ref.uuid).rename(ref.image.toFile().path);
 
-    project.references.add(ref);
+    project.references.add(ref, index: index);
 
     if (await tmpStorageDir.list().isEmpty) {
       await tmpStorageDir.delete();
     }
 
     _actualData = null;
-  }
 
-  @override
-  void assertValidOnRedoStack() {
-    super.assertValidOnRedoStack();
-    assert(_actualData != null);
+    await project.save(); // must save to prevent desync with image storage
   }
-
-  @override
-  HistoryEntryType get type => HistoryEntryType.addReference;
 
   @override
   Map<String, dynamic> toJson() {
@@ -96,11 +82,11 @@ class AddReferenceHistoryEntry extends HistoryEntry implements LogicallyDisposab
   }
 
   @override
-  String toString() => "AddReferenceHistoryEntry($_uuid)";
+  String toString() => "${runtimeType.toString()}($_uuid)";
 
   @override
   void disposeLogical(HistoryContext context) {
-    logger.d("Disposing AddReferenceHistoryEntry($_uuid)");
+    logger.d("Disposing $this");
 
     String firstTwo = _uuid.substring(0, 2);
     Directory tmpStorageDir = context.project.root
@@ -113,5 +99,82 @@ class AddReferenceHistoryEntry extends HistoryEntry implements LogicallyDisposab
     if (tmpStorageDir.listSync().isEmpty) {
       tmpStorageDir.delete();
     }
+  }
+}
+
+class AddReferenceHistoryEntry extends _ActivatableReferenceHistoryEntry {
+  factory AddReferenceHistoryEntry(Reference reference) {
+    return AddReferenceHistoryEntry._(reference.uuid, null);
+  }
+
+  AddReferenceHistoryEntry._(super._uuid, super._actualData);
+
+  factory AddReferenceHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return AddReferenceHistoryEntry._(
+      json['uuid'],
+      json['actualData']
+    );
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    await _activate(project);
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    await _deactivate(project);
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.addReference;
+
+  @override
+  void assertValidOnRedoStack() {
+    super.assertValidOnRedoStack();
+    assert(_actualData != null);
+  }
+}
+
+class RemoveReferenceHistoryEntry extends _ActivatableReferenceHistoryEntry {
+  final int _index;
+
+  factory RemoveReferenceHistoryEntry(Reference reference, int index) {
+    return RemoveReferenceHistoryEntry._(reference.uuid, reference.toJson(), index);
+  }
+
+  RemoveReferenceHistoryEntry._(super._uuid, super._actualData, this._index);
+
+  factory RemoveReferenceHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return RemoveReferenceHistoryEntry._(
+      json['uuid'],
+      json['actualData'],
+      json['index'] ?? 0
+    );
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    await _deactivate(project);
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    await _activate(project, index: _index);
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.removeReference;
+
+  @override
+  void assertValidOnUndoStack() {
+    super.assertValidOnUndoStack();
+    assert(_actualData != null);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return super.toJson()
+    ..['index'] = _index;
   }
 }

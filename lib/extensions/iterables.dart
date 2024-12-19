@@ -65,3 +65,13 @@ extension MapSingleValue<K, V> on Map<K, V> {
     return mapper(value);
   }
 }
+
+extension NullableIndexOf<T> on List<T> {
+  int? nullableIndexOf(T element, [int start = 0]) {
+    final idx = indexOf(element, start);
+    if (idx == -1) {
+      return null;
+    }
+    return idx;
+  }
+}

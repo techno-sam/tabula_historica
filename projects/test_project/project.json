@@ -23,28 +23,6 @@
       }
     },
     {
-      "uuid": "96813a54-cfd7-4ab1-98d8-ce410affd669",
-      "image": {
-        "path": "references/tiger_face_edit.png",
-        "width": 260,
-        "height": 260
-      },
-      "title": "Tiger!",
-      "opacity": 1.0,
-      "blendMode": "srcOver",
-      "transform": {
-        "translation": {
-          "x": 730.0642501793404,
-          "y": -205.41072718964176
-        },
-        "scale": {
-          "x": 0.9999999999999997,
-          "y": 1.0000000000000002
-        },
-        "rotation": 0.0
-      }
-    },
-    {
       "uuid": "6695fc8a-bda8-4ced-99df-fdcc766a0a31",
       "image": {
         "path": "references/demo_ref_1.png",

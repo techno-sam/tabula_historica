@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 
 import '../../extensions/iterables.dart';
 import '../../extensions/directory.dart';
+import '../../logger.dart';
 import 'foundation/needs_save.dart';
 import 'foundation/project_path.dart';
 import 'history_manager.dart';
@@ -45,19 +46,20 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
 
   Reference operator[](int index) => _references[index];
 
-  void add(Reference reference) {
-    _references.insert(0, reference);
+  void add(Reference reference, {int? index}) {
+    _references.insert(index ?? 0, reference);
     markDirty();
     notifyListeners();
   }
 
-  bool remove(Reference reference) {
-    var found = _references.remove(reference);
-    if (found) {
+  int? remove(Reference reference) {
+    int? idx = _references.nullableIndexOf(reference);
+    if (idx != null) {
+      _references.removeAt(idx);
       markDirty();
       notifyListeners();
     }
-    return found;
+    return idx;
   }
 
   void reorder(HistoryManager history, int from, int to) {
@@ -131,6 +133,7 @@ class Project implements NeedsSave {
   }
 
   factory Project.load(Directory root) {
+    logger.d("Loading project from $root");
     File file = File("${root.path}/project.json");
     if (!file.existsSync()) {
       return Project._(root: root);
@@ -165,6 +168,7 @@ class Project implements NeedsSave {
   void dispose() {
     references.dispose();
     historyManager.dispose();
+    logger.d("Disposed $this");
   }
 
   static const JsonEncoder _prettyEncoder = JsonEncoder.withIndent("  ");
@@ -195,48 +199,13 @@ class Project implements NeedsSave {
     return reference;
   }
 
-  Reference createReferenceSync(File sourceImage, Point<int> dimensions, String? title) {
-    String name = sourceImage.path.split("/").last;
-    Directory $references = root.resolve("references");
-    $references.createSync(recursive: true);
-
-    File destImage = $references.resolveFile(name);
-    sourceImage.copySync(destImage.path);
-
-    var reference = Reference(
-      image: ProjectPath(projectRoot: root, path: "references/$name"),
-      imageDimensions: dimensions,
-      title: title
-    );
-    references.add(reference);
-
-    historyManager.record(AddReferenceHistoryEntry(reference));
-
-    return reference;
-  }
-
-  // fixme history
   Future<void> removeReference(Reference reference) async {
-    if (!references.remove(reference)) {
+    final idx = references.remove(reference);
+    if (idx == null) {
       throw ArgumentError("Reference not found");
     }
-    try {
-      await reference.image.toFile().delete();
-    } on FileSystemException {
-      // may have been moved by undo system
-    }
-  }
-
-  // fixme history
-  void removeReferenceSync(Reference reference) {
-    if (!references.remove(reference)) {
-      throw ArgumentError("Reference not found");
-    }
-    try {
-      reference.image.toFile().deleteSync();
-    } on FileSystemException {
-      // may have been moved by undo system
-    }
+    await moveImageToHistoricalStorage(this, reference);
+    historyManager.record(RemoveReferenceHistoryEntry(reference, idx));
   }
 
   Reference? getReference(String uuid) {
@@ -260,6 +229,11 @@ class Project implements NeedsSave {
       _extraNeedsSave ||
       historyManager.needsSave ||
       references.needsSave;
+
+  @override
+  String toString() {
+    return "Project(${root.path}${needsSave ? " *" : ""})";
+  }
 
   static Project of(BuildContext context, {bool listen = true}) {
     return Provider.of<Project>(context, listen: listen);
