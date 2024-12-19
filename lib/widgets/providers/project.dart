@@ -68,7 +68,8 @@ class _ProjectProviderState extends SingleChildState<ProjectProvider> {
       providers: [
         Provider.value(value: _project!),
         ChangeNotifierProvider.value(value: _project!.historyManager),
-        ChangeNotifierProvider.value(value: _project!.references)
+        ChangeNotifierProvider.value(value: _project!.references),
+        ChangeNotifierProvider.value(value: _project!.structures),
       ], child: child,
     );
   }

@@ -128,7 +128,7 @@ class _PerfectDrawingPainter extends CustomPainter {
       streamline: 0.15,
       smoothing: 0.3,
       thinning: 0.6,
-      size: 16, // default for now
+      size: (8 * _detailMultiplier).toDouble(), // default for now
     );
 
     final Paint paint = Paint()

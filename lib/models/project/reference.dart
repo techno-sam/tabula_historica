@@ -47,8 +47,8 @@ class Reference with NeedsSave, ChangeNotifier {
     this.opacity = 1.0,
     this.blendMode = BlendMode.srcOver,
     Transform2D? transform
-  })
-      : _uuid = uuid ?? const Uuid().v4(),
+  }):
+        _uuid = uuid ?? const Uuid().v4(),
         title = title ?? "Unnamed Reference",
         _transform = transform ?? Transform2D();
 

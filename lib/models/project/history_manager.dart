@@ -31,6 +31,7 @@ import '../transform.dart';
 import 'loading_context.dart';
 import 'project.dart';
 import 'foundation/needs_save.dart';
+import 'structure.dart';
 
 part 'history_manager_entries.dart';
 
@@ -51,6 +52,13 @@ enum HistoryEntryType {
   modifyReferenceBlendMode(ModifyReferenceBlendModeHistoryEntry.fromJson),
   modifyReferenceTransform(ModifyReferenceTransformHistoryEntry.fromJson),
   modifyReferenceOpacity(ModifyReferenceOpacityHistoryEntry.fromJson),
+
+  addStructure(AddStructureHistoryEntry.fromJson),
+  removeStructure(RemoveStructureHistoryEntry.fromJson),
+  reorderStructure(ReorderStructureHistoryEntry.fromJson),
+  modifyStructureTitle(ModifyStructureTitleHistoryEntry.fromJson),
+  modifyStructureDescription(ModifyStructureDescriptionHistoryEntry.fromJson),
+  modifyStructurePen(ModifyStructurePenHistoryEntry.fromJson),
   ;
 
   final HistoryEntry Function(Map<String, dynamic> json) _fromJson;

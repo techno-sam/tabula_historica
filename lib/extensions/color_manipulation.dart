@@ -33,8 +33,29 @@ extension ColorManipulation on Color {
     assert(factor >= 0 && factor <= 1);
 
     final hsl = HSLColor.fromColor(this);
-    final hslLight = hsl.withLightness((hsl.lightness + factor).clamp(0.0, 1.0));
+    final hslLight = hsl.withLightness(
+        (hsl.lightness + factor).clamp(0.0, 1.0));
 
     return hslLight.toColor();
+  }
+}
+
+extension JsonColor on Color {
+  Map<String, dynamic> toJson() {
+    return {
+      "r": r,
+      "g": g,
+      "b": b,
+      "a": a
+    };
+  }
+
+  static Color fromJson(Map<String, dynamic> json) {
+    return Color.from(
+      alpha: json["a"],
+      red: json["r"],
+      green: json["g"],
+      blue: json["b"]
+    );
   }
 }

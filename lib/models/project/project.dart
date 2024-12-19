@@ -33,62 +33,66 @@ import 'foundation/project_path.dart';
 import 'history_manager.dart';
 import 'loading_context.dart';
 import 'reference.dart';
+import 'structure.dart';
 
-class ReferenceList extends ChangeNotifier implements NeedsSave {
-  final List<Reference> _references;
-  bool _extraNeedsSave = false;
+abstract class ReorderableListModel<T extends Object> extends ChangeNotifier implements NeedsSave {
+  final List<T> __objects;
+  bool __extraNeedsSave = false;
 
-  ReferenceList([List<Reference>? references]): _references = references ?? [];
+  ReorderableListModel([List<T>? objects]): __objects = objects ?? [];
 
-  Iterable<Reference> get references => _references;
-  Iterable<Reference> get referencesReversed => _references.reversed;
+  Iterable<T> get _objects => __objects;
+  Iterable<T> get _objectsReversed => __objects.reversed;
 
-  get length => _references.length;
+  get length => __objects.length;
 
-  Reference operator[](int index) => _references[index];
+  T operator[](int index) => __objects[index];
 
-  void add(Reference reference, {int? index}) {
-    _references.insert(index ?? 0, reference);
+  void add(T object, {int? index}) {
+    __objects.insert(index ?? 0, object);
     markDirty();
     notifyListeners();
   }
 
-  int? remove(Reference reference) {
-    int? idx = _references.nullableIndexOf(reference);
+  int? remove(T object) {
+    int? idx = __objects.nullableIndexOf(object);
     if (idx != null) {
-      _references.removeAt(idx);
+      __objects.removeAt(idx);
       markDirty();
       notifyListeners();
     }
     return idx;
   }
 
+  String _getUuid(T object);
+  void _recordReorder(HistoryManager history, T object, int from, int actualTo);
+
   void reorder(HistoryManager history, int from, int to, {bool skipHistory = false, String? uuid}) {
-    if (from < 0 || from >= _references.length) {
+    if (from < 0 || from >= __objects.length) {
       throw ArgumentError.value(from, "from", "invalid index");
     }
     if (to < 0) {
       throw ArgumentError.value(to, "to", "invalid index");
     }
-    to = min(to, _references.length);
+    to = min(to, __objects.length);
 
     if (from == to) {
       return;
     }
 
-    final value = _references.removeAt(from);
-    if (uuid != null && value.uuid != uuid) {
-      _references.insert(from, value);
-      throw ArgumentError.value(uuid, "uuid", "UUID mismatch, got ${value.uuid}");
+    final value = __objects.removeAt(from);
+    if (uuid != null && _getUuid(value) != uuid) {
+      __objects.insert(from, value);
+      throw ArgumentError.value(uuid, "uuid", "UUID mismatch, got ${_getUuid(value)}");
     }
     final int actualTo = to;
     if (from < to - 1) { // account for the fact that we just shifted every item
       to--;
     }
-    _references.insert(to, value);
+    __objects.insert(to, value);
 
     if (!skipHistory) {
-      history.record(ReorderReferenceHistoryEntry(value.uuid, from, actualTo));
+      _recordReorder(history, value, from, actualTo);
     }
 
     markDirty();
@@ -97,24 +101,28 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
 
   @override
   void markClean() {
-    _extraNeedsSave = false;
-    for (var e in _references) {
-      e.markClean();
+    __extraNeedsSave = false;
+    for (var e in __objects) {
+      if (e is NeedsSave) {
+        e.markClean();
+      }
     }
   }
 
   @override
   void markDirty() {
-    _extraNeedsSave = true;
+    __extraNeedsSave = true;
   }
 
   @override
-  bool get needsSave => _extraNeedsSave || _references.any((e) => e.needsSave);
+  bool get needsSave => __extraNeedsSave || __objects.any((e) => e is NeedsSave && e.needsSave);
 
   @override
   void dispose() {
-    for (var e in _references) {
-      e.dispose();
+    for (var e in __objects) {
+      if (e is ChangeNotifier) {
+        e.dispose();
+      }
     }
     super.dispose();
   }
@@ -124,9 +132,50 @@ class ReferenceList extends ChangeNotifier implements NeedsSave {
   }
 }
 
+class ReferenceList extends ReorderableListModel<Reference> {
+  ReferenceList([super.references]);
+
+  Iterable<Reference> get references => _objects;
+  Iterable<Reference> get referencesReversed => _objectsReversed;
+
+  @pragma('vm:prefer-inline')
+  @override
+  String _getUuid(Reference object) => object.uuid;
+
+  @override
+  void _recordReorder(HistoryManager history, Reference object, int from, int actualTo) {
+    history.record(ReorderReferenceHistoryEntry(object.uuid, from, actualTo));
+  }
+
+  static ReferenceList of(BuildContext context, {bool listen = true}) {
+    return Provider.of(context, listen: listen);
+  }
+}
+
+class StructureList extends ReorderableListModel<Structure> {
+  StructureList([super.structures]);
+
+  Iterable<Structure> get structures => _objects;
+  Iterable<Structure> get structuresReversed => _objectsReversed;
+
+  @pragma('vm:prefer-inline')
+  @override
+  String _getUuid(Structure object) => object.uuid;
+
+  @override
+  void _recordReorder(HistoryManager history, Structure object, int from, int actualTo) {
+    history.record(ReorderStructureHistoryEntry(object.uuid, from, actualTo));
+  }
+
+  static StructureList of(BuildContext context, {bool listen = true}) {
+    return Provider.of(context, listen: listen);
+  }
+}
+
 class Project implements NeedsSave {
   final Directory root;
   final ReferenceList references;
+  final StructureList structures;
   late final HistoryManager historyManager;
   bool _extraNeedsSave = false;
 
@@ -135,8 +184,9 @@ class Project implements NeedsSave {
   Project._({
     required this.root,
     List<Reference>? references,
+    List<Structure>? structures,
     HistoryManager? historyManager
-  }): references = ReferenceList(references) {
+  }): references = ReferenceList(references), structures = StructureList(structures) {
     this.historyManager = historyManager ?? HistoryManager(getProject: () => this);
   }
 
@@ -160,6 +210,7 @@ class Project implements NeedsSave {
     final project = Project._(
       root: root,
       references: json.mapSingle("references", (refs) => (refs as List).map((e) => Reference.fromJson(ctx, e)).toList()),
+      structures: json.mapSingle("structures", (structs) => (structs as List).map((e) => Structure.fromJson(e)).toList()),
       historyManager: json.mapSingle("historyManager", (hm) => HistoryManager.fromJson(ctx, hm))
     );
     tmp[0] = project;
@@ -169,12 +220,14 @@ class Project implements NeedsSave {
   Map<String, dynamic> toJson() {
     return {
       "references": references.references.map((e) => e.toJson()).toList(),
+      "structures": structures.structures.map((e) => e.toJson()).toList(),
       "historyManager": historyManager.toJson()
     };
   }
 
   void dispose() {
     references.dispose();
+    structures.dispose();
     historyManager.dispose();
     logger.d("Disposed $this");
   }
@@ -220,10 +273,34 @@ class Project implements NeedsSave {
     return references.references.firstWhereOrNull((e) => e.uuid == uuid);
   }
 
+  Structure createStructure({String? title, String? description, Pen pen = Pen.building}) {
+    var structure = Structure(
+      title: title,
+      description: description,
+      pen: pen,
+    );
+    structures.add(structure);
+    historyManager.record(AddStructureHistoryEntry(structure));
+    return structure;
+  }
+
+  void removeStructure(Structure structure) {
+    final idx = structures.remove(structure);
+    if (idx == null) {
+      throw ArgumentError("Structure not found");
+    }
+    historyManager.record(RemoveStructureHistoryEntry(structure, idx));
+  }
+
+  Structure? getStructure(String uuid) {
+    return structures.structures.firstWhereOrNull((e) => e.uuid == uuid);
+  }
+
   @override
   void markClean() {
     _extraNeedsSave = false;
     references.markClean();
+    structures.markClean();
     historyManager.markClean();
   }
 
@@ -236,7 +313,8 @@ class Project implements NeedsSave {
   bool get needsSave =>
       _extraNeedsSave ||
       historyManager.needsSave ||
-      references.needsSave;
+      references.needsSave ||
+      structures.needsSave;
 
   @override
   String toString() {
