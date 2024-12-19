@@ -93,10 +93,6 @@
     "undoEntries": [
       {
         "type": "HistoryEntryType.addReference",
-        "uuid": "96813a54-cfd7-4ab1-98d8-ce410affd669"
-      },
-      {
-        "type": "HistoryEntryType.addReference",
         "uuid": "d39ffe34-3faa-41f1-b162-9f94a3154496"
       },
       {
