@@ -43,7 +43,7 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
     final camera = MapCamera.of(context);
     final toolSelection = ToolSelection.of(context);
     final history = HistoryManager.of(context);
-    final structure = context.read<Structure>();
+    final structure = context.watch<Structure>();
 
     final selected = toolSelection.selectedTool == Tool.structures &&
         toolSelection.mapStateOr((StructuresState state) =>
@@ -51,17 +51,13 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
 
     final penWidth = toolSelection.mapStateOr((StructuresState state) => state.penWidth, Width.normal);
 
-    final customPaint = Consumer(
-      builder: (context, Structure structure, _) {
-        return CustomPaint(
-          painter: _MapSurfaceStructurePainter(
-            pen: structure.pen,
-            strokes: structure.strokes,
-            currentStroke: structure.currentStroke,
-            camera: camera,
-          ),
-        );
-      }
+    final customPaint = CustomPaint(
+      painter: _MapSurfaceStructurePainter(
+        pen: structure.pen,
+        strokes: structure.strokes,
+        currentStroke: structure.currentStroke,
+        camera: camera,
+      ),
     );
 
     Widget out = SizedBox.expand(
@@ -104,22 +100,24 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
 
     final Widget out2;
     if (selected) {
-      final transformedOutline = camera.getOffsetRect(structure.fullBounds).inflate(8.0);
-      out = Stack(
-        children: [
-          Positioned.fromRect(
-            rect: transformedOutline,
-            child: DottedBorder(
-              color: Colors.blue,
-              borderType: BorderType.RRect,
-              radius: const Radius.circular(8.0),
-              dashPattern: const [8, 8],
-              child: const SizedBox(),
+      final transformedOutline = camera.getOffsetRect(structure.fullBounds.inflate(6.0)).inflate(2.0);
+      if (transformedOutline.isFinite) {
+        out = Stack(
+          children: [
+            Positioned.fromRect(
+              rect: transformedOutline,
+              child: DottedBorder(
+                color: Colors.blue,
+                borderType: BorderType.RRect,
+                radius: const Radius.circular(8.0),
+                dashPattern: const [8, 8],
+                child: const SizedBox(),
+              ),
             ),
-          ),
-          out,
-        ],
-      );
+            out,
+          ],
+        );
+      }
     }
     return selected ? out : IgnorePointer(child: out,);
   }

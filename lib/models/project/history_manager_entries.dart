@@ -670,6 +670,51 @@ class ModifyStructureDescriptionHistoryEntry extends HistoryEntry {
   }
 }
 
+class ModifyStructureTimePeriodHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final TimePeriod _oldTimePeriod;
+  final TimePeriod _newTimePeriod;
+
+  ModifyStructureTimePeriodHistoryEntry(this._uuid, this._oldTimePeriod, this._newTimePeriod);
+
+  factory ModifyStructureTimePeriodHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyStructureTimePeriodHistoryEntry(
+        json['uuid'],
+        TimePeriod.fromJson(json['oldTimePeriod']),
+        TimePeriod.fromJson(json['newTimePeriod'])
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setTimePeriod(project.historyManager, _oldTimePeriod, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setTimePeriod(project.historyManager, _newTimePeriod, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldTimePeriod': _oldTimePeriod.toJson(),
+      'newTimePeriod': _newTimePeriod.toJson(),
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyStructureTimePeriod;
+
+  @override
+  String toString() {
+    return "ModifyStructureTimePeriodHistoryEntry($_uuid, $_oldTimePeriod -> $_newTimePeriod)";
+  }
+}
+
 class ModifyStructurePenHistoryEntry extends HistoryEntry {
   final String _uuid;
   final Pen _oldPen;

@@ -58,6 +58,7 @@ enum HistoryEntryType {
   reorderStructure(ReorderStructureHistoryEntry.fromJson),
   modifyStructureTitle(ModifyStructureTitleHistoryEntry.fromJson),
   modifyStructureDescription(ModifyStructureDescriptionHistoryEntry.fromJson),
+  modifyStructureTimePeriod(ModifyStructureTimePeriodHistoryEntry.fromJson),
   modifyStructurePen(ModifyStructurePenHistoryEntry.fromJson),
   addStrokeToStructure(AddStrokeToStructureHistoryEntry.fromJson),
   ;

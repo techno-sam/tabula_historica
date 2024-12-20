@@ -273,10 +273,11 @@ class Project implements NeedsSave {
     return references.references.firstWhereOrNull((e) => e.uuid == uuid);
   }
 
-  Structure createStructure({String? title, String? description, Pen pen = Pen.building}) {
+  Structure createStructure({String? title, String? description, TimePeriod? timePeriod, Pen pen = Pen.building}) {
     var structure = Structure(
       title: title,
       description: description,
+      timePeriod: timePeriod,
       pen: pen,
     );
     structures.add(structure);

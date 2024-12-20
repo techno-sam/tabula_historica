@@ -26,11 +26,20 @@ import 'tool_selection.dart';
 class StructuresState extends ChangeNotifier implements EphemeralState {
   WeakReference<Structure>? _selectedStructure;
   Width _penWidth = Width.normal;
+  TimePeriod _timePeriod = TimePeriod.earlyRepublic;
 
   Width get penWidth => _penWidth;
   set penWidth(Width penWidth) {
     if (penWidth != _penWidth) {
       _penWidth = penWidth;
+      notifyListeners();
+    }
+  }
+
+  TimePeriod get timePeriod => _timePeriod;
+  set timePeriod(TimePeriod timePeriod) {
+    if (timePeriod != _timePeriod) {
+      _timePeriod = timePeriod;
       notifyListeners();
     }
   }
@@ -65,12 +74,16 @@ class StructuresState extends ChangeNotifier implements EphemeralState {
         _selectedStructure = WeakReference(structure);
       }
     }
+    penWidth = Width.fromJson(json['penWidth']);
+    timePeriod = TimePeriod.fromJson(json['timePeriod']);
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'selectedStructure': _selectedStructure?.target?.uuid,
+      'penWidth': _penWidth.toJson(),
+      'timePeriod': _timePeriod.toJson(),
     };
   }
 }

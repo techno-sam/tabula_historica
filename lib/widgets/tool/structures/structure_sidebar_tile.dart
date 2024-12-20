@@ -146,6 +146,15 @@ class StructureListTile extends StatelessWidget {
                 ),
                 child: selected ? const _PenSelector() : const SizedBox.shrink(),
               ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  fixedCrossAxisSizeFactor: 1.0,
+                  child: child,
+                ),
+                child: selected ? const _TimePeriodSelector() : const SizedBox.shrink(),
+              ),
             ],
           ),
         )
@@ -203,6 +212,55 @@ class _PenSelectorState extends State<_PenSelector> {
                     Text(pen.toString().split('.').last.toTitleCase()),
                   ],
                 ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TimePeriodSelector extends StatefulWidget {
+  const _TimePeriodSelector();
+
+  @override
+  State<_TimePeriodSelector> createState() => _TimePeriodSelectorState();
+}
+
+class _TimePeriodSelectorState extends State<_TimePeriodSelector> {
+  final FocusNode _focusNode = FocusNode(debugLabel: "TimePeriodSelector");
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final history = HistoryManager.of(context);
+    final structure = context.watch<Structure>();
+
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text("Period:", style: theme.textTheme.labelLarge),
+        const SizedBox(width: 8),
+        Expanded(
+          child: DropdownButton<TimePeriod>(
+            value: structure.timePeriod,
+            isExpanded: true,
+            focusNode: _focusNode,
+            onChanged: (newTimePeriod) {
+              structure.setTimePeriod(history, newTimePeriod ?? TimePeriod.earlyRepublic);
+              _focusNode.unfocus();
+            },
+            items: TimePeriod.values.map((timePeriod) {
+              return DropdownMenuItem<TimePeriod>(
+                value: timePeriod,
+                child: Text(timePeriod.toString().split('.').last.splitCamelCase().toTitleCase()),
               );
             }).toList(),
           ),

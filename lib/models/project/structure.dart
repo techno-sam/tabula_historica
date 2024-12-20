@@ -20,6 +20,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
+import 'package:tabula_historica/extensions/iterables.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../logger.dart';
@@ -37,6 +38,23 @@ import 'history_manager.dart';
 );*/
 
 const int structureDetailMultiplier = 2;
+
+enum TimePeriod {
+  earlyRepublic, // before 300 BCE
+  lateRepublic, // 300 BCE - ?
+  rome14CE, // 14 CE
+  rome117CE, // 117 CE
+  early3rdCentury, // 200 CE
+  ;
+
+  static TimePeriod fromJson(String json) {
+    return TimePeriod.values.firstWhere((e) => e.name == json);
+  }
+
+  String toJson() {
+    return name;
+  }
+}
 
 enum Width {
   thin(2),
@@ -201,12 +219,14 @@ class Structure with NeedsSave, ChangeNotifier {
   final String uuid;
   String _title;
   String? _description;
+  TimePeriod _timePeriod;
   Pen _pen;
   List<CompletedStroke> _strokes;
   Stroke? _currentStroke;
 
   String get title => _title;
   String get description => _description ?? "";
+  TimePeriod get timePeriod => _timePeriod;
   Pen get pen => _pen;
   List<Stroke> get strokes => List<Stroke>.unmodifiable(_strokes);
   Stroke? get currentStroke => _currentStroke;
@@ -236,11 +256,13 @@ class Structure with NeedsSave, ChangeNotifier {
     String? uuid,
     String? title,
     String? description,
+    TimePeriod? timePeriod,
     Pen pen = Pen.building,
     List<CompletedStroke>? strokes
   }):
         _pen = pen,
         _description = description,
+        _timePeriod = timePeriod ?? TimePeriod.earlyRepublic,
         _title = title ?? "Unnamed Structure",
         uuid = uuid ?? const Uuid().v4(),
         _strokes = strokes ?? [];
@@ -250,6 +272,7 @@ class Structure with NeedsSave, ChangeNotifier {
       uuid: json["uuid"],
       title: json["title"],
       description: json["description"],
+      timePeriod: json.mapSingle("timePeriod", (tp) => TimePeriod.fromJson(tp)),
       pen: Pen.fromJson(json["pen"]),
       strokes: (json["strokes"] as List).map((e) => CompletedStroke.fromJson(e)).toList()
     );
@@ -260,6 +283,7 @@ class Structure with NeedsSave, ChangeNotifier {
       "uuid": uuid,
       "title": _title,
       "description": _description,
+      "timePeriod": _timePeriod.toJson(),
       "pen": _pen.toJson(),
       "strokes": _strokes.map((e) => e.toJson()).toList()
     };
@@ -282,6 +306,16 @@ class Structure with NeedsSave, ChangeNotifier {
     }
     _description = newDescription;
     logger.d("Changed description of $this to $newDescription");
+    markDirty();
+  }
+
+  void setTimePeriod(HistoryManager history, TimePeriod newTimePeriod, {bool skipHistory = false}) {
+    if (_timePeriod == newTimePeriod) return;
+    if (!skipHistory) {
+      history.record(ModifyStructureTimePeriodHistoryEntry(uuid, _timePeriod, newTimePeriod));
+    }
+    _timePeriod = newTimePeriod;
+    logger.d("Changed time period of $this to $newTimePeriod");
     markDirty();
   }
 

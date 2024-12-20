@@ -89,7 +89,8 @@ class MyApp extends StatelessWidget {
       ),
       home: Provider(
         create: (BuildContext context) => backend.Connection(apiUri: Uri.parse('http://localhost:80/map_data/')),
-        child: const MyHomePage(title: 'Flutter Demo Home Page'),
+        // child: const MyHomePage(title: 'Flutter Demo Home Page'),
+        child: const MapScreen(),
       ),
     );
   }
