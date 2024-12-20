@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
 import 'package:provider/provider.dart';
@@ -63,7 +64,7 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
       }
     );
 
-    final out = SizedBox.expand(
+    Widget out = SizedBox.expand(
       child: selected
           ? Listener(
             behavior: HitTestBehavior.opaque,
@@ -100,6 +101,26 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
           )
           : customPaint,
     );
+
+    final Widget out2;
+    if (selected) {
+      final transformedOutline = camera.getOffsetRect(structure.fullBounds).inflate(8.0);
+      out = Stack(
+        children: [
+          Positioned.fromRect(
+            rect: transformedOutline,
+            child: DottedBorder(
+              color: Colors.blue,
+              borderType: BorderType.RRect,
+              radius: const Radius.circular(8.0),
+              dashPattern: const [8, 8],
+              child: const SizedBox(),
+            ),
+          ),
+          out,
+        ],
+      );
+    }
     return selected ? out : IgnorePointer(child: out,);
   }
 }

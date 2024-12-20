@@ -59,7 +59,7 @@ enum Width {
 }
 
 enum Pen {
-  building(Icons.house_outlined),
+  building(Icons.house_outlined, color: Color(0xFF470000)),
   aqueduct(Icons.water_outlined, color: Colors.lightBlue),
   ;
   final IconData icon;
@@ -211,6 +211,27 @@ class Structure with NeedsSave, ChangeNotifier {
   List<Stroke> get strokes => List<Stroke>.unmodifiable(_strokes);
   Stroke? get currentStroke => _currentStroke;
 
+  Rect? _cachedFullBounds;
+
+  Rect get fullBounds {
+    if (_cachedFullBounds != null) return _cachedFullBounds!;
+
+    double minX = double.infinity;
+    double minY = double.infinity;
+    double maxX = double.negativeInfinity;
+    double maxY = double.negativeInfinity;
+
+    for (final stroke in _strokes) {
+      minX = min(minX, stroke._bounds.left);
+      minY = min(minY, stroke._bounds.top);
+      maxX = max(maxX, stroke._bounds.right);
+      maxY = max(maxY, stroke._bounds.bottom);
+    }
+
+    _cachedFullBounds = Rect.fromLTRB(minX, minY, maxX, maxY);
+    return _cachedFullBounds!;
+  }
+
   Structure({
     String? uuid,
     String? title,
@@ -277,6 +298,7 @@ class Structure with NeedsSave, ChangeNotifier {
   void startStroke(HistoryManager history, Width width, Offset start) {
     if (_currentStroke != null) {
       _strokes.add(CompletedStroke.from(_currentStroke!));
+      _cachedFullBounds = null;
     }
     _currentStroke = Stroke(width: width, points: [start]);
     markDirty();
@@ -291,6 +313,7 @@ class Structure with NeedsSave, ChangeNotifier {
   void endStroke(HistoryManager history) {
     if (_currentStroke == null) return;
     _strokes.add(CompletedStroke.from(_currentStroke!));
+    _cachedFullBounds = null;
     _currentStroke = null;
     history.record(AddStrokeToStructureHistoryEntry(uuid));
     markDirty();
@@ -298,6 +321,7 @@ class Structure with NeedsSave, ChangeNotifier {
 
   void $forHistory$restoreStroke(Stroke stroke) {
     _strokes.add(CompletedStroke.from(stroke));
+    _cachedFullBounds = null;
     markDirty();
   }
 

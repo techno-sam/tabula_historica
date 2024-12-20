@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:tabula_historica/widgets/drawing/perfect_drawing_pad.dart';
+import 'package:tabula_historica/widgets/map/map_grid_paper.dart';
 import 'package:tabula_historica/widgets/project/all_structures.dart';
 import 'package:tabula_historica/widgets/tool/structures/structure_pen_selector.dart';
 import 'package:tabula_historica/widgets/tool/structures/structure_sidebar.dart';
@@ -111,7 +112,7 @@ class MultiLODMap extends StatelessWidget {
                                 child: const SizedBox.expand(),
                               ),
                             ),
-                          _MultiLODMap(
+                          /*_MultiLODMap(
                             lods: lods,
                             tileProvider: CancellableNetworkTileProvider(),
                             tileBuilder: tile_builder
@@ -120,7 +121,8 @@ class MultiLODMap extends StatelessWidget {
                                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
                             evictErrorTileStrategy: EvictErrorTileStrategy
                                 .notVisibleRespectMargin,
-                          ),
+                          ),*/
+                          const MapGridPaper(),
                           /******************************/
                           /* Surface positioned widgets */
                           /******************************/
