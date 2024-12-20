@@ -25,6 +25,15 @@ import 'tool_selection.dart';
 
 class StructuresState extends ChangeNotifier implements EphemeralState {
   WeakReference<Structure>? _selectedStructure;
+  Width _penWidth = Width.normal;
+
+  Width get penWidth => _penWidth;
+  set penWidth(Width penWidth) {
+    if (penWidth != _penWidth) {
+      _penWidth = penWidth;
+      notifyListeners();
+    }
+  }
 
   bool isStructureSelected(Structure structure) {
     return _selectedStructure?.target == structure;

@@ -16,14 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:perfect_freehand/perfect_freehand.dart';
-import 'package:tabula_historica/models/project/history_manager.dart';
+import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
 import 'package:uuid/uuid.dart';
 
-import '../../extensions/color_manipulation.dart';
 import '../../logger.dart';
+import '../../widgets/map/flutter_map/map_camera.dart';
+import '../../widgets/map/flutter_map/extensions/point.dart';
 import 'foundation/needs_save.dart';
+import 'history_manager.dart';
 
 /*final StrokeOptions _defaultStrokeOptions = StrokeOptions(
   isComplete: true,
@@ -33,12 +36,14 @@ import 'foundation/needs_save.dart';
   size: Width.normal.value,
 );*/
 
+const int structureDetailMultiplier = 2;
+
 enum Width {
   thin(2),
   semiThin(4),
   normal(8),
   semiThick(16),
-  thick(32),
+  thick(24),
   ;
   final double value;
 
@@ -54,15 +59,16 @@ enum Width {
 }
 
 enum Pen {
-  building(),
-  aqueduct(color: Colors.lightBlue),
+  building(Icons.house_outlined),
+  aqueduct(Icons.water_outlined, color: Colors.lightBlue),
   ;
+  final IconData icon;
   final Color color;
   final double _streamline;
   final double _smoothing;
   final double _thinning;
 
-  const Pen({
+  const Pen(this.icon, {
     this.color = Colors.black,
     double streamline = 0.15,
     double smoothing = 0.3,
@@ -115,12 +121,88 @@ class Stroke {
   }
 }
 
+class CompletedStroke extends Stroke {
+  late final Rect _bounds;
+  List<PointVector>? _cachedBase;
+  int? _outlineStrokeOptionsHash;
+  List<Offset>? _cachedUntransformedOutline;
+
+  CompletedStroke({
+    required super.width,
+    required List<Offset> points,
+  }) : super(points: List.unmodifiable(points)) {
+    if (points.isEmpty) {
+      _bounds = Rect.zero;
+    } else {
+      double minX = double.infinity;
+      double minY = double.infinity;
+      double maxX = double.negativeInfinity;
+      double maxY = double.negativeInfinity;
+
+      for (final point in points) {
+        minX = min(minX, point.dx);
+        minY = min(minY, point.dy);
+        maxX = max(maxX, point.dx);
+        maxY = max(maxY, point.dy);
+      }
+
+      _bounds = Rect.fromLTRB(minX, minY, maxX, maxY);
+    }
+  }
+
+  CompletedStroke.from(Stroke stroke):
+        this(width: stroke.width, points: List.unmodifiable(stroke.points));
+
+  factory CompletedStroke.fromJson(Map<String, dynamic> json) {
+    return CompletedStroke.from(Stroke.fromJson(json));
+  }
+
+  bool visible(MapCamera camera) {
+    return camera.getOffsetRect(_bounds)
+        .overlaps(Rect.fromLTWH(0, 0, camera.size.width, camera.size.height));
+  }
+
+  void clearCache() {
+    _cachedBase = null;
+    _cachedUntransformedOutline = null;
+  }
+
+  List<PointVector> _getBase() {
+    if (_cachedBase != null) return _cachedBase!;
+
+    _cachedBase = points
+        .map((p) => p * structureDetailMultiplier.toDouble())
+        .map((p) => PointVector(p.dx, p.dy))
+        .toList();
+
+    return _cachedBase!;
+  }
+
+  List<Offset> getUntransformedOutline(StrokeOptions options) {
+    if (_outlineStrokeOptionsHash != options.hashCode) {
+      _outlineStrokeOptionsHash = options.hashCode;
+      _cachedUntransformedOutline = null;
+    }
+
+    if (_cachedUntransformedOutline != null) return _cachedUntransformedOutline!;
+
+    final outline = getStroke(_getBase(), options: options);
+
+    final invDetail = 1 / structureDetailMultiplier.toDouble();
+    _cachedUntransformedOutline = outline
+        .map((e) => e.scale(invDetail, invDetail))
+        .toList();
+
+    return _cachedUntransformedOutline!;
+  }
+}
+
 class Structure with NeedsSave, ChangeNotifier {
   final String uuid;
   String _title;
   String? _description;
   Pen _pen;
-  List<Stroke> _strokes;
+  List<CompletedStroke> _strokes;
   Stroke? _currentStroke;
 
   String get title => _title;
@@ -134,7 +216,7 @@ class Structure with NeedsSave, ChangeNotifier {
     String? title,
     String? description,
     Pen pen = Pen.building,
-    List<Stroke>? strokes
+    List<CompletedStroke>? strokes
   }):
         _pen = pen,
         _description = description,
@@ -148,7 +230,7 @@ class Structure with NeedsSave, ChangeNotifier {
       title: json["title"],
       description: json["description"],
       pen: Pen.fromJson(json["pen"]),
-      strokes: (json["strokes"] as List).map((e) => Stroke.fromJson(e)).toList()
+      strokes: (json["strokes"] as List).map((e) => CompletedStroke.fromJson(e)).toList()
     );
   }
 
@@ -194,13 +276,13 @@ class Structure with NeedsSave, ChangeNotifier {
 
   void startStroke(HistoryManager history, Width width, Offset start) {
     if (_currentStroke != null) {
-      _strokes.add(_currentStroke!);
+      _strokes.add(CompletedStroke.from(_currentStroke!));
     }
     _currentStroke = Stroke(width: width, points: [start]);
     markDirty();
   }
 
-  void addPoint(HistoryManager history, Offset point) {
+  void updateStroke(HistoryManager history, Offset point) {
     if (_currentStroke == null) return;
     _currentStroke!.points.add(point);
     markDirty();
@@ -208,7 +290,7 @@ class Structure with NeedsSave, ChangeNotifier {
 
   void endStroke(HistoryManager history) {
     if (_currentStroke == null) return;
-    _strokes.add(_currentStroke!);
+    _strokes.add(CompletedStroke.from(_currentStroke!));
     _currentStroke = null;
     markDirty();
   }

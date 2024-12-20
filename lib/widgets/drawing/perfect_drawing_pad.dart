@@ -57,36 +57,36 @@ class _PerfectDrawingPadState extends State<PerfectDrawingPad> {
         ),*/
         child: toolSelection.selectedTool == Tool.structures
             ? Listener(
-                behavior: HitTestBehavior.opaque,
-                onPointerDown: (PointerDownEvent event) {
-                  if (!event.hasPrimaryButton ||
-                      event.hasSecondaryButton ||
-                      event.hasMiddleButton) {
-                    return;
-                  }
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: (PointerDownEvent event) {
+                if (!event.hasPrimaryButton ||
+                    event.hasSecondaryButton ||
+                    event.hasMiddleButton) {
+                  return;
+                }
+                setState(() {
+                  final line = <PointVector>[];
+                  lines.add(line);
+                  final transformed = camera.getBlockPos(event.localPosition.toPoint()) * _detailMultiplier;
+                  line.add(PointVector(transformed.x, transformed.y));
+                });
+              },
+              onPointerMove: (PointerMoveEvent event) {
+                if (!event.hasPrimaryButton ||
+                    event.hasSecondaryButton ||
+                    event.hasMiddleButton) {
+                  return;
+                }
+                if (lines.isNotEmpty) {
                   setState(() {
-                    final line = <PointVector>[];
-                    lines.add(line);
+                    final line = lines.last;
                     final transformed = camera.getBlockPos(event.localPosition.toPoint()) * _detailMultiplier;
                     line.add(PointVector(transformed.x, transformed.y));
                   });
-                },
-                onPointerMove: (PointerMoveEvent event) {
-                  if (!event.hasPrimaryButton ||
-                      event.hasSecondaryButton ||
-                      event.hasMiddleButton) {
-                    return;
-                  }
-                  if (lines.isNotEmpty) {
-                    setState(() {
-                      final line = lines.last;
-                      final transformed = camera.getBlockPos(event.localPosition.toPoint()) * _detailMultiplier;
-                      line.add(PointVector(transformed.x, transformed.y));
-                    });
-                  }
-                },
-                child: customPaint,
-              )
+                }
+              },
+              child: customPaint,
+            )
             : customPaint,
       ),
     );

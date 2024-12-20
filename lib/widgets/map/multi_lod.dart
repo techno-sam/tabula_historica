@@ -27,6 +27,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:tabula_historica/widgets/drawing/perfect_drawing_pad.dart';
+import 'package:tabula_historica/widgets/project/all_structures.dart';
+import 'package:tabula_historica/widgets/tool/structures/structure_pen_selector.dart';
+import 'package:tabula_historica/widgets/tool/structures/structure_sidebar.dart';
 
 import '../../backend/backend.dart' as backend;
 import '../../extensions/pointer_event.dart';
@@ -130,19 +133,28 @@ class MultiLODMap extends StatelessWidget {
                             child: const Text("Press me"),
                           )),
                           const AllReferences(),
-                          const PerfectDrawingPad(),
+                          const AllStructures(),
+                          // const PerfectDrawingPad(),
                           /***************/
                           /* UI elements */
                           /***************/
                           const Positioned(
                             top: 4,
                             right: 4,
-                            child: Toolbar(),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Toolbar(),
+                                StructurePenWidthSelector(),
+                              ],
+                            ),
                           ),
                         ]
                     ),
                   ),
                   const ReferenceSidebar(),
+                  const StructureSidebar(),
                 ],
               ),
             ),

@@ -251,7 +251,7 @@ class _BlendModeSelectorState extends State<_BlendModeSelector> {
           items: BlendMode.values.map((mode) {
             return DropdownMenuItem<BlendMode>(
               value: mode,
-              child: Text(mode.toString().split(".")[1]),
+              child: Text(mode.toString().split('.').last),
             );
           }).toList(),
         ),

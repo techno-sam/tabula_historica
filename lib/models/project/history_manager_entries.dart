@@ -618,6 +618,11 @@ class ModifyStructureTitleHistoryEntry extends HistoryEntry {
 
   @override
   HistoryEntryType get type => HistoryEntryType.modifyStructureTitle;
+
+  @override
+  String toString() {
+    return "ModifyStructureTitleHistoryEntry($_uuid, $_oldTitle -> $_newTitle)";
+  }
 }
 
 class ModifyStructureDescriptionHistoryEntry extends HistoryEntry {
@@ -658,6 +663,11 @@ class ModifyStructureDescriptionHistoryEntry extends HistoryEntry {
 
   @override
   HistoryEntryType get type => HistoryEntryType.modifyStructureDescription;
+
+  @override
+  String toString() {
+    return "ModifyStructureDescriptionHistoryEntry($_uuid, $_oldDescription -> $_newDescription)";
+  }
 }
 
 class ModifyStructurePenHistoryEntry extends HistoryEntry {
@@ -698,4 +708,9 @@ class ModifyStructurePenHistoryEntry extends HistoryEntry {
 
   @override
   HistoryEntryType get type => HistoryEntryType.modifyStructurePen;
+
+  @override
+  String toString() {
+    return "ModifyStructurePenHistoryEntry($_uuid, $_oldPen -> $_newPen)";
+  }
 }

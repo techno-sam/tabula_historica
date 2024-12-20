@@ -156,6 +156,13 @@ class MapCamera extends ChangeNotifier {
     return blockPos;
   }
 
+  Rect getOffsetRect(Rect bounds) {
+    return Rect.fromPoints(
+        getOffset(bounds.topLeft.toPoint()).toOffset(),
+        getOffset(bounds.bottomRight.toPoint()).toOffset()
+    );
+  }
+
   static MapCamera of(BuildContext context, {bool listen = true}) {
     return Provider.of(context, listen: listen);
   }
