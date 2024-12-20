@@ -99,13 +99,13 @@ class MultiLODMap extends StatelessWidget {
                     /* Surface positioned widgets */
                     /******************************/
                     //const DebugMapSurfacePositioned(x: -32, y: 16, baseScale: 1, which: false),
-                    MapSurfacePositioned(
+                    /*MapSurfacePositioned(
                         x: -32, y: 16, baseScale: 1, child: ElevatedButton(
                       onPressed: () {
                         logger.d("Button pressed");
                       },
                       child: const Text("Press me"),
-                    )),
+                    )),*/
                     const AllReferences(),
                     const AllStructures(),
                     // const PerfectDrawingPad(),

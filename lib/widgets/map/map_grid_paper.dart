@@ -65,11 +65,11 @@ class _MapGridPaperPainter extends CustomPainter {
 
     final double scaledInterval = rawInterval * scale;
 
-    int verticalLineCellCount = (width / scaledInterval / 2).ceil();
-    int horizontalLineCellCount = (height / scaledInterval / 2).ceil();
+    int verticalLineCellCount = (width / scaledInterval).ceil();
+    int horizontalLineCellCount = (height / scaledInterval).ceil();
 
     void renderGrid(int lineCount, void Function(double offset) render) {
-      for (int major = -lineCount; major <= lineCount; major++) {
+      for (int major = -1; major <= lineCount; major++) {
         for (int semiMajor = 0; semiMajor < divisions; semiMajor++) {
           for (int minor = 0; minor < subDivisions; minor++) {
             for (int ultraMinor = 0; ultraMinor < superDivisions; ultraMinor++) {
@@ -108,14 +108,20 @@ class _MapGridPaperPainter extends CustomPainter {
     }
 
     renderGrid(verticalLineCellCount, (offset) {
-      offset += originX;
+      offset += (originX % scaledInterval);
       canvas.drawLine(Offset(offset, 0), Offset(offset, height), paint);
     });
 
     renderGrid(horizontalLineCellCount, (offset) {
-      offset += originY;
+      offset += (originY % scaledInterval);
       canvas.drawLine(Offset(0, offset), Offset(width, offset), paint);
     });
+
+    // render a scaled circle at the origin
+    paint.strokeWidth = 1.0;
+    paint.style = PaintingStyle.fill;
+    paint.color = Colors.black;
+    canvas.drawCircle(originOffset, 8, paint);
   }
 
   @override

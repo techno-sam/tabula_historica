@@ -1,0 +1,3720 @@
+{
+  "references": [
+    {
+      "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+      "image": {
+        "path": "references/1f4eb9-rome_early_3rd_century_ce_forum-1.png",
+        "width": 3000,
+        "height": 3017
+      },
+      "title": "Early 3rd Century Forum",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 239.77512457217472,
+          "y": -259.32361612729585
+        },
+        "scale": {
+          "x": 0.4652238342191439,
+          "y": 0.46522383421914426
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+      "image": {
+        "path": "references/ab33c3-rome_early_3rd_century_ce-1.png",
+        "width": 3000,
+        "height": 2994
+      },
+      "title": "Early 3rd Century",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 122.80943800074124,
+          "y": -294.9084980172905
+        },
+        "scale": {
+          "x": 1.4639673206458075,
+          "y": 1.4639673206458064
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+      "image": {
+        "path": "references/c4fc04-rome_117ce_inset.png",
+        "width": 1567,
+        "height": 1136
+      },
+      "title": "Rome 117 CE Forum",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 119.5233399203671,
+          "y": -562.7755992920181
+        },
+        "scale": {
+          "x": 0.22753102408171133,
+          "y": 0.22753102408171133
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+      "image": {
+        "path": "references/f695a0-rome_117ce-1.png",
+        "width": 3000,
+        "height": 3482
+      },
+      "title": "Rome 117 CE",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 78.90583232996367,
+          "y": 48.008068045976756
+        },
+        "scale": {
+          "x": 1.4431556633911602,
+          "y": 1.4431556633911578
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "5708ed92-5950-4829-8bac-b460f31ae3b0",
+      "image": {
+        "path": "references/c64c23-rome_14ce_inset.png",
+        "width": 1692,
+        "height": 1192
+      },
+      "title": "Rome 14 CE Forum",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 116.5687296437006,
+          "y": -563.9591800536878
+        },
+        "scale": {
+          "x": 0.21368995827850223,
+          "y": 0.21368995827850204
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "2d159932-09e4-4f97-88fe-e216c17085a2",
+      "image": {
+        "path": "references/8eade4-rome_14ce-1.png",
+        "width": 3009,
+        "height": 4174
+      },
+      "title": "Rome 14 CE",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "993dee52-9e4e-4f5b-afce-3edff0770a16",
+      "image": {
+        "path": "references/51f99f-late_republic_inset.png",
+        "width": 1691,
+        "height": 1192
+      },
+      "title": "Late Republic Forum",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 116.5687296437006,
+          "y": -563.9591800536878
+        },
+        "scale": {
+          "x": 0.21368995827850223,
+          "y": 0.21368995827850204
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "75cba859-5aef-4597-8f70-03d4a252590b",
+      "image": {
+        "path": "references/d60ff5-late_republic-1.png",
+        "width": 3011,
+        "height": 4172
+      },
+      "title": "Late Republic",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+      "image": {
+        "path": "references/5a59f0-early_republic-inset.png",
+        "width": 1691,
+        "height": 1197
+      },
+      "title": "Early Republic Forum",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 116.5687296437006,
+          "y": -563.9591800536878
+        },
+        "scale": {
+          "x": 0.21368995827850223,
+          "y": 0.21368995827850204
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "4414fe18-d9b7-42a1-b063-d59d372b7e92",
+      "image": {
+        "path": "references/4895a9-early_republic-1.png",
+        "width": 3008,
+        "height": 4173
+      },
+      "title": "Early Republic",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "rotation": 0.0
+      }
+    },
+    {
+      "uuid": "15acf34f-627a-4fc2-b941-eea2e956c3a7",
+      "image": {
+        "path": "references/984ab0--000.png",
+        "width": 3380,
+        "height": 3745
+      },
+      "title": "Base!",
+      "opacity": 1.0,
+      "blendMode": "srcOver",
+      "transform": {
+        "translation": {
+          "x": 111.3921278685122,
+          "y": -549.5154122428681
+        },
+        "scale": {
+          "x": 0.9999999999999998,
+          "y": 0.9999999999999998
+        },
+        "rotation": 0.0
+      }
+    }
+  ],
+  "structures": [],
+  "historyManager": {
+    "undoEntries": [
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldBlendMode": "multiply",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 248.72885155374266,
+            "y": -262.9908380843313
+          },
+          "scale": {
+            "x": 0.4652238342191439,
+            "y": 0.46522383421914426
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 239.77512457217472,
+            "y": -259.32361612729585
+          },
+          "scale": {
+            "x": 0.4652238342191439,
+            "y": 0.46522383421914426
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 239.96756162402363,
+            "y": -258.64508827492847
+          },
+          "scale": {
+            "x": 0.46522383421914393,
+            "y": 0.46522383421914426
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 248.72885155374266,
+            "y": -262.9908380843313
+          },
+          "scale": {
+            "x": 0.4652238342191439,
+            "y": 0.46522383421914426
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 236.81069736760662,
+            "y": -254.10764808230138
+          },
+          "scale": {
+            "x": 0.4652238342191439,
+            "y": 0.46522383421914415
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 239.96756162402363,
+            "y": -258.64508827492847
+          },
+          "scale": {
+            "x": 0.46522383421914393,
+            "y": 0.46522383421914426
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 235.01721833337666,
+            "y": -254.10767745938762
+          },
+          "scale": {
+            "x": 0.46402818610525737,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 236.81069736760662,
+            "y": -254.10764808230138
+          },
+          "scale": {
+            "x": 0.4652238342191439,
+            "y": 0.46522383421914415
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 233.9247780907067,
+            "y": -254.46745676983866
+          },
+          "scale": {
+            "x": 0.4640281861052574,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 235.01721833337666,
+            "y": -254.10767745938762
+          },
+          "scale": {
+            "x": 0.46402818610525737,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 388.3988590078279,
+            "y": -335.49586470532734
+          },
+          "scale": {
+            "x": 0.4640281861052574,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 233.9247780907067,
+            "y": -254.46745676983866
+          },
+          "scale": {
+            "x": 0.4640281861052574,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 240.30045731774098,
+            "y": -239.96388455431148
+          },
+          "scale": {
+            "x": 0.4640281861052574,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 388.3988590078279,
+            "y": -335.49586470532734
+          },
+          "scale": {
+            "x": 0.4640281861052574,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 262.0988967681454,
+            "y": -239.96385615030783
+          },
+          "scale": {
+            "x": 0.47856047907219373,
+            "y": 0.47856047907219396
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 240.30045731774098,
+            "y": -239.96388455431148
+          },
+          "scale": {
+            "x": 0.4640281861052574,
+            "y": 0.4640281861052576
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 245.3732410303262,
+            "y": -248.58709844260954
+          },
+          "scale": {
+            "x": 0.4785604790721937,
+            "y": 0.4785604790721939
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 262.0988967681454,
+            "y": -239.96385615030783
+          },
+          "scale": {
+            "x": 0.47856047907219373,
+            "y": 0.47856047907219396
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 221.60306020701285,
+            "y": -262.5756629213298
+          },
+          "scale": {
+            "x": 0.47856047907219373,
+            "y": 0.4785604790721939
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 245.3732410303262,
+            "y": -248.58709844260954
+          },
+          "scale": {
+            "x": 0.4785604790721937,
+            "y": 0.4785604790721939
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 203.84293122018096,
+            "y": -260.26469353410164
+          },
+          "scale": {
+            "x": 0.4785604790721937,
+            "y": 0.47856047907219373
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 221.60306020701285,
+            "y": -262.5756629213298
+          },
+          "scale": {
+            "x": 0.47856047907219373,
+            "y": 0.4785604790721939
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 210.2734645567922,
+            "y": -260.2646939721725
+          },
+          "scale": {
+            "x": 0.48284750129660114,
+            "y": 0.4828475012966012
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 203.84293122018096,
+            "y": -260.26469353410164
+          },
+          "scale": {
+            "x": 0.4785604790721937,
+            "y": 0.47856047907219373
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 201.7882567916855,
+            "y": -256.19295323833217
+          },
+          "scale": {
+            "x": 0.48284750129660114,
+            "y": 0.4828475012966012
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 210.2734645567922,
+            "y": -260.2646939721725
+          },
+          "scale": {
+            "x": 0.48284750129660114,
+            "y": 0.4828475012966012
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 208.24445946373362,
+            "y": -256.1929531347158
+          },
+          "scale": {
+            "x": 0.4871516364112999,
+            "y": 0.4871516364113
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 201.7882567916855,
+            "y": -256.19295323833217
+          },
+          "scale": {
+            "x": 0.48284750129660114,
+            "y": 0.4828475012966012
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 193.71654421291817,
+            "y": -250.95037286728726
+          },
+          "scale": {
+            "x": 0.4871516364112998,
+            "y": 0.4871516364113
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 208.24445946373362,
+            "y": -256.1929531347158
+          },
+          "scale": {
+            "x": 0.4871516364112999,
+            "y": 0.4871516364113
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 199.5201355377743,
+            "y": -250.95037250940996
+          },
+          "scale": {
+            "x": 0.49102069729453723,
+            "y": 0.4910206972945373
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 193.71654421291817,
+            "y": -250.95037286728726
+          },
+          "scale": {
+            "x": 0.4871516364112998,
+            "y": 0.4871516364113
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 176.11049756773969,
+            "y": -236.01990672043507
+          },
+          "scale": {
+            "x": 0.49102069729453723,
+            "y": 0.4910206972945373
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 199.5201355377743,
+            "y": -250.95037250940996
+          },
+          "scale": {
+            "x": 0.49102069729453723,
+            "y": 0.4910206972945373
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 194.8073914754367,
+            "y": -236.01990671993988
+          },
+          "scale": {
+            "x": 0.503485293233002,
+            "y": 0.503485293233002
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 176.11049756773969,
+            "y": -236.01990672043507
+          },
+          "scale": {
+            "x": 0.49102069729453723,
+            "y": 0.4910206972945373
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 180.7350240173356,
+            "y": -239.27162119189975
+          },
+          "scale": {
+            "x": 0.503485293233002,
+            "y": 0.503485293233002
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 194.8073914754367,
+            "y": -236.01990671993988
+          },
+          "scale": {
+            "x": 0.503485293233002,
+            "y": 0.503485293233002
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 189.43984720784658,
+            "y": -239.2716307252098
+          },
+          "scale": {
+            "x": 0.5092885086933425,
+            "y": 0.5092885086933426
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 180.7350240173356,
+            "y": -239.27162119189975
+          },
+          "scale": {
+            "x": 0.503485293233002,
+            "y": 0.503485293233002
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 158.65509055409385,
+            "y": -229.63335907107665
+          },
+          "scale": {
+            "x": 0.5092885086933426,
+            "y": 0.5092885086933426
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 189.43984720784658,
+            "y": -239.2716307252098
+          },
+          "scale": {
+            "x": 0.5092885086933425,
+            "y": 0.5092885086933426
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 178.37245095554016,
+            "y": -229.63330006315664
+          },
+          "scale": {
+            "x": 0.5224333598093719,
+            "y": 0.5224333598093719
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 158.65509055409385,
+            "y": -229.63335907107665
+          },
+          "scale": {
+            "x": 0.5092885086933426,
+            "y": 0.5092885086933426
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 273.50277600946816,
+            "y": -205.34172746618003
+          },
+          "scale": {
+            "x": 0.5224333598093718,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 178.37245095554016,
+            "y": -229.63330006315664
+          },
+          "scale": {
+            "x": 0.5224333598093719,
+            "y": 0.5224333598093719
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "multiply"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldOpacity": 0.0,
+        "newOpacity": 1.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldBlendMode": "multiply",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 167.64247535818248,
+            "y": -208.14087340454415
+          },
+          "scale": {
+            "x": 0.5224333598093719,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 273.50277600946816,
+            "y": -205.34172746618003
+          },
+          "scale": {
+            "x": 0.5224333598093718,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -549.3061736353268,
+            "y": 266.24366086584973
+          },
+          "scale": {
+            "x": 0.5224333598093718,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 167.64247535818248,
+            "y": -208.14087340454415
+          },
+          "scale": {
+            "x": 0.5224333598093719,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -483.0625212915768,
+            "y": 191.12599987395356
+          },
+          "scale": {
+            "x": 0.5224333598093718,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -549.3061736353268,
+            "y": 266.24366086584973
+          },
+          "scale": {
+            "x": 0.5224333598093718,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -522.1877959497799,
+            "y": 230.47299124406425
+          },
+          "scale": {
+            "x": 0.4963498433705697,
+            "y": 0.4963498433705697
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -483.0625212915768,
+            "y": 191.12599987395356
+          },
+          "scale": {
+            "x": 0.5224333598093718,
+            "y": 0.5224333598093718
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -441.9777129419674,
+            "y": 138.2469102031365
+          },
+          "scale": {
+            "x": 0.4963498433705697,
+            "y": 0.4963498433705697
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -522.1877959497799,
+            "y": 230.47299124406425
+          },
+          "scale": {
+            "x": 0.4963498433705697,
+            "y": 0.4963498433705697
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -490.05513603767054,
+            "y": 186.59676032263678
+          },
+          "scale": {
+            "x": 0.4642982279734343,
+            "y": 0.46429822797343423
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -441.9777129419674,
+            "y": 138.2469102031365
+          },
+          "scale": {
+            "x": 0.4963498433705697,
+            "y": 0.4963498433705697
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -451.75826103767054,
+            "y": 140.97836382659034
+          },
+          "scale": {
+            "x": 0.4642982279734343,
+            "y": 0.46429822797343423
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -490.05513603767054,
+            "y": 186.59676032263678
+          },
+          "scale": {
+            "x": 0.4642982279734343,
+            "y": 0.46429822797343423
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -475.047674489819,
+            "y": 164.3997387619679
+          },
+          "scale": {
+            "x": 0.4487719523386687,
+            "y": 0.4487719523386687
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -451.75826103767054,
+            "y": 140.97836382659034
+          },
+          "scale": {
+            "x": 0.4642982279734343,
+            "y": 0.46429822797343423
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -427.019842458569,
+            "y": 109.48251429350921
+          },
+          "scale": {
+            "x": 0.4487719523386687,
+            "y": 0.4487719523386687
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -475.047674489819,
+            "y": 164.3997387619679
+          },
+          "scale": {
+            "x": 0.4487719523386687,
+            "y": 0.4487719523386687
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -455.8067382105221,
+            "y": 138.4325282415415
+          },
+          "scale": {
+            "x": 0.42958068850403325,
+            "y": 0.42958068850403325
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -427.019842458569,
+            "y": 109.48251429350921
+          },
+          "scale": {
+            "x": 0.4487719523386687,
+            "y": 0.4487719523386687
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -430.9880126245846,
+            "y": 126.39664711618173
+          },
+          "scale": {
+            "x": 0.42958068850403325,
+            "y": 0.42958068850403325
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -455.8067382105221,
+            "y": 138.4325282415415
+          },
+          "scale": {
+            "x": 0.42958068850403325,
+            "y": 0.42958068850403325
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -445.4890197046627,
+            "y": 140.97983449561048
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -430.9880126245846,
+            "y": 126.39664711618173
+          },
+          "scale": {
+            "x": 0.42958068850403325,
+            "y": 0.42958068850403325
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -442.98122398362307,
+            "y": 166.3359164387577
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.41991337079569996
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -445.4890197046627,
+            "y": 140.97983449561048
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "multiply"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -111.19805583340644,
+            "y": 166.52181023299732
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -442.98122398362307,
+            "y": 166.3359164387577
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.41991337079569996
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -707.5734865699588,
+            "y": 439.8328921911624
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -111.19805583340644,
+            "y": 166.52181023299732
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldOpacity": 1.0,
+        "newOpacity": 0.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -1219.7156642827213,
+            "y": -188.20234390687412
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -707.5734865699588,
+            "y": 439.8328921911624
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 376.30761197614913,
+            "y": -192.58032075816072
+          },
+          "scale": {
+            "x": 0.41991337079569974,
+            "y": 0.41991337079569974
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -1219.7156642827213,
+            "y": -188.20234390687412
+          },
+          "scale": {
+            "x": 0.4199133707956999,
+            "y": 0.4199133707956999
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -57.02989206626094,
+            "y": -628.3734039901444
+          },
+          "scale": {
+            "x": 0.131021701434093,
+            "y": 0.131021701434093
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 376.30761197614913,
+            "y": -192.58032075816072
+          },
+          "scale": {
+            "x": 0.41991337079569974,
+            "y": 0.41991337079569974
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 182.38255058887893,
+            "y": -508.4222417778501
+          },
+          "scale": {
+            "x": 0.131021701434093,
+            "y": 0.131021701434093
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -57.02989206626094,
+            "y": -628.3734039901444
+          },
+          "scale": {
+            "x": 0.131021701434093,
+            "y": 0.131021701434093
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldOpacity": 0.0,
+        "newOpacity": 1.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 118.19998740368966,
+            "y": -78.09459767684973
+          },
+          "scale": {
+            "x": 0.131021701434093,
+            "y": 0.13102170143409306
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 182.38255058887893,
+            "y": -508.4222417778501
+          },
+          "scale": {
+            "x": 0.131021701434093,
+            "y": 0.131021701434093
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 329.865194098742,
+            "y": -290.95926007641646
+          },
+          "scale": {
+            "x": 0.27213183663758955,
+            "y": 0.2721318366375896
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 118.19998740368966,
+            "y": -78.09459767684973
+          },
+          "scale": {
+            "x": 0.131021701434093,
+            "y": 0.13102170143409306
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": -1091.8022887884836,
+            "y": 1097.9891397836693
+          },
+          "scale": {
+            "x": 0.27213183663758955,
+            "y": 0.2721318366375896
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 329.865194098742,
+            "y": -290.95926007641646
+          },
+          "scale": {
+            "x": 0.27213183663758955,
+            "y": 0.2721318366375896
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTransform": {
+          "translation": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -1091.8022887884836,
+            "y": 1097.9891397836693
+          },
+          "scale": {
+            "x": 0.27213183663758955,
+            "y": 0.2721318366375896
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldOpacity": 1.0,
+        "newOpacity": 0.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408",
+        "oldTitle": "New reference",
+        "newTitle": "Early 3rd Century Forum"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "33061490-d17e-4c2f-9d3a-b8f26fc7c408"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldBlendMode": "difference",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 130.00455196658845,
+            "y": -304.0969259056259
+          },
+          "scale": {
+            "x": 1.4639673206458073,
+            "y": 1.4639673206458066
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 122.80943800074124,
+            "y": -294.9084980172905
+          },
+          "scale": {
+            "x": 1.4639673206458075,
+            "y": 1.4639673206458064
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 72.34406101127365,
+            "y": -268.30100004586393
+          },
+          "scale": {
+            "x": 1.4639673206458075,
+            "y": 1.4639673206458064
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 130.00455196658845,
+            "y": -304.0969259056259
+          },
+          "scale": {
+            "x": 1.4639673206458073,
+            "y": 1.4639673206458066
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "difference"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldBlendMode": "difference",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 71.84725858000104,
+            "y": -285.17723536718677
+          },
+          "scale": {
+            "x": 1.4639673206458075,
+            "y": 1.4639673206458068
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 72.34406101127365,
+            "y": -268.30100004586393
+          },
+          "scale": {
+            "x": 1.4639673206458075,
+            "y": 1.4639673206458064
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 53.74243697511383,
+            "y": -285.17715669366817
+          },
+          "scale": {
+            "x": 1.4518974391204449,
+            "y": 1.4518974391204442
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 71.84725858000104,
+            "y": -285.17723536718677
+          },
+          "scale": {
+            "x": 1.4639673206458075,
+            "y": 1.4639673206458068
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 57.55459266048683,
+            "y": -285.0744457169253
+          },
+          "scale": {
+            "x": 1.451897439120445,
+            "y": 1.4518974391204442
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 53.74243697511383,
+            "y": -285.17715669366817
+          },
+          "scale": {
+            "x": 1.4518974391204449,
+            "y": 1.4518974391204442
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 55.49002331767019,
+            "y": -314.6823597897878
+          },
+          "scale": {
+            "x": 1.4518974391204449,
+            "y": 1.4518974391204444
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 57.55459266048683,
+            "y": -285.0744457169253
+          },
+          "scale": {
+            "x": 1.451897439120445,
+            "y": 1.4518974391204442
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 23.110844820606417,
+            "y": -314.6823509259891
+          },
+          "scale": {
+            "x": 1.430311298812411,
+            "y": 1.4303112988124096
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 55.49002331767019,
+            "y": -314.6823597897878
+          },
+          "scale": {
+            "x": 1.4518974391204449,
+            "y": 1.4518974391204444
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 32.0893964588754,
+            "y": -317.8658112335297
+          },
+          "scale": {
+            "x": 1.4303112988124105,
+            "y": 1.430311298812409
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 23.110844820606417,
+            "y": -314.6823509259891
+          },
+          "scale": {
+            "x": 1.430311298812411,
+            "y": 1.4303112988124096
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 26.166687008193435,
+            "y": -366.69372367482265
+          },
+          "scale": {
+            "x": 1.4303112988124103,
+            "y": 1.430311298812409
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 32.0893964588754,
+            "y": -317.8658112335297
+          },
+          "scale": {
+            "x": 1.4303112988124105,
+            "y": 1.430311298812409
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -31.753349438506575,
+            "y": -366.69381604568025
+          },
+          "scale": {
+            "x": 1.391697921232595,
+            "y": 1.3916979212325944
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 26.166687008193435,
+            "y": -366.69372367482265
+          },
+          "scale": {
+            "x": 1.4303112988124103,
+            "y": 1.430311298812409
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -30.63880212101344,
+            "y": -369.84316835996015
+          },
+          "scale": {
+            "x": 1.3916979212325953,
+            "y": 1.3916979212325942
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -31.753349438506575,
+            "y": -366.69381604568025
+          },
+          "scale": {
+            "x": 1.391697921232595,
+            "y": 1.3916979212325944
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -24.583882588976735,
+            "y": -517.7214571259706
+          },
+          "scale": {
+            "x": 1.3916979212325953,
+            "y": 1.3916979212325946
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -30.63880212101344,
+            "y": -369.84316835996015
+          },
+          "scale": {
+            "x": 1.3916979212325953,
+            "y": 1.3916979212325942
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -187.71214319181036,
+            "y": -517.721402508138
+          },
+          "scale": {
+            "x": 1.2829456972114157,
+            "y": 1.2829456972114146
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -24.583882588976735,
+            "y": -517.7214571259706
+          },
+          "scale": {
+            "x": 1.3916979212325953,
+            "y": 1.3916979212325946
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -188.91863453741985,
+            "y": -518.5967099044062
+          },
+          "scale": {
+            "x": 1.2829456972114155,
+            "y": 1.2829456972114144
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -187.71214319181036,
+            "y": -517.721402508138
+          },
+          "scale": {
+            "x": 1.2829456972114157,
+            "y": 1.2829456972114146
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -190.03495214827876,
+            "y": -535.184406919192
+          },
+          "scale": {
+            "x": 1.2829456972114155,
+            "y": 1.2829456972114142
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -188.91863453741985,
+            "y": -518.5967099044062
+          },
+          "scale": {
+            "x": 1.2829456972114155,
+            "y": 1.2829456972114144
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -178.40721911592118,
+            "y": -693.9676900861956
+          },
+          "scale": {
+            "x": 1.2829456972114157,
+            "y": 1.2829456972114137
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -190.03495214827876,
+            "y": -535.184406919192
+          },
+          "scale": {
+            "x": 1.2829456972114155,
+            "y": 1.2829456972114142
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -371.05123330501647,
+            "y": -693.9677524037224
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658002
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -178.40721911592118,
+            "y": -693.9676900861956
+          },
+          "scale": {
+            "x": 1.2829456972114157,
+            "y": 1.2829456972114137
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -366.524004850624,
+            "y": -695.724151972702
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658002
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -371.05123330501647,
+            "y": -693.9677524037224
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658002
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -334.38146701813366,
+            "y": -682.8257047093305
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658004
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -366.524004850624,
+            "y": -695.724151972702
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658002
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -359.2193100623905,
+            "y": -906.9792190174159
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658006
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -334.38146701813366,
+            "y": -682.8257047093305
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658004
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -590.9939199663677,
+            "y": -906.9792569933261
+          },
+          "scale": {
+            "x": 0.9999999999999999,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -359.2193100623905,
+            "y": -906.9792190174159
+          },
+          "scale": {
+            "x": 1.1545164006658013,
+            "y": 1.1545164006658006
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldBlendMode": "darken",
+        "newBlendMode": "difference"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -591.9047899910993,
+            "y": -822.869725371318
+          },
+          "scale": {
+            "x": 0.9999999999999999,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -590.9939199663677,
+            "y": -906.9792569933261
+          },
+          "scale": {
+            "x": 0.9999999999999999,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -575.5786681240282,
+            "y": -731.4183261177873
+          },
+          "scale": {
+            "x": 0.9999999999999999,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -591.9047899910993,
+            "y": -822.869725371318
+          },
+          "scale": {
+            "x": 0.9999999999999999,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "darken"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": -378.23394778772064,
+            "y": -621.2117989095311
+          },
+          "scale": {
+            "x": 0.9999999999999998,
+            "y": 0.9999999999999999
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -575.5786681240282,
+            "y": -731.4183261177873
+          },
+          "scale": {
+            "x": 0.9999999999999999,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTransform": {
+          "translation": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -378.23394778772064,
+            "y": -621.2117989095311
+          },
+          "scale": {
+            "x": 0.9999999999999998,
+            "y": 0.9999999999999999
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50",
+        "oldTitle": "New reference",
+        "newTitle": "Early 3rd Century"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "2f6ffc95-d276-47ae-8121-e03689651b50"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldOpacity": 0.0,
+        "newOpacity": 1.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldBlendMode": "multiply",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 117.65514583544586,
+            "y": -564.1299555627784
+          },
+          "scale": {
+            "x": 0.22991544114027018,
+            "y": 0.2299154411402702
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 119.5233399203671,
+            "y": -562.7755992920181
+          },
+          "scale": {
+            "x": 0.22753102408171133,
+            "y": 0.22753102408171133
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 116.01970882689339,
+            "y": -564.161785691959
+          },
+          "scale": {
+            "x": 0.22991544114027024,
+            "y": 0.22991544114027024
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 117.65514583544586,
+            "y": -564.1299555627784
+          },
+          "scale": {
+            "x": 0.22991544114027018,
+            "y": 0.2299154411402702
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 119.79352746912144,
+            "y": -562.4094759193881
+          },
+          "scale": {
+            "x": 0.22991544114027018,
+            "y": 0.22991544114027027
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 116.01970882689339,
+            "y": -564.161785691959
+          },
+          "scale": {
+            "x": 0.22991544114027024,
+            "y": 0.22991544114027024
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 138.37198816248082,
+            "y": -555.7952773586437
+          },
+          "scale": {
+            "x": 0.22991544114027018,
+            "y": 0.22991544114027027
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 119.79352746912144,
+            "y": -562.4094759193881
+          },
+          "scale": {
+            "x": 0.22991544114027018,
+            "y": 0.22991544114027027
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 140.25145898767613,
+            "y": -555.7952786892469
+          },
+          "scale": {
+            "x": 0.23231425521199361,
+            "y": 0.2323142552119937
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 138.37198816248082,
+            "y": -555.7952773586437
+          },
+          "scale": {
+            "x": 0.22991544114027018,
+            "y": 0.22991544114027027
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 117.63390438438952,
+            "y": -559.1614272859098
+          },
+          "scale": {
+            "x": 0.23231425521199356,
+            "y": 0.2323142552119937
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 140.25145898767613,
+            "y": -555.7952786892469
+          },
+          "scale": {
+            "x": 0.23231425521199361,
+            "y": 0.2323142552119937
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 136.95557327872643,
+            "y": -545.1541322366736
+          },
+          "scale": {
+            "x": 0.256974990528238,
+            "y": 0.256974990528238
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 117.63390438438952,
+            "y": -559.1614272859098
+          },
+          "scale": {
+            "x": 0.23231425521199356,
+            "y": 0.2323142552119937
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 135.83907071933348,
+            "y": -546.8769381910593
+          },
+          "scale": {
+            "x": 0.2569749905282381,
+            "y": 0.256974990528238
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 136.95557327872643,
+            "y": -545.1541322366736
+          },
+          "scale": {
+            "x": 0.256974990528238,
+            "y": 0.256974990528238
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 113.44170334291579,
+            "y": -610.8953776920094
+          },
+          "scale": {
+            "x": 0.2569749905282381,
+            "y": 0.25697499052823797
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 135.83907071933348,
+            "y": -546.8769381910593
+          },
+          "scale": {
+            "x": 0.2569749905282381,
+            "y": 0.256974990528238
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldOpacity": 1.0,
+        "newOpacity": 0.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 69.72132836664196,
+            "y": -557.3900166532283
+          },
+          "scale": {
+            "x": 0.2569749905282381,
+            "y": 0.25697499052823797
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 113.44170334291579,
+            "y": -610.8953776920094
+          },
+          "scale": {
+            "x": 0.2569749905282381,
+            "y": 0.25697499052823797
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 118.82325033457613,
+            "y": -592.9865607285037
+          },
+          "scale": {
+            "x": 0.19430501856472493,
+            "y": 0.1943050185647248
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 69.72132836664196,
+            "y": -557.3900166532283
+          },
+          "scale": {
+            "x": 0.2569749905282381,
+            "y": 0.25697499052823797
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 125.94026058875778,
+            "y": -577.9136764663465
+          },
+          "scale": {
+            "x": 0.19430501856472493,
+            "y": 0.1943050185647248
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 118.82325033457613,
+            "y": -592.9865607285037
+          },
+          "scale": {
+            "x": 0.19430501856472493,
+            "y": 0.1943050185647248
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "multiply"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 105.5471748853942,
+            "y": -588.9589764145447
+          },
+          "scale": {
+            "x": 0.19430501856472493,
+            "y": 0.19430501856472482
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 125.94026058875778,
+            "y": -577.9136764663465
+          },
+          "scale": {
+            "x": 0.19430501856472493,
+            "y": 0.1943050185647248
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 208.5045354580324,
+            "y": -663.5981241969844
+          },
+          "scale": {
+            "x": 0.3257119880256543,
+            "y": 0.32571198802565415
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 105.5471748853942,
+            "y": -588.9589764145447
+          },
+          "scale": {
+            "x": 0.19430501856472493,
+            "y": 0.19430501856472482
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 235.35454842618984,
+            "y": -679.0769985776499
+          },
+          "scale": {
+            "x": 0.32571198802565426,
+            "y": 0.3257119880256542
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 208.5045354580324,
+            "y": -663.5981241969844
+          },
+          "scale": {
+            "x": 0.3257119880256543,
+            "y": 0.32571198802565415
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 511.0474627239286,
+            "y": 118.78159116994897
+          },
+          "scale": {
+            "x": 0.32571198802565426,
+            "y": 0.3257119880256542
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 235.35454842618984,
+            "y": -679.0769985776499
+          },
+          "scale": {
+            "x": 0.32571198802565426,
+            "y": 0.3257119880256542
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 1039.3521201058286,
+            "y": -264.2140018598409
+          },
+          "scale": {
+            "x": 1.0000000000000002,
+            "y": 0.9999999999999998
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 511.0474627239286,
+            "y": 118.78159116994897
+          },
+          "scale": {
+            "x": 0.32571198802565426,
+            "y": 0.3257119880256542
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTransform": {
+          "translation": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 1039.3521201058286,
+            "y": -264.2140018598409
+          },
+          "scale": {
+            "x": 1.0000000000000002,
+            "y": 0.9999999999999998
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13",
+        "oldTitle": "New reference",
+        "newTitle": "Rome 117 CE Forum"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "47790a26-b3ab-4fb3-a95f-c42b0162df13"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldBlendMode": "multiply",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldOpacity": 0.9,
+        "newOpacity": 1.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 81.35392552552179,
+            "y": 49.777318927219824
+          },
+          "scale": {
+            "x": 1.4431556633911602,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 78.90583232996367,
+            "y": 48.008068045976756
+          },
+          "scale": {
+            "x": 1.4431556633911602,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": -32.23983196537566,
+            "y": 61.57597275082142
+          },
+          "scale": {
+            "x": 1.4431556633911602,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 81.35392552552179,
+            "y": 49.777318927219824
+          },
+          "scale": {
+            "x": 1.4431556633911602,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 691.1485043285048,
+            "y": 391.9735266245559
+          },
+          "scale": {
+            "x": 1.4431556633911602,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -32.23983196537566,
+            "y": 61.57597275082142
+          },
+          "scale": {
+            "x": 1.4431556633911602,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 687.7129590724054,
+            "y": 360.8106155428785
+          },
+          "scale": {
+            "x": 1.4431556633911604,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 691.1485043285048,
+            "y": 391.9735266245559
+          },
+          "scale": {
+            "x": 1.4431556633911602,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 659.576543441479,
+            "y": 360.8106661571246
+          },
+          "scale": {
+            "x": 1.4243980331611736,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 687.7129590724054,
+            "y": 360.8106155428785
+          },
+          "scale": {
+            "x": 1.4431556633911604,
+            "y": 1.4431556633911578
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 667.7929088344458,
+            "y": 542.4914607628255
+          },
+          "scale": {
+            "x": 1.4243980331611739,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 659.576543441479,
+            "y": 360.8106661571246
+          },
+          "scale": {
+            "x": 1.4243980331611736,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 77.05124772695066,
+            "y": 39.67874457281221
+          },
+          "scale": {
+            "x": 1.4243980331611739,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 667.7929088344458,
+            "y": 542.4914607628255
+          },
+          "scale": {
+            "x": 1.4243980331611739,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 75.73946794705522,
+            "y": 40.83982103617336
+          },
+          "scale": {
+            "x": 1.4243980331611739,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 77.05124772695066,
+            "y": 39.67874457281221
+          },
+          "scale": {
+            "x": 1.4243980331611739,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldOpacity": 1.0,
+        "newOpacity": 0.9
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 48.41792622708158,
+            "y": -15.604223004636992
+          },
+          "scale": {
+            "x": 1.4243980331611736,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 75.73946794705522,
+            "y": 40.83982103617336
+          },
+          "scale": {
+            "x": 1.4243980331611739,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 20.02280127988729,
+            "y": -3.3700349976418806
+          },
+          "scale": {
+            "x": 1.4243980331611736,
+            "y": 1.4243980331611716
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 48.41792622708158,
+            "y": -15.604223004636992
+          },
+          "scale": {
+            "x": 1.4243980331611736,
+            "y": 1.4243980331611714
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 43.57820644034075,
+            "y": -30.710260633538155
+          },
+          "scale": {
+            "x": 1.4086942817818597,
+            "y": 1.4086942817818577
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 20.02280127988729,
+            "y": -3.3700349976418806
+          },
+          "scale": {
+            "x": 1.4243980331611736,
+            "y": 1.4243980331611716
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 43.262659820286586,
+            "y": 5.176074341121193
+          },
+          "scale": {
+            "x": 1.4086942817818597,
+            "y": 1.4086942817818577
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 43.57820644034075,
+            "y": -30.710260633538155
+          },
+          "scale": {
+            "x": 1.4086942817818597,
+            "y": 1.4086942817818577
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 82.53887269695588,
+            "y": -1.920637754192967
+          },
+          "scale": {
+            "x": 1.4086942817818597,
+            "y": 1.4086942817818577
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 43.262659820286586,
+            "y": 5.176074341121193
+          },
+          "scale": {
+            "x": 1.4086942817818597,
+            "y": 1.4086942817818577
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 85.24115883099009,
+            "y": 1.2156135974054223
+          },
+          "scale": {
+            "x": 1.4068927541307519,
+            "y": 1.4068927541307499
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 82.53887269695588,
+            "y": -1.920637754192967
+          },
+          "scale": {
+            "x": 1.4086942817818597,
+            "y": 1.4086942817818577
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 61.37417987198137,
+            "y": 27.142888942661102
+          },
+          "scale": {
+            "x": 1.4068927541307517,
+            "y": 1.4068927541307499
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 85.24115883099009,
+            "y": 1.2156135974054223
+          },
+          "scale": {
+            "x": 1.4068927541307519,
+            "y": 1.4068927541307499
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 15.817921904672005,
+            "y": -25.732809355478196
+          },
+          "scale": {
+            "x": 1.3765218710470064,
+            "y": 1.3765218710470044
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 61.37417987198137,
+            "y": 27.142888942661102
+          },
+          "scale": {
+            "x": 1.4068927541307517,
+            "y": 1.4068927541307499
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 33.311671424873225,
+            "y": 6.441198656325454
+          },
+          "scale": {
+            "x": 1.3765218710470062,
+            "y": 1.3765218710470044
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 15.817921904672005,
+            "y": -25.732809355478196
+          },
+          "scale": {
+            "x": 1.3765218710470064,
+            "y": 1.3765218710470044
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": -35.86269372030358,
+            "y": -62.608784575479376
+          },
+          "scale": {
+            "x": 1.3765218710470057,
+            "y": 1.3765218710470046
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 33.311671424873225,
+            "y": 6.441198656325454
+          },
+          "scale": {
+            "x": 1.3765218710470062,
+            "y": 1.3765218710470044
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": -35.862303227376515,
+            "y": -62.608925107616
+          },
+          "scale": {
+            "x": 1.235724908201428,
+            "y": 1.2357249082014272
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -35.86269372030358,
+            "y": -62.608784575479376
+          },
+          "scale": {
+            "x": 1.3765218710470057,
+            "y": 1.3765218710470046
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": -176.93753774401603,
+            "y": -155.42144065583648
+          },
+          "scale": {
+            "x": 1.235724908201428,
+            "y": 1.2357249082014272
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -35.862303227376515,
+            "y": -62.608925107616
+          },
+          "scale": {
+            "x": 1.235724908201428,
+            "y": 1.2357249082014272
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": -176.93751364467846,
+            "y": -155.4214998070043
+          },
+          "scale": {
+            "x": 1.0000000000000002,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -176.93753774401603,
+            "y": -155.42144065583648
+          },
+          "scale": {
+            "x": 1.235724908201428,
+            "y": 1.2357249082014272
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTransform": {
+          "translation": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": -176.93751364467846,
+            "y": -155.4214998070043
+          },
+          "scale": {
+            "x": 1.0000000000000002,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "multiply"
+      },
+      {
+        "type": "HistoryEntryType.reorderReference",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldIndex": 2,
+        "newIndex": 0
+      },
+      {
+        "type": "HistoryEntryType.reorderReference",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldIndex": 0,
+        "newIndex": 3
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e",
+        "oldTitle": "New reference",
+        "newTitle": "Rome 117 CE"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "e68804c0-cda7-4bd7-8c08-904f0667046e"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "5708ed92-5950-4829-8bac-b460f31ae3b0",
+        "oldTitle": "New reference",
+        "newTitle": "Rome 14 CE Forum"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "5708ed92-5950-4829-8bac-b460f31ae3b0"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "2d159932-09e4-4f97-88fe-e216c17085a2",
+        "oldTitle": "New reference",
+        "newTitle": "Rome 14 CE"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "2d159932-09e4-4f97-88fe-e216c17085a2"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "75cba859-5aef-4597-8f70-03d4a252590b",
+        "oldOpacity": 0.0,
+        "newOpacity": 1.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceOpacity",
+        "uuid": "75cba859-5aef-4597-8f70-03d4a252590b",
+        "oldOpacity": 1.0,
+        "newOpacity": 0.0
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "993dee52-9e4e-4f5b-afce-3edff0770a16",
+        "oldTitle": "New reference",
+        "newTitle": "Late Republic Inset"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "993dee52-9e4e-4f5b-afce-3edff0770a16"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "75cba859-5aef-4597-8f70-03d4a252590b",
+        "oldBlendMode": "difference",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "75cba859-5aef-4597-8f70-03d4a252590b",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "difference"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "75cba859-5aef-4597-8f70-03d4a252590b",
+        "oldTitle": "New reference",
+        "newTitle": "Late Republic"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "75cba859-5aef-4597-8f70-03d4a252590b"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldBlendMode": "multiply",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 114.51790024746307,
+            "y": -565.4108936497043
+          },
+          "scale": {
+            "x": 0.21611556539578397,
+            "y": 0.2161155653957838
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 116.5687296437006,
+            "y": -563.9591800536878
+          },
+          "scale": {
+            "x": 0.21368995827850223,
+            "y": 0.21368995827850204
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 117.54729799815658,
+            "y": -564.8353752609617
+          },
+          "scale": {
+            "x": 0.21611556539578397,
+            "y": 0.21611556539578375
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 114.51790024746307,
+            "y": -565.4108936497043
+          },
+          "scale": {
+            "x": 0.21611556539578397,
+            "y": 0.2161155653957838
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 117.03791151170424,
+            "y": -565.1959360183396
+          },
+          "scale": {
+            "x": 0.21671802677261606,
+            "y": 0.21671802677261578
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 117.54729799815658,
+            "y": -564.8353752609617
+          },
+          "scale": {
+            "x": 0.21611556539578397,
+            "y": 0.21611556539578375
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 127.73365424109019,
+            "y": -573.2358825774161
+          },
+          "scale": {
+            "x": 0.21671802677261606,
+            "y": 0.21671802677261578
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 117.03791151170424,
+            "y": -565.1959360183396
+          },
+          "scale": {
+            "x": 0.21671802677261606,
+            "y": 0.21671802677261578
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 189.10135295002604,
+            "y": -529.7958261879447
+          },
+          "scale": {
+            "x": 0.2892995746246987,
+            "y": 0.2892995746246983
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 127.73365424109019,
+            "y": -573.2358825774161
+          },
+          "scale": {
+            "x": 0.21671802677261606,
+            "y": 0.21671802677261578
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 146.82480656422456,
+            "y": -563.8978135999988
+          },
+          "scale": {
+            "x": 0.2892995746246986,
+            "y": 0.2892995746246983
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 189.10135295002604,
+            "y": -529.7958261879447
+          },
+          "scale": {
+            "x": 0.2892995746246987,
+            "y": 0.2892995746246983
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 525.2596029183819,
+            "y": 478.8954309538301
+          },
+          "scale": {
+            "x": 0.2892995746246983,
+            "y": 0.2892995746246983
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 146.82480656422456,
+            "y": -563.8978135999988
+          },
+          "scale": {
+            "x": 0.2892995746246986,
+            "y": 0.2892995746246983
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 525.2596029183819,
+            "y": 478.8954309538301
+          },
+          "scale": {
+            "x": 0.37875850571921177,
+            "y": 0.19984064353018482
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 525.2596029183819,
+            "y": 478.8954309538301
+          },
+          "scale": {
+            "x": 0.2892995746246983,
+            "y": 0.2892995746246983
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTransform": {
+          "translation": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 525.2596029183819,
+            "y": 478.8954309538301
+          },
+          "scale": {
+            "x": 0.37875850571921177,
+            "y": 0.19984064353018482
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "multiply"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7",
+        "oldTitle": "New reference",
+        "newTitle": "Early Republic Forum"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "0f0e712f-d4b9-4d40-92f3-8b41423399c7"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "4414fe18-d9b7-42a1-b063-d59d372b7e92",
+        "oldBlendMode": "multiply",
+        "newBlendMode": "srcOver"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "15acf34f-627a-4fc2-b941-eea2e956c3a7",
+        "oldTransform": {
+          "translation": {
+            "x": 94.84661442734932,
+            "y": -546.2424276701937
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 0.9999999999999999
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 111.3921278685122,
+            "y": -549.5154122428681
+          },
+          "scale": {
+            "x": 0.9999999999999998,
+            "y": 0.9999999999999998
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTransform",
+        "uuid": "15acf34f-627a-4fc2-b941-eea2e956c3a7",
+        "oldTransform": {
+          "translation": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0
+        },
+        "newTransform": {
+          "translation": {
+            "x": 94.84661442734932,
+            "y": -546.2424276701937
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 0.9999999999999999
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceBlendMode",
+        "uuid": "4414fe18-d9b7-42a1-b063-d59d372b7e92",
+        "oldBlendMode": "srcOver",
+        "newBlendMode": "multiply"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "4414fe18-d9b7-42a1-b063-d59d372b7e92",
+        "oldTitle": "New reference",
+        "newTitle": "Early Republic"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "4414fe18-d9b7-42a1-b063-d59d372b7e92"
+      },
+      {
+        "type": "HistoryEntryType.modifyReferenceTitle",
+        "uuid": "15acf34f-627a-4fc2-b941-eea2e956c3a7",
+        "oldTitle": "New reference",
+        "newTitle": "Base!"
+      },
+      {
+        "type": "HistoryEntryType.addReference",
+        "uuid": "15acf34f-627a-4fc2-b941-eea2e956c3a7"
+      }
+    ],
+    "redoEntries": []
+  }
+}

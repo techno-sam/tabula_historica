@@ -28,13 +28,13 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         backgroundColor: theme.colorScheme.secondary,
         title: const Text('Demo Map'),
-      ),
+      ),*/
       backgroundColor: const Color(0xFFFCF5E5).lighten(0.025), // parchment
       body: const KeyboardEventProvider(child: MultiLODMap()),
     );
