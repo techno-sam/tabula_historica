@@ -40,12 +40,16 @@ import 'history_manager.dart';
 const int structureDetailMultiplier = 2;
 
 enum TimePeriod {
-  earlyRepublic, // before 300 BCE
-  lateRepublic, // 300 BCE - ?
-  rome14CE, // 14 CE
-  rome117CE, // 117 CE
-  early3rdCentury, // 200 CE
+  earlyRepublic(Colors.red), // before 300 BCE
+  lateRepublic(Colors.orange), // 300 BCE - ?
+  rome14CE(Colors.yellow), // 14 CE
+  rome117CE(Colors.green), // 117 CE
+  early3rdCentury(Colors.blue), // 200 CE
   ;
+
+  final Color color;
+
+  const TimePeriod(this.color);
 
   static TimePeriod fromJson(String json) {
     return TimePeriod.values.firstWhere((e) => e.name == json);

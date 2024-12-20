@@ -131,7 +131,9 @@ class StructureListTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const Divider(),
+                      Divider(
+                        color: structure.timePeriod.color,
+                      ),
                     ],
                   ),
                 ),

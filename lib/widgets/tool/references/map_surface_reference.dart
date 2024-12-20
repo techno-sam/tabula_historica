@@ -24,6 +24,7 @@ import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:provider/provider.dart';
 import 'package:tabula_historica/extensions/numeric.dart';
 
+import '../../../logger.dart';
 import '../../../models/project/history_manager.dart';
 import '../../../models/project/reference.dart';
 import '../../../models/tools/tool_selection.dart';
@@ -94,125 +95,124 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
         max(scaledWidth, scaledHeight) < 10))
     ;
 
-    return ChangeNotifierProvider.value(
-      value: reference,
-      child: TransformableBox(
-        rect: rect,
-        flip: Flip.none,
-        allowContentFlipping: false,
-        allowFlippingWhileResizing: false,
-        draggable: enabled,
-        resizable: enabled,
-        constraints: BoxConstraints(
-          minWidth: (width * cameraScale) / 10.0,
-          minHeight: (height * cameraScale) / 10.0,
-        ),
-        supportedDragDevices: supportedDragDevices,
-        supportedResizeDevices: supportedDragDevices,
+    bool invisible = !selected && reference.opacity < 0.001;
 
-        onChanged: (result, details) {
+    return TransformableBox(
+      rect: rect,
+      flip: Flip.none,
+      allowContentFlipping: false,
+      allowFlippingWhileResizing: false,
+      draggable: enabled,
+      resizable: enabled,
+      constraints: BoxConstraints(
+        minWidth: (width * cameraScale) / 10.0,
+        minHeight: (height * cameraScale) / 10.0,
+      ),
+      supportedDragDevices: supportedDragDevices,
+      supportedResizeDevices: supportedDragDevices,
+
+      onChanged: (result, details) {
+        setState(() {
+          reference.updateTransformIntermediate((transform) {
+            transform.translation = camera.getBlockPos(result.rect.center.toPoint()).toOffset();
+            transform.scaleX = result.rect.width / width / cameraScale;
+            transform.scaleY = result.rect.height / height / cameraScale;
+          });
+        });
+      },
+
+      onResizeStart: (handle, details) {
+        bool wasTransforming = _activelyTransforming;
+        _activelyResizing = true;
+        if (wasTransforming != _activelyTransforming) {
+          onStartTransform();
+        }
+      },
+      onResizeEnd: (handle, details) {
+        bool wasTransforming = _activelyTransforming;
+        _activelyResizing = false;
+        if (wasTransforming != _activelyTransforming) {
+          onEndTransform();
+        }
+      },
+      onResizeCancel: (handle) {
+        bool wasTransforming = _activelyTransforming;
+        _activelyResizing = false;
+        if (wasTransforming != _activelyTransforming) {
+          onCancelTransform();
+        }
+      },
+
+      onDragStart: (details) {
+        bool wasTransforming = _activelyTransforming;
+        _activelyDragging = true;
+        if (wasTransforming != _activelyTransforming) {
+          onStartTransform();
+        }
+      },
+      onDragEnd: (details) {
+        bool wasTransforming = _activelyTransforming;
+        _activelyDragging = false;
+        if (wasTransforming != _activelyTransforming) {
+          onEndTransform();
+        }
+      },
+      onDragCancel: () {
+        bool wasTransforming = _activelyTransforming;
+        _activelyDragging = false;
+        if (wasTransforming != _activelyTransforming) {
+          onCancelTransform();
+        }
+      },
+
+      contentBuilder: (context, rect, flip) {
+        final img = Image.file(
+            reference.image.toFile(),
+            width: rect.width,
+            height: rect.height,
+            fit: BoxFit.fill,
+          );
+        return GestureDetector(
+        onDoubleTap: enabled ? () {
+          // Reset aspect ratio
           setState(() {
-            reference.updateTransformIntermediate((transform) {
-              transform.translation = camera.getBlockPos(result.rect.center.toPoint()).toOffset();
-              transform.scaleX = result.rect.width / width / cameraScale;
-              transform.scaleY = result.rect.height / height / cameraScale;
+            final averageScale = (reference.transform.scaleX + reference.transform.scaleY) / 2;
+            reference.updateTransformImmediate(history, (transform) {
+              transform.scaleX = averageScale;
+              transform.scaleY = averageScale;
             });
           });
-        },
-
-        onResizeStart: (handle, details) {
-          bool wasTransforming = _activelyTransforming;
-          _activelyResizing = true;
-          if (wasTransforming != _activelyTransforming) {
-            onStartTransform();
-          }
-        },
-        onResizeEnd: (handle, details) {
-          bool wasTransforming = _activelyTransforming;
-          _activelyResizing = false;
-          if (wasTransforming != _activelyTransforming) {
-            onEndTransform();
-          }
-        },
-        onResizeCancel: (handle) {
-          bool wasTransforming = _activelyTransforming;
-          _activelyResizing = false;
-          if (wasTransforming != _activelyTransforming) {
-            onCancelTransform();
-          }
-        },
-
-        onDragStart: (details) {
-          bool wasTransforming = _activelyTransforming;
-          _activelyDragging = true;
-          if (wasTransforming != _activelyTransforming) {
-            onStartTransform();
-          }
-        },
-        onDragEnd: (details) {
-          bool wasTransforming = _activelyTransforming;
-          _activelyDragging = false;
-          if (wasTransforming != _activelyTransforming) {
-            onEndTransform();
-          }
-        },
-        onDragCancel: () {
-          bool wasTransforming = _activelyTransforming;
-          _activelyDragging = false;
-          if (wasTransforming != _activelyTransforming) {
-            onCancelTransform();
-          }
-        },
-
-        contentBuilder: (context, rect, flip) {
-          final img = Image.file(
-              reference.image.toFile(),
-              width: rect.width,
-              height: rect.height,
-              fit: BoxFit.fill,
-            );
-          return GestureDetector(
-          onDoubleTap: enabled ? () {
-            // Reset aspect ratio
-            setState(() {
-              final averageScale = (reference.transform.scaleX + reference.transform.scaleY) / 2;
-              reference.updateTransformImmediate(history, (transform) {
-                transform.scaleX = averageScale;
-                transform.scaleY = averageScale;
-              });
-            });
-          } : null,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: selected
-                    ? (enabled
-                      ? Colors.blue
-                      : Colors.blue.shade700)
-                    : Colors.black,
-                width: 2,
-              ),
-            ),
-            child: Selector(
-              selector: (BuildContext context, Reference reference) => (reference.blendMode, reference.opacity),
-              builder: (context, data, child) {
-                final blendMode = data.$1;
-                final opacity = data.$2;
-                child ??= const SizedBox();
-                return (blendMode == BlendMode.srcOver && !opacity.differs(1.0, 0.001))
-                    ? child
-                    : BlendMask(
-                      blendMode: blendMode,
-                      opacity: opacity,
-                      child: child
-                    );
-              },
-              child: img,
+        } : null,
+        child: invisible ? const SizedBox() : Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: selected
+                  ? (enabled
+                    ? Colors.blue
+                    : Colors.blue.shade700)
+                  : Colors.black,
+              width: 2,
             ),
           ),
-        );
-        },
-      ),
+          child: Selector(
+            selector: (BuildContext context, Reference reference) => (reference.blendMode, reference.opacity),
+            builder: (context, data, child) {
+              final blendMode = data.$1;
+              final opacity = data.$2;
+              child ??= const SizedBox();
+              return (blendMode == BlendMode.srcOver && !opacity.differs(1.0, 0.001))
+                  ? child
+                  : BlendMask(
+                    blendMode: blendMode,
+                    opacity: opacity,
+                    child: child
+                  );
+            },
+            child: img,
+          ),
+        ),
+      );
+      },
     );
   }
 }
