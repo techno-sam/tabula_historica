@@ -59,6 +59,7 @@ enum HistoryEntryType {
   modifyStructureTitle(ModifyStructureTitleHistoryEntry.fromJson),
   modifyStructureDescription(ModifyStructureDescriptionHistoryEntry.fromJson),
   modifyStructurePen(ModifyStructurePenHistoryEntry.fromJson),
+  addStrokeToStructure(AddStrokeToStructureHistoryEntry.fromJson),
   ;
 
   final HistoryEntry Function(Map<String, dynamic> json) _fromJson;

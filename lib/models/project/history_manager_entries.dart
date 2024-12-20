@@ -714,3 +714,51 @@ class ModifyStructurePenHistoryEntry extends HistoryEntry {
     return "ModifyStructurePenHistoryEntry($_uuid, $_oldPen -> $_newPen)";
   }
 }
+
+class AddStrokeToStructureHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  Map<String, dynamic>? _serializedStroke;
+
+  factory AddStrokeToStructureHistoryEntry(String structureUuid) {
+    return AddStrokeToStructureHistoryEntry._(structureUuid, null);
+  }
+
+  AddStrokeToStructureHistoryEntry._(this._uuid, this._serializedStroke);
+
+  factory AddStrokeToStructureHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return AddStrokeToStructureHistoryEntry._(
+      json['uuid'],
+      json['serializedStroke'] as Map<String, dynamic>?,
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    _serializedStroke = structure.$forHistory$removeStroke()!.toJson();
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    final stroke = Stroke.fromJson(_serializedStroke!);
+    structure.$forHistory$restoreStroke(stroke);
+    _serializedStroke = null;
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'serializedStroke': _serializedStroke,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.addStrokeToStructure;
+
+  @override
+  String toString() {
+    return "AddStrokeToStructureHistoryEntry($_uuid)";
+  }
+}

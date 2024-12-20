@@ -282,7 +282,7 @@ class Structure with NeedsSave, ChangeNotifier {
     markDirty();
   }
 
-  void updateStroke(HistoryManager history, Offset point) {
+  void updateStroke(Offset point) {
     if (_currentStroke == null) return;
     _currentStroke!.points.add(point);
     markDirty();
@@ -292,12 +292,29 @@ class Structure with NeedsSave, ChangeNotifier {
     if (_currentStroke == null) return;
     _strokes.add(CompletedStroke.from(_currentStroke!));
     _currentStroke = null;
+    history.record(AddStrokeToStructureHistoryEntry(uuid));
     markDirty();
+  }
+
+  void $forHistory$restoreStroke(Stroke stroke) {
+    _strokes.add(CompletedStroke.from(stroke));
+    markDirty();
+  }
+
+  Stroke? $forHistory$removeStroke() {
+    final ret = _strokes.removeLast();
+    markDirty();
+    return ret;
   }
 
   @override
   void markDirty() {
     super.markDirty();
     notifyListeners();
+  }
+
+  @override
+  String toString() {
+    return "Structure(uuid: $uuid, title: $_title, description: $_description, pen: $_pen, strokes: ${_strokes.length})";
   }
 }

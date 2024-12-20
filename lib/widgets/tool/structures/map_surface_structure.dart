@@ -48,6 +48,8 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
         toolSelection.mapStateOr((StructuresState state) =>
             state.isStructureSelected(structure), false);
 
+    final penWidth = toolSelection.mapStateOr((StructuresState state) => state.penWidth, Width.normal);
+
     final customPaint = Consumer(
       builder: (context, Structure structure, _) {
         return CustomPaint(
@@ -75,7 +77,7 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
               final transformed = camera.getBlockPos(event.localPosition.toPoint()).toOffset();
               structure.startStroke(
                 history,
-                Width.normal,
+                penWidth,
                 transformed,
               );
             },
@@ -87,10 +89,7 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
               }
 
               final transformed = camera.getBlockPos(event.localPosition.toPoint()).toOffset();
-              structure.updateStroke(
-                history,
-                transformed,
-              );
+              structure.updateStroke(transformed);
             },
             onPointerUp: (PointerUpEvent event) {
               structure.endStroke(
@@ -119,10 +118,7 @@ class _MapSurfaceStructurePainter extends CustomPainter {
   });
 
   void _paintStroke(Canvas canvas, Size size, Paint paint, Stroke stroke, bool completed) {
-    if (stroke is CompletedStroke && !stroke.visible(camera)) {
-      logger.d("Skipping stroke $stroke because not visible");
-      return;
-    }
+    if (stroke is CompletedStroke && !stroke.visible(camera)) return;
 
     final strokeOptions = pen.getOptions(
       completed,

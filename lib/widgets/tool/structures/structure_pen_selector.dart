@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart';
 
@@ -62,12 +60,17 @@ class StructurePenWidthSelector extends StatelessWidget {
 class _WidthButton extends StatelessWidget {
   final Width width;
 
-  const _WidthButton({super.key, required this.width});
+  const _WidthButton({required this.width});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final toolSelection = ToolSelection.of(context);
+
+    final selected = toolSelection.mapStateOr(
+      (StructuresState state) => state.penWidth == width,
+      false
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2.0),
@@ -82,8 +85,7 @@ class _WidthButton extends StatelessWidget {
           },
           style: OutlinedButton.styleFrom(
             foregroundColor: theme.colorScheme.onSurface,
-            backgroundColor: toolSelection.mapStateOr((StructuresState state) =>
-                state.penWidth == width ? theme.colorScheme.surfaceContainerLow : null, null),
+            backgroundColor: selected ? theme.colorScheme.surfaceContainerLow : null,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),
             ),
@@ -108,22 +110,13 @@ class _WidthButton extends StatelessWidget {
 class _PenPreview extends StatelessWidget {
   final Width width;
 
-  const _PenPreview({super.key, required this.width});
+  const _PenPreview({required this.width});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
+    return SizedBox(
       width: 36,
       height: 36,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: theme.colorScheme.onSurfaceVariant,
-          width: 1,
-        ),
-      ),
       child: CustomPaint(
         painter: _PenPreviewPainter(width: width),
       ),
@@ -142,7 +135,7 @@ class _PenPreviewPainter extends CustomPainter {
       ..color = Colors.black;
 
     const extraScale = 2.5;
-    const margin = 0.175;
+    const margin = 0.15;
     final pts = _previewPoints
       .map((p) => Offset(margin + p.dx * (1 - 2 * margin), margin + p.dy * (1 - 2 * margin)))
       .map((p) => Offset(p.dx * size.width * extraScale, p.dy * size.height * extraScale))
