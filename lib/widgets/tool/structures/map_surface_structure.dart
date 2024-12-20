@@ -98,7 +98,6 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
           : customPaint,
     );
 
-    final Widget out2;
     if (selected) {
       final transformedOutline = camera.getOffsetRect(structure.fullBounds.inflate(6.0)).inflate(2.0);
       if (transformedOutline.isFinite) {

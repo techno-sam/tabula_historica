@@ -73,95 +73,65 @@ class MultiLODMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final client = context.watch<backend.Connection>();
-
-    return FutureBuilder(
-        future: client.getLODs(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-
-          var lods = snapshot.data;
-          if (lods == null) {
-            return const Text('Null data');
-          }
-
-          return Center(
-            child: MultiProvider(
-              providers: [
-                ProjectProvider(rootDir: Directory("/home/sam/AppDev/tabula_historica/projects/test_project")),
-                const _CameraProvider(),
-                const _ToolSelectionProvider(),
-                const HistoryKeyHandler(),
-              ],
+    return Center(
+      child: MultiProvider(
+        providers: [
+          ProjectProvider(rootDir: Directory("/home/sam/AppDev/tabula_historica/projects/final_project")),
+          const _CameraProvider(),
+          const _ToolSelectionProvider(),
+          const HistoryKeyHandler(),
+        ],
+        child: Stack(
+          children: [
+            _MapController(
               child: Stack(
-                children: [
-                  _MapController(
-                    child: Stack(
+                  children: [
+                    if (_debugPadding != null)
+                      Padding(
+                        padding: EdgeInsets.all(_debugPadding!),
+                        child: Container(
+                          color: Colors.black.withValues(alpha: 0.5),
+                          child: const SizedBox.expand(),
+                        ),
+                      ),
+                    const MapGridPaper(),
+                    /******************************/
+                    /* Surface positioned widgets */
+                    /******************************/
+                    //const DebugMapSurfacePositioned(x: -32, y: 16, baseScale: 1, which: false),
+                    MapSurfacePositioned(
+                        x: -32, y: 16, baseScale: 1, child: ElevatedButton(
+                      onPressed: () {
+                        logger.d("Button pressed");
+                      },
+                      child: const Text("Press me"),
+                    )),
+                    const AllReferences(),
+                    const AllStructures(),
+                    // const PerfectDrawingPad(),
+                    /***************/
+                    /* UI elements */
+                    /***************/
+                    const Positioned(
+                      top: 4,
+                      right: 4,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if (_debugPadding != null)
-                            Padding(
-                              padding: EdgeInsets.all(_debugPadding!),
-                              child: Container(
-                                color: Colors.black.withValues(alpha: 0.5),
-                                child: const SizedBox.expand(),
-                              ),
-                            ),
-                          /*_MultiLODMap(
-                            lods: lods,
-                            tileProvider: CancellableNetworkTileProvider(),
-                            tileBuilder: tile_builder
-                                .coordinateAndLoadingTimeDebugTileBuilder,
-                            errorImage: const NetworkImage(
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJO3ByBfWNJI8AS-m8MhsEZ65z5Wv2mnD5AQ&s"),
-                            evictErrorTileStrategy: EvictErrorTileStrategy
-                                .notVisibleRespectMargin,
-                          ),*/
-                          const MapGridPaper(),
-                          /******************************/
-                          /* Surface positioned widgets */
-                          /******************************/
-                          //const DebugMapSurfacePositioned(x: -32, y: 16, baseScale: 1, which: false),
-                          MapSurfacePositioned(
-                              x: -32, y: 16, baseScale: 1, child: ElevatedButton(
-                            onPressed: () {
-                              logger.d("Button pressed");
-                            },
-                            child: const Text("Press me"),
-                          )),
-                          const AllReferences(),
-                          const AllStructures(),
-                          // const PerfectDrawingPad(),
-                          /***************/
-                          /* UI elements */
-                          /***************/
-                          const Positioned(
-                            top: 4,
-                            right: 4,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Toolbar(),
-                                StructurePenWidthSelector(),
-                              ],
-                            ),
-                          ),
-                        ]
+                          Toolbar(),
+                          StructurePenWidthSelector(),
+                        ],
+                      ),
                     ),
-                  ),
-                  const ReferenceSidebar(),
-                  const StructureSidebar(),
-                ],
+                  ]
               ),
             ),
-          );
-        }
+            const ReferenceSidebar(),
+            const StructureSidebar(),
+          ],
+        ),
+      ),
     );
   }
 }
