@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
 import 'package:provider/provider.dart';
+import 'package:tabula_historica/extensions/color_manipulation.dart';
 
 import '../../../extensions/pointer_event.dart';
 import '../../../logger.dart';
@@ -56,6 +59,7 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
         pen: structure.pen,
         strokes: structure.strokes,
         currentStroke: structure.currentStroke,
+        selected: selected,
         camera: camera,
       ),
     );
@@ -126,12 +130,14 @@ class _MapSurfaceStructurePainter extends CustomPainter {
   final Pen pen;
   final List<Stroke> strokes;
   final Stroke? currentStroke;
+  final bool selected;
   final MapCamera camera;
 
   _MapSurfaceStructurePainter({
     required this.pen,
     required this.strokes,
     required this.currentStroke,
+    required this.selected,
     required this.camera,
   });
 
@@ -185,6 +191,21 @@ class _MapSurfaceStructurePainter extends CustomPainter {
 
     if (currentStroke != null) {
       _paintStroke(canvas, size, paint, currentStroke!, false);
+    }
+
+    if (selected) {
+      final Paint selectedPaint = Paint()
+        ..color = pen.color.withValues(alpha: 1.0).invert().lighten(0.05)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4.0;
+
+      for (final stroke in strokes) {
+        _paintStroke(canvas, size, selectedPaint, stroke, true);
+      }
+
+      if (currentStroke != null) {
+        _paintStroke(canvas, size, selectedPaint, currentStroke!, false);
+      }
     }
   }
 

@@ -38,6 +38,16 @@ extension ColorManipulation on Color {
 
     return hslLight.toColor();
   }
+
+  Color invert() {
+    return Color.from(
+      alpha: a,
+      red: 1 - r,
+      green: 1 - g,
+      blue: 1 - b,
+      colorSpace: colorSpace,
+    );
+  }
 }
 
 extension JsonColor on Color {

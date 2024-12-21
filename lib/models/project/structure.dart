@@ -71,6 +71,7 @@ enum Width {
   normal(8),
   semiThick(16),
   thick(24),
+  ultraThick(36),
   ;
   final double value;
 
@@ -87,7 +88,9 @@ enum Width {
 
 enum Pen {
   building(Icons.house_outlined, color: Color(0xFFA50000)),
+  river(Icons.water, color: Color(0xFF1976D2)),
   aqueduct(Icons.water_outlined, color: Colors.lightBlue),
+  road(Icons.add_road, color: Color(0xC5607D8B)),
   ;
   final IconData icon;
   final Color color;
