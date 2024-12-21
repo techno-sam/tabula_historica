@@ -61,6 +61,7 @@ enum TimePeriod {
 }
 
 enum Width {
+  ultraThin(1),
   thin(2),
   semiThin(4),
   normal(8),
@@ -81,7 +82,7 @@ enum Width {
 }
 
 enum Pen {
-  building(Icons.house_outlined, color: Color(0xFF470000)),
+  building(Icons.house_outlined, color: Color(0xFFA50000)),
   aqueduct(Icons.water_outlined, color: Colors.lightBlue),
   ;
   final IconData icon;
@@ -365,6 +366,7 @@ class Structure with NeedsSave, ChangeNotifier {
 
   Stroke? $forHistory$removeStroke() {
     final ret = _strokes.removeLast();
+    _cachedFullBounds = null;
     markDirty();
     return ret;
   }

@@ -46,7 +46,7 @@ class StructureSidebar extends StatelessWidget {
           top: 8,
           left: 8,
           bottom: 8,
-          width: 250,
+          width: 350,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTapUp: (details) {

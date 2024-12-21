@@ -98,7 +98,7 @@ class MapCamera extends ChangeNotifier {
   }
 
   final double minZoom = log2(1 / 8);
-  final double maxZoom = log2(128);
+  final double maxZoom = log2(128 * 2);
 
   Point<double> get blockPosCenter => _blockPosCenter;
   double get zoom => _zoom;
