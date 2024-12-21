@@ -106,7 +106,7 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
             Positioned.fromRect(
               rect: transformedOutline,
               child: DottedBorder(
-                color: Colors.blue,
+                color: structure.timePeriod.color,
                 borderType: BorderType.RRect,
                 radius: const Radius.circular(8.0),
                 dashPattern: const [8, 8],

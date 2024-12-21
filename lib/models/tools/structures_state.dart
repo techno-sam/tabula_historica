@@ -18,6 +18,8 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:tabula_historica/extensions/iterables.dart';
 
 import '../project/project.dart';
 import '../project/structure.dart';
@@ -27,6 +29,7 @@ class StructuresState extends ChangeNotifier implements EphemeralState {
   WeakReference<Structure>? _selectedStructure;
   Width _penWidth = Width.normal;
   TimePeriod _timePeriod = TimePeriod.earlyRepublic;
+  Set<TimePeriod> _visibility = TimePeriod.values.toSet();
 
   Width get penWidth => _penWidth;
   set penWidth(Width penWidth) {
@@ -42,6 +45,26 @@ class StructuresState extends ChangeNotifier implements EphemeralState {
       _timePeriod = timePeriod;
       notifyListeners();
     }
+  }
+
+  Iterable<TimePeriod> get visibility => _visibility;
+
+  bool visibilityFilter(Structure structure) {
+    for (final timePeriod in _visibility) {
+      if (structure.visibleForFilter(timePeriod)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  bool isVisible(TimePeriod timePeriod) => _visibility.contains(timePeriod);
+  void setVisibility(TimePeriod timePeriod, bool visible) {
+    if (visible) {
+      _visibility.add(timePeriod);
+    } else {
+      _visibility.remove(timePeriod);
+    }
+    notifyListeners();
   }
 
   bool isStructureSelected(Structure structure) {
@@ -76,6 +99,12 @@ class StructuresState extends ChangeNotifier implements EphemeralState {
     }
     penWidth = Width.fromJson(json['penWidth']);
     timePeriod = TimePeriod.fromJson(json['timePeriod']);
+    _visibility = json.mapSingle(
+        'visibility',
+            (l) => (l as List<String>).map(
+                    (e) => TimePeriod.fromJson(e)
+            ).toSet()
+    ) ?? _visibility;
   }
 
   @override
@@ -84,6 +113,7 @@ class StructuresState extends ChangeNotifier implements EphemeralState {
       'selectedStructure': _selectedStructure?.target?.uuid,
       'penWidth': _penWidth.toJson(),
       'timePeriod': _timePeriod.toJson(),
+      'visibility': _visibility.map((e) => e.toJson()).toList(),
     };
   }
 }

@@ -21,6 +21,9 @@ import 'package:provider/provider.dart';
 import 'package:tabula_historica/widgets/tool/structures/map_surface_structure.dart';
 
 import '../../models/project/project.dart';
+import '../../models/project/structure.dart';
+import '../../models/tools/structures_state.dart';
+import '../../models/tools/tool_selection.dart';
 
 class AllStructures extends StatelessWidget {
   const AllStructures({super.key});
@@ -28,13 +31,18 @@ class AllStructures extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final structures = StructureList.of(context);
+    final bool Function(Structure) filter = ToolSelection.of(context)
+        .mapStateOr((StructuresState state) => state.visibilityFilter, (_) => true);
 
-    return Stack(children: structures.structuresReversed.map((structure) {
+    return Stack(children: structures.structuresReversed
+    .where(filter)
+    .map((structure) {
       return ChangeNotifierProvider.value(
         key: ObjectKey(structure.uuid),
         value: structure,
         child: const MapSurfaceStructure(),
       );
-    }).toList(growable: false));
+    })
+    .toList(growable: false));
   }
 }

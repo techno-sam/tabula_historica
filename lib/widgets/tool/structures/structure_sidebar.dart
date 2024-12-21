@@ -21,7 +21,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_scroll_shadow/flutter_scroll_shadow.dart';
 import 'package:provider/provider.dart';
-import 'package:tabula_historica/widgets/tool/structures/structure_add_button.dart';
+import 'package:tabula_historica/extensions/string.dart';
+import 'package:tabula_historica/models/project/structure.dart';
 
 import '../../../logger.dart';
 import '../../../models/project/history_manager.dart';
@@ -31,9 +32,63 @@ import '../../../models/tools/tool_selection.dart';
 import '../../misc/scroll_shadow_axis_limiter.dart';
 import '../tool_specific.dart';
 import 'structure_sidebar_tile.dart';
+import 'structure_add_button.dart';
 
-class StructureSidebar extends StatelessWidget {
+class StructureSidebar extends StatefulWidget {
   const StructureSidebar({super.key});
+
+  @override
+  State<StructureSidebar> createState() => _StructureSidebarState();
+}
+
+class _StructureSidebarState extends State<StructureSidebar> {
+  bool _isExtraOpen = false;
+
+  List<Widget> _buildExtra(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return [
+      const SizedBox(width: 8,),
+      SizedBox(
+        width: 225,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Card(
+              margin: EdgeInsets.zero,
+              elevation: 1,
+              color: theme.colorScheme.surfaceContainerLowest,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 35,
+                      child: Text(
+                        "Visibility",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+
+                    SizedBox(height: ((theme.dividerTheme.space ?? 16) - (theme.dividerTheme.thickness ?? 0)) / 2),
+                    Divider(
+                      height: theme.dividerTheme.thickness ?? 0,
+                      thickness: theme.dividerTheme.thickness ?? 0,
+                    ),
+                    const SizedBox(height: 8,),
+                    for (final timePeriod in TimePeriod.values)
+                      _VisibilityButton(
+                        timePeriod: timePeriod,
+                      ),
+                  ],
+                )
+              ),
+            ),
+          ],
+        ),
+      )
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,46 +101,77 @@ class StructureSidebar extends StatelessWidget {
           top: 8,
           left: 8,
           bottom: 8,
-          width: 350,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTapUp: (details) {
-              if (details.localPosition.dy < 45) {
-                final toolSelection = ToolSelection.of(context, listen: false);
-                toolSelection.withState((StructuresState state) {
-                  state.deselect();
-                });
-              }
-            },
-            child: Card(
-              margin: EdgeInsets.zero,
-              elevation: 1,
-              color: theme.colorScheme.surfaceContainerLowest,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Text(
-                      "Structures",
-                      style: theme.textTheme.titleLarge,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 350,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTapUp: (details) {
+                    if (details.localPosition.dy < 45) {
+                      final toolSelection = ToolSelection.of(context, listen: false);
+                      toolSelection.withState((StructuresState state) {
+                        state.deselect();
+                      });
+                    }
+                  },
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    elevation: 1,
+                    color: theme.colorScheme.surfaceContainerLowest,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 35,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const SizedBox.shrink(),
+                                Text(
+                                  "Structures",
+                                  style: theme.textTheme.titleLarge,
+                                ),
+                                IconButton.outlined(
+                                  icon: const Icon(Icons.visibility_outlined, size: 24,),
+                                  visualDensity: VisualDensity.compact,
+                                  isSelected: _isExtraOpen,
+                                  onPressed: () {
+                                    setState(() {
+                                      _isExtraOpen = !_isExtraOpen;
+                                    });
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: ((theme.dividerTheme.space ?? 16) - (theme.dividerTheme.thickness ?? 0)) / 2),
+                          Divider(
+                            height: theme.dividerTheme.thickness ?? 0,
+                            thickness: theme.dividerTheme.thickness ?? 0,
+                          ),
+                          const Expanded(
+                            child: _StructureList(),
+                          ),
+                          Divider(
+                            height: theme.dividerTheme.thickness ?? 0,
+                            thickness: theme.dividerTheme.thickness ?? 0,
+                          ),
+                          const StructureAddButton(),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: ((theme.dividerTheme.space ?? 16) - (theme.dividerTheme.thickness ?? 0)) / 2),
-                    Divider(
-                      height: theme.dividerTheme.thickness ?? 0,
-                      thickness: theme.dividerTheme.thickness ?? 0,
-                    ),
-                    const Expanded(
-                      child: _StructureList(),
-                    ),
-                    Divider(
-                      height: theme.dividerTheme.thickness ?? 0,
-                      thickness: theme.dividerTheme.thickness ?? 0,
-                    ),
-                    const StructureAddButton(),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              if (_isExtraOpen)
+                ..._buildExtra(context),
+            ],
           ),
         );
       },
@@ -171,6 +257,49 @@ class _StructureList extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class _VisibilityButton extends StatelessWidget {
+  final TimePeriod timePeriod;
+
+  const _VisibilityButton({
+    // ignore: unused_element
+    super.key,
+    required this.timePeriod,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final toolSelection = ToolSelection.of(context);
+
+    final structuresState = toolSelection.mapState((StructuresState state) => state);
+    if (structuresState == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Switch(
+            value: structuresState.isVisible(timePeriod),
+            onChanged: (visible) {
+              structuresState.setVisibility(timePeriod, visible);
+            },
+            activeTrackColor: timePeriod.color,
+            inactiveTrackColor: timePeriod.color.withValues(alpha: 0.25),
+          ),
+          Text(
+            timePeriod.name.splitCamelCase().toTitleCase(),
+            style: theme.textTheme.bodyLarge,
+          ),
+        ],
       ),
     );
   }

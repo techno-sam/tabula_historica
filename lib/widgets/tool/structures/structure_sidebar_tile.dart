@@ -131,8 +131,21 @@ class StructureListTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Divider(
-                        color: structure.timePeriod.color,
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Divider(
+                              color: structure.timePeriod.color,
+                              thickness: 2,
+                            ),
+                          ),
+                          Flexible(
+                            child: Divider(
+                              color: structure.lastTimePeriod.color,
+                              thickness: 2,
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -156,6 +169,15 @@ class StructureListTile extends StatelessWidget {
                   child: child,
                 ),
                 child: selected ? const _TimePeriodSelector() : const SizedBox.shrink(),
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  fixedCrossAxisSizeFactor: 1.0,
+                  child: child,
+                ),
+                child: selected ? const _LastTimePeriodSelector() : const SizedBox.shrink(),
               ),
             ],
           ),
@@ -193,29 +215,32 @@ class _PenSelectorState extends State<_PenSelector> {
         Text("Pen:", style: theme.textTheme.labelLarge),
         const SizedBox(width: 8),
         Expanded(
-          child: DropdownButton<Pen>(
-            value: structure.pen,
-            isExpanded: true,
-            focusNode: _focusNode,
-            onChanged: (newPen) {
-              structure.setPen(history, newPen ?? Pen.building);
-              _focusNode.unfocus();
-            },
-            items: Pen.values.map((pen) {
-              return DropdownMenuItem<Pen>(
-                value: pen,
-                child: Row(
-                  children: [
-                    Icon(
-                      pen.icon,
-                      color: pen.color,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(pen.toString().split('.').last.toTitleCase()),
-                  ],
-                ),
-              );
-            }).toList(),
+          child: TapRegion(
+            onTapOutside: (_) => _focusNode.unfocus(),
+            child: DropdownButton<Pen>(
+              value: structure.pen,
+              isExpanded: true,
+              focusNode: _focusNode,
+              onChanged: (newPen) {
+                structure.setPen(history, newPen ?? Pen.building);
+                _focusNode.unfocus();
+              },
+              items: Pen.values.map((pen) {
+                return DropdownMenuItem<Pen>(
+                  value: pen,
+                  child: Row(
+                    children: [
+                      Icon(
+                        pen.icon,
+                        color: pen.color,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(pen.toString().split('.').last.toTitleCase()),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
           ),
         ),
       ],
@@ -251,20 +276,76 @@ class _TimePeriodSelectorState extends State<_TimePeriodSelector> {
         Text("Period:", style: theme.textTheme.labelLarge),
         const SizedBox(width: 8),
         Expanded(
-          child: DropdownButton<TimePeriod>(
-            value: structure.timePeriod,
-            isExpanded: true,
-            focusNode: _focusNode,
-            onChanged: (newTimePeriod) {
-              structure.setTimePeriod(history, newTimePeriod ?? TimePeriod.earlyRepublic);
-              _focusNode.unfocus();
-            },
-            items: TimePeriod.values.map((timePeriod) {
-              return DropdownMenuItem<TimePeriod>(
-                value: timePeriod,
-                child: Text(timePeriod.toString().split('.').last.splitCamelCase().toTitleCase()),
-              );
-            }).toList(),
+          child: TapRegion(
+            onTapOutside: (_) => _focusNode.unfocus(),
+            child: DropdownButton<TimePeriod>(
+              value: structure.timePeriod,
+              isExpanded: true,
+              focusNode: _focusNode,
+              onChanged: (newTimePeriod) {
+                structure.setTimePeriod(history, newTimePeriod ?? TimePeriod.earlyRepublic);
+                _focusNode.unfocus();
+              },
+              items: TimePeriod.values.map((timePeriod) {
+                return DropdownMenuItem<TimePeriod>(
+                  value: timePeriod,
+                  child: Text(timePeriod.toString().split('.').last.splitCamelCase().toTitleCase()),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _LastTimePeriodSelector extends StatefulWidget {
+  const _LastTimePeriodSelector();
+
+  @override
+  State<_LastTimePeriodSelector> createState() => _LastTimePeriodSelectorState();
+}
+
+class _LastTimePeriodSelectorState extends State<_LastTimePeriodSelector> {
+  final FocusNode _focusNode = FocusNode(debugLabel: "LastTimePeriodSelector");
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final history = HistoryManager.of(context);
+    final structure = context.watch<Structure>();
+
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text("Last Period:", style: theme.textTheme.labelLarge),
+        const SizedBox(width: 8),
+        Expanded(
+          child: TapRegion(
+            onTapOutside: (_) => _focusNode.unfocus(),
+            child: DropdownButton<TimePeriod>(
+              key: ValueKey("LastTimePeriodSelector ${structure.uuid} ${structure.lastTimePeriod}"),
+              value: structure.lastTimePeriod,
+              isExpanded: true,
+              focusNode: _focusNode,
+              onChanged: (newLastTimePeriod) {
+                structure.setLastTimePeriod(history, newLastTimePeriod ?? TimePeriod.earlyRepublic);
+                _focusNode.unfocus();
+              },
+              items: TimePeriod.values.map((lastTimePeriod) {
+                return DropdownMenuItem<TimePeriod>(
+                  value: lastTimePeriod,
+                  child: Text(lastTimePeriod.toString().split('.').last.splitCamelCase().toTitleCase()),
+                );
+              }).toList(),
+            ),
           ),
         ),
       ],

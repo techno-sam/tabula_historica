@@ -58,6 +58,10 @@ enum TimePeriod {
   String toJson() {
     return name;
   }
+
+  TimePeriod max(TimePeriod other) {
+    return index > other.index ? this : other;
+  }
 }
 
 enum Width {
@@ -225,6 +229,8 @@ class Structure with NeedsSave, ChangeNotifier {
   String _title;
   String? _description;
   TimePeriod _timePeriod;
+  /// the last time period this structure was found in
+  TimePeriod _lastTimePeriod;
   Pen _pen;
   List<CompletedStroke> _strokes;
   Stroke? _currentStroke;
@@ -232,6 +238,7 @@ class Structure with NeedsSave, ChangeNotifier {
   String get title => _title;
   String get description => _description ?? "";
   TimePeriod get timePeriod => _timePeriod;
+  TimePeriod get lastTimePeriod => _lastTimePeriod;
   Pen get pen => _pen;
   List<Stroke> get strokes => List<Stroke>.unmodifiable(_strokes);
   Stroke? get currentStroke => _currentStroke;
@@ -262,12 +269,14 @@ class Structure with NeedsSave, ChangeNotifier {
     String? title,
     String? description,
     TimePeriod? timePeriod,
+    TimePeriod? lastTimePeriod,
     Pen pen = Pen.building,
     List<CompletedStroke>? strokes
   }):
         _pen = pen,
         _description = description,
         _timePeriod = timePeriod ?? TimePeriod.earlyRepublic,
+        _lastTimePeriod = (lastTimePeriod ?? TimePeriod.earlyRepublic).max(timePeriod ?? TimePeriod.earlyRepublic),
         _title = title ?? "Unnamed Structure",
         uuid = uuid ?? const Uuid().v4(),
         _strokes = strokes ?? [];
@@ -278,6 +287,7 @@ class Structure with NeedsSave, ChangeNotifier {
       title: json["title"],
       description: json["description"],
       timePeriod: json.mapSingle("timePeriod", (tp) => TimePeriod.fromJson(tp)),
+      lastTimePeriod: json.mapSingle("lastTimePeriod", (tp) => TimePeriod.fromJson(tp)),
       pen: Pen.fromJson(json["pen"]),
       strokes: (json["strokes"] as List).map((e) => CompletedStroke.fromJson(e)).toList()
     );
@@ -289,9 +299,14 @@ class Structure with NeedsSave, ChangeNotifier {
       "title": _title,
       "description": _description,
       "timePeriod": _timePeriod.toJson(),
+      "lastTimePeriod": _lastTimePeriod.toJson(),
       "pen": _pen.toJson(),
       "strokes": _strokes.map((e) => e.toJson()).toList()
     };
+  }
+
+  bool visibleForFilter(TimePeriod filter) {
+    return _timePeriod.index <= filter.index && _lastTimePeriod.index >= filter.index;
   }
 
   void setTitle(HistoryManager history, String newTitle, {bool skipHistory = false}) {
@@ -320,7 +335,19 @@ class Structure with NeedsSave, ChangeNotifier {
       history.record(ModifyStructureTimePeriodHistoryEntry(uuid, _timePeriod, newTimePeriod));
     }
     _timePeriod = newTimePeriod;
+    _lastTimePeriod = _lastTimePeriod.max(newTimePeriod);
     logger.d("Changed time period of $this to $newTimePeriod");
+    markDirty();
+  }
+
+  void setLastTimePeriod(HistoryManager history, TimePeriod newTimePeriod, {bool skipHistory = false}) {
+    newTimePeriod = newTimePeriod.max(_timePeriod);
+    if (_lastTimePeriod == newTimePeriod) return;
+    if (!skipHistory) {
+      history.record(ModifyStructureLastTimePeriodHistoryEntry(uuid, _lastTimePeriod, newTimePeriod));
+    }
+    _lastTimePeriod = newTimePeriod;
+    logger.d("Changed last time period of $this to $newTimePeriod");
     markDirty();
   }
 
