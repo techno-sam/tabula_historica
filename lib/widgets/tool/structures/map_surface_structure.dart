@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
 import 'package:provider/provider.dart';
 import 'package:tabula_historica/extensions/color_manipulation.dart';
+import 'package:tabula_historica/widgets/map/widgets/map_surface_positioned.dart';
 
 import '../../../extensions/pointer_event.dart';
 import '../../../models/project/history_manager.dart';
@@ -40,6 +43,8 @@ class MapSurfaceStructure extends StatefulWidget {
 class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final camera = MapCamera.of(context);
     final toolSelection = ToolSelection.of(context);
     final history = HistoryManager.of(context);
@@ -99,11 +104,12 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
           : customPaint,
     );
 
-    if (selected) {
-      final transformedOutline = camera.getOffsetRect(structure.fullBounds.inflate(6.0)).inflate(2.0);
-      if (transformedOutline.isFinite) {
-        out = Stack(
-          children: [
+    // final center = camera.getOffset(structure.fullBounds.center.toPoint());
+    final transformedOutline = camera.getOffsetRect(structure.fullBounds.inflate(6.0)).inflate(2.0);
+    if (transformedOutline.isFinite && (selected || structure.pen == Pen.building)) {
+      out = Stack(
+        children: [
+          if (selected)
             Positioned.fromRect(
               rect: transformedOutline,
               child: DottedBorder(
@@ -114,10 +120,33 @@ class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
                 child: const SizedBox(),
               ),
             ),
-            out,
-          ],
-        );
-      }
+          out,
+          if (structure.pen == Pen.building)
+            MapSurfacePositioned(
+              x: structure.fullBounds.center.dx,
+              y: structure.fullBounds.center.dy,
+              baseScale: 0.2,
+              child: Card.outlined(
+                color: theme.colorScheme.surfaceContainerLowest,
+                // black outline
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  side: BorderSide(
+                    color: theme.colorScheme.surfaceContainerLowest.invert(),
+                    width: 1.0,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                  child: Text(
+                    structure.titleForDisplay,
+                    style: theme.textTheme.labelLarge,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      );
     }
     return selected ? out : IgnorePointer(child: out,);
   }

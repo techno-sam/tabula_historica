@@ -267,6 +267,24 @@ class Structure with NeedsSave, ChangeNotifier {
     return _cachedFullBounds!;
   }
 
+  static final _regexps = [
+    RegExp(r"^\d+\.\s*(.*)\s*{.*}$"),
+    RegExp(r"^\d+\.\s*(.*)$"),
+    RegExp(r"^(.*)\s*{.*}$"),
+  ];
+
+  String get titleForDisplay {
+    // strip out leading "1." (or other number)
+    // also strip out trailing "{...}"
+    for (final regexp in _regexps) {
+      final match = regexp.firstMatch(_title);
+      if (match != null) {
+        return match.group(1)!;
+      }
+    }
+    return _title;
+  }
+
   Structure({
     String? uuid,
     String? title,
