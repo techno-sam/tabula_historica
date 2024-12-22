@@ -48,7 +48,7 @@ class MapSurfacePositioned extends StatelessWidget {
       left: projected.x - scaledHalfSize,
       top: projected.y - scaledHalfSize,
       child: Container(
-        color: Colors.lightBlueAccent.withValues(alpha: 0.2),
+        color: Colors.transparent,//Colors.lightBlueAccent.withValues(alpha: 0.2),
         child: SizedBox(
           width: scaledHalfSize*2,
           height: scaledHalfSize*2,

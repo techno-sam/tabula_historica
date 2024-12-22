@@ -23,6 +23,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -107,6 +108,15 @@ class MultiLODMap extends StatelessWidget {
                       child: const Text("Press me"),
                     )),*/
                     const AllReferences(),
+                    MapSurfacePositioned(
+                      x: 111,
+                      y: -549.75,
+                      baseScale: 0.75,
+                      child: SvgPicture.file(
+                        File("/home/sam/Documents/0_latin_map_project/z_topo_mapping/topo_only.svg"),
+                        // width: 3380,
+                      ),
+                    ),
                     const AllStructures(),
                     // const PerfectDrawingPad(),
                     /***************/
