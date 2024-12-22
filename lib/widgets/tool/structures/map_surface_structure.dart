@@ -33,14 +33,9 @@ import '../../../models/tools/structures_state.dart';
 import '../../map/flutter_map/map_camera.dart';
 import '../../map/flutter_map/extensions/point.dart';
 
-class MapSurfaceStructure extends StatefulWidget {
+class MapSurfaceStructure extends StatelessWidget {
   const MapSurfaceStructure({super.key});
 
-  @override
-  State<MapSurfaceStructure> createState() => _MapSurfaceStructureState();
-}
-
-class _MapSurfaceStructureState extends State<MapSurfaceStructure> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
