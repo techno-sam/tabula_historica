@@ -50,10 +50,15 @@ class MapSurfaceStructureLabel extends StatelessWidget {
       return const SizedBox();
     }
 
+    Offset position = structure.fullBounds.center;
+    if (structure.fullBounds.width * structure.fullBounds.width + structure.fullBounds.height * structure.fullBounds.height < (20*20)) {
+      position = structure.fullBounds.topCenter - const Offset(0, 2);
+    }
+
     return MapSurfacePositioned(
-      x: structure.fullBounds.center.dx,
-      y: structure.fullBounds.center.dy,
-      baseScale: 0.2,
+      x: position.dx,
+      y: position.dy,
+      baseScale: 0.25,
       child: IgnorePointer(
         child: Card.outlined(
           color: theme.colorScheme.surfaceContainerLowest,
