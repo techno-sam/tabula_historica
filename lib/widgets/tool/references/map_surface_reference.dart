@@ -24,7 +24,6 @@ import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:provider/provider.dart';
 import 'package:tabula_historica/extensions/numeric.dart';
 
-import '../../../logger.dart';
 import '../../../models/project/history_manager.dart';
 import '../../../models/project/reference.dart';
 import '../../../models/tools/tool_selection.dart';

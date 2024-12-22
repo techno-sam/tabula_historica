@@ -18,7 +18,6 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:tabula_historica/extensions/iterables.dart';
 
 import '../project/project.dart';

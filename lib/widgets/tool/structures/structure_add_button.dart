@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabula_historica/extensions/string.dart';
 
-import '../../../logger.dart';
 import '../../../models/project/project.dart';
 import '../../../models/project/structure.dart';
 import '../../../models/tools/structures_state.dart';

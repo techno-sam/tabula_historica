@@ -24,8 +24,6 @@ import 'package:tabula_historica/extensions/pointer_event.dart';
 import 'package:tabula_historica/models/tools/tool_selection.dart';
 import 'package:tabula_historica/widgets/map/flutter_map/extensions/point.dart';
 
-import '../../logger.dart';
-import '../../models/annotations.dart';
 import '../map/flutter_map/map_camera.dart';
 
 const int _detailMultiplier = 2;
@@ -92,24 +90,6 @@ class _PerfectDrawingPadState extends State<PerfectDrawingPad> {
     );
     return toolSelection.selectedTool == Tool.structures ? out : IgnorePointer(child: out);
   }
-
-  static void _transformPoints(List<List<PointVector>> lines, MapCamera camera) {
-    for (final line in lines) {
-      for (int i = 0; i < line.length; i++) {
-        var pt = Point(line[i].x, line[i].y);
-        pt = camera.getOffset(pt);
-        line[i] = PointVector(pt.x, pt.y, line[i].pressure);
-      }
-    }
-  }
-
-  static List<List<PointVector>> _simplify(List<List<PointVector>> lines, MapCamera camera) {
-    return lines.map((line) {
-      final points = line.map((e) => Offset(e.x, e.y)).toList();
-      final simplified = rdpSimplify(points, 20);
-      return simplified.map((e) => PointVector(e.dx, e.dy)).toList();
-    }).toList(growable: false);
-  }
 }
 
 class _PerfectDrawingPainter extends CustomPainter {
@@ -144,9 +124,6 @@ class _PerfectDrawingPainter extends CustomPainter {
 
       if (outlinePoints.isEmpty) {
         continue;
-      } else if (outlinePoints.length < 2 && false) {
-        path.addOval(Rect.fromCircle(
-          center: Offset(outlinePoints[0].dx, outlinePoints[0].dy), radius: 1));
       } else {
         path.moveTo(outlinePoints[0].dx, outlinePoints[0].dy);
 

@@ -27,7 +27,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:tabula_historica/widgets/drawing/perfect_drawing_pad.dart';
 import 'package:tabula_historica/widgets/map/map_grid_paper.dart';
 import 'package:tabula_historica/widgets/project/all_structures.dart';
 import 'package:tabula_historica/widgets/tool/structures/structure_pen_selector.dart';
@@ -48,7 +47,6 @@ import 'widgets/map_surface_positioned.dart';
 
 import 'flutter_map/map_camera.dart';
 import 'flutter_map/extensions/point.dart';
-import 'flutter_map/providers/cancellable/cancellable_network_tile_provider.dart';
 import 'flutter_map/providers/regular/network_tile_provider.dart';
 import 'flutter_map/tile.dart';
 import 'flutter_map/tile_bounds_at_zoom.dart';
@@ -57,7 +55,6 @@ import 'flutter_map/tile_image.dart';
 import 'flutter_map/tile_image_manager.dart';
 import 'flutter_map/tile_range.dart';
 import 'flutter_map/tile_range_calculator.dart';
-import 'flutter_map/tile_builder.dart' as tile_builder;
 import 'flutter_map/base_tile_provider.dart';
 import 'flutter_map/tile_builder.dart';
 import 'flutter_map/tile_error_evict_callback.dart';

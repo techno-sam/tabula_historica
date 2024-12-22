@@ -25,7 +25,6 @@ import 'package:uuid/uuid.dart';
 
 import '../../logger.dart';
 import '../../widgets/map/flutter_map/map_camera.dart';
-import '../../widgets/map/flutter_map/extensions/point.dart';
 import 'foundation/needs_save.dart';
 import 'history_manager.dart';
 

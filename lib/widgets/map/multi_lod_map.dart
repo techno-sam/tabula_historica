@@ -77,11 +77,14 @@ class _MultiLODMap extends StatefulWidget {
     this.keepBuffer = 2,
     // ignore: unused_element
     this.panBuffer = 1,
+    // ignore: unused_element
     this.errorImage,
     final TileProvider? tileProvider,
     // ignore: unused_element
     this.errorTileCallback,
+    // ignore: unused_element
     this.tileBuilder,
+    // ignore: unused_element
     this.evictErrorTileStrategy = EvictErrorTileStrategy.none,
     String userAgentPackageName = 'unknown',
   }) : tileProvider = tileProvider ?? NetworkTileProvider() {

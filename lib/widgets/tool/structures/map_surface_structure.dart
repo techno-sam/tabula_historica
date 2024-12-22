@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:math';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
@@ -25,7 +23,6 @@ import 'package:provider/provider.dart';
 import 'package:tabula_historica/extensions/color_manipulation.dart';
 
 import '../../../extensions/pointer_event.dart';
-import '../../../logger.dart';
 import '../../../models/project/history_manager.dart';
 import '../../../models/tools/tool_selection.dart';
 import '../../../models/project/structure.dart';
