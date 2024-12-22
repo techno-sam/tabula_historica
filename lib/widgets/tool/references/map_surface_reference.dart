@@ -94,7 +94,11 @@ class _MapTransformableReferenceState extends State<MapTransformableReference> {
         max(scaledWidth, scaledHeight) < 10))
     ;
 
-    bool invisible = !selected && reference.opacity < 0.001;
+    bool invisible = (!selected) && reference.opacity < 0.001;
+
+    if (invisible) {
+      return const SizedBox.shrink();
+    }
 
     return TransformableBox(
       rect: rect,

@@ -28,12 +28,15 @@ class AllReferences extends StatelessWidget {
   Widget build(BuildContext context) {
     final references = ReferenceList.of(context);
 
-    return Stack(children: references.referencesReversed.map((reference) {
-      return ChangeNotifierProvider.value(
-        key: ObjectKey(reference.uuid),
-        value: reference,
-        child: const MapTransformableReference(),
-      );
-    }).toList(growable: false));
+    return Stack(children: [
+      const Center(child: SizedBox.shrink()),
+      ...references.referencesReversed.map((reference) {
+        return ChangeNotifierProvider.value(
+          key: ObjectKey(reference.uuid),
+          value: reference,
+          child: const MapTransformableReference(),
+        );
+      })
+    ]);
   }
 }
