@@ -43,7 +43,7 @@ enum TimePeriod {
   lateRepublic(Colors.orange), // 300 BCE - ?
   rome14CE(Colors.yellow), // 14 CE
   rome117CE(Colors.green), // 117 CE
-  early3rdCentury(Colors.blue), // 200 CE
+  // early3rdCentury(Colors.blue), // 200 CE
   ;
 
   final Color color;
