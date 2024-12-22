@@ -89,8 +89,8 @@ enum Pen {
   building(Icons.house_outlined, color: Color(0xFFA50000)),
   river(Icons.water, color: Color(0xFF1976D2)),
   aqueduct(Icons.water_outlined, color: Colors.lightBlue),
-  road(Icons.add_road, color: Color(0xC5607D8B)),
-  walls(Icons.security_outlined, color: Color(0xE2393939)),
+  road(Icons.add_road, color: Color(0xFF607D8B)),
+  walls(Icons.security_outlined, color: Color(0xFF393939)),
   ;
   final IconData icon;
   final Color color;
