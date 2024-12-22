@@ -32,17 +32,28 @@ class AllStructures extends StatelessWidget {
   Widget build(BuildContext context) {
     final structures = StructureList.of(context);
     final bool Function(Structure) filter = ToolSelection.of(context)
-        .mapStateOr((StructuresState state) => state.visibilityFilter, (_) => true);
+        .mapStateOr((StructuresState state) => state.visibilityFilter, (
+        _) => true);
 
-    return Stack(children: structures.structuresReversed
-    .where(filter)
-    .map((structure) {
-      return ChangeNotifierProvider.value(
-        key: ObjectKey(structure.uuid),
-        value: structure,
-        child: const MapSurfaceStructure(),
-      );
-    })
-    .toList(growable: false));
+    return Stack(children: [
+      ...structures.structuresReversed
+          .where(filter)
+          .map((structure) {
+        return ChangeNotifierProvider.value(
+          key: ValueKey((structure.uuid, 'structure')),
+          value: structure,
+          child: const MapSurfaceStructure(),
+        );
+      }),
+      ...structures.structuresReversed
+          .where(filter)
+          .map((structure) {
+        return ChangeNotifierProvider.value(
+          key: ValueKey((structure.uuid, 'label')),
+          value: structure,
+          child: const MapSurfaceStructureLabel(),
+        );
+      })
+    ]);
   }
 }

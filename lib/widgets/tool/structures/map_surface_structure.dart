@@ -33,13 +33,59 @@ import '../../../models/tools/structures_state.dart';
 import '../../map/flutter_map/map_camera.dart';
 import '../../map/flutter_map/extensions/point.dart';
 
+class MapSurfaceStructureLabel extends StatelessWidget {
+  const MapSurfaceStructureLabel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final structure = context.watch<Structure>();
+
+    if (structure.pen != Pen.building || !structure.fullBounds.isFinite ||
+        structure.fullBounds.isEmpty) {
+      return const SizedBox();
+    }
+
+    final camera = MapCamera.of(context);
+    final transformedOutline = camera.getOffsetRect(structure.fullBounds);
+    if (!transformedOutline.overlaps(Offset.zero & camera.size)) {
+      return const SizedBox();
+    }
+
+    return MapSurfacePositioned(
+      x: structure.fullBounds.center.dx,
+      y: structure.fullBounds.center.dy,
+      baseScale: 0.2,
+      child: IgnorePointer(
+        child: Card.outlined(
+          color: theme.colorScheme.surfaceContainerLowest,
+          // black outline
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            side: BorderSide(
+              color: theme.colorScheme.surfaceContainerLowest.invert(),
+              width: 1.0,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: 4.0, horizontal: 8.0),
+            child: Text(
+              structure.titleForDisplay,
+              style: theme.textTheme.labelLarge,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class MapSurfaceStructure extends StatelessWidget {
   const MapSurfaceStructure({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     final camera = MapCamera.of(context);
     final toolSelection = ToolSelection.of(context);
     final history = HistoryManager.of(context);
@@ -99,47 +145,21 @@ class MapSurfaceStructure extends StatelessWidget {
           : customPaint,
     );
 
-    // final center = camera.getOffset(structure.fullBounds.center.toPoint());
     final transformedOutline = camera.getOffsetRect(structure.fullBounds.inflate(6.0)).inflate(2.0);
-    if (transformedOutline.isFinite && (selected || structure.pen == Pen.building)) {
+    if (transformedOutline.isFinite && selected) {
       out = Stack(
         children: [
-          if (selected)
-            Positioned.fromRect(
-              rect: transformedOutline,
-              child: DottedBorder(
-                color: structure.timePeriod.color,
-                borderType: BorderType.RRect,
-                radius: const Radius.circular(8.0),
-                dashPattern: const [8, 8],
-                child: const SizedBox(),
-              ),
+          Positioned.fromRect(
+            rect: transformedOutline,
+            child: DottedBorder(
+              color: structure.timePeriod.color,
+              borderType: BorderType.RRect,
+              radius: const Radius.circular(8.0),
+              dashPattern: const [8, 8],
+              child: const SizedBox(),
             ),
+          ),
           out,
-          if (structure.pen == Pen.building)
-            MapSurfacePositioned(
-              x: structure.fullBounds.center.dx,
-              y: structure.fullBounds.center.dy,
-              baseScale: 0.2,
-              child: Card.outlined(
-                color: theme.colorScheme.surfaceContainerLowest,
-                // black outline
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  side: BorderSide(
-                    color: theme.colorScheme.surfaceContainerLowest.invert(),
-                    width: 1.0,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                  child: Text(
-                    structure.titleForDisplay,
-                    style: theme.textTheme.labelLarge,
-                  ),
-                ),
-              ),
-            ),
         ],
       );
     }
