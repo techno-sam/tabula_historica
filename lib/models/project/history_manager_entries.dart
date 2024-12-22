@@ -143,10 +143,16 @@ abstract class _ActivatableReferenceHistoryEntry extends HistoryEntry implements
         .resolve('references')
         .resolve(firstTwo);
 
-    tmpStorageDir.resolveFile(_uuid).deleteSync();
+    try {
+      tmpStorageDir.resolveFile(_uuid).deleteSync();
 
-    if (tmpStorageDir.listSync().isEmpty) {
-      tmpStorageDir.delete();
+      if (tmpStorageDir
+          .listSync()
+          .isEmpty) {
+        tmpStorageDir.delete();
+      }
+    } on FileSystemException {
+      logger.e("Failed to delete image for $_uuid");
     }
   }
 }
