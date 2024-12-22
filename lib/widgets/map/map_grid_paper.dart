@@ -23,7 +23,9 @@ import 'package:tabula_historica/widgets/map/flutter_map/extensions/point.dart';
 import 'package:tabula_historica/widgets/map/flutter_map/map_camera.dart';
 
 class MapGridPaper extends StatelessWidget {
-  const MapGridPaper({super.key});
+  final Offset originOffset;
+
+  const MapGridPaper({super.key, this.originOffset = Offset.zero});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class MapGridPaper extends StatelessWidget {
 
     return CustomPaint(
       painter: _MapGridPaperPainter(
-        originOffset: camera.getOffset(const Point(0, 0)).toOffset(),
+        originOffset: camera.getOffset(originOffset.toPoint()).toOffset(),
         scale: pow(2, camera.zoom).toDouble(),
       ),
       child: const SizedBox.expand(),
@@ -79,7 +81,7 @@ class _MapGridPaperPainter extends CustomPainter {
                   + minor * (scaledInterval / (divisions * subDivisions))
                   + ultraMinor * (scaledInterval / (divisions * subDivisions * superDivisions));
               paint.strokeWidth = (semiMajor == 0 && minor == 0 && ultraMinor == 0)
-                  ? 4.0
+                  ? 3.0
                   : ((minor == 0 && ultraMinor == 0)
                   ? 2.0
                   : ((ultraMinor == 0) ? 1.0 : 0.5)
@@ -121,7 +123,7 @@ class _MapGridPaperPainter extends CustomPainter {
     paint.strokeWidth = 1.0;
     paint.style = PaintingStyle.fill;
     paint.color = Colors.black;
-    canvas.drawCircle(originOffset, 8, paint);
+    canvas.drawCircle(originOffset, 4, paint);
   }
 
   @override

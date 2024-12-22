@@ -93,7 +93,9 @@ class MultiLODMap extends StatelessWidget {
                           child: const SizedBox.expand(),
                         ),
                       ),
-                    const MapGridPaper(),
+                    const MapGridPaper(
+                      originOffset: Offset(48.75, -618),
+                    ),
                     /******************************/
                     /* Surface positioned widgets */
                     /******************************/
@@ -201,8 +203,8 @@ class _CameraProviderState extends SingleChildState<_CameraProvider> {
       builder: (BuildContext context, BoxConstraints constraints) {
         if (!_initialized) {
           _camera = MapCamera(
-            blockPosCenter: const Point(0, 0),
-            zoom: log2(3/4),
+            blockPosCenter: const Point(48.75, -618),
+            zoom: log2(32),
             size: Size(constraints.maxWidth - (_debugPadding??0)*2, constraints.maxHeight - (_debugPadding??0)*2)
           );
           _initialized = true;

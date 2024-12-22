@@ -53,6 +53,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../extensions/numeric.dart';
 import '../../../util/math.dart';
 import 'extensions/point.dart';
 import 'tile_update_event.dart';
@@ -97,8 +98,9 @@ class MapCamera extends ChangeNotifier {
     );
   }
 
-  final double minZoom = log2(1 / 8);
+  final double minZoom = log2(8);
   final double maxZoom = log2(128 * 2);
+  final Rect centerBounds = const Rect.fromLTRB(-2396.8, -2513.5, 1908.4, 650.9);
 
   Point<double> get blockPosCenter => _blockPosCenter;
   double get zoom => _zoom;
@@ -119,6 +121,8 @@ class MapCamera extends ChangeNotifier {
   bool get isInBatchOperation => _batchDepth > 0;
 
   set blockPosCenter(Point<double> blockPosCenter){
+    // constrain to bounds
+    blockPosCenter = blockPosCenter.toOffset().clampToRect(centerBounds).toPoint();
     if (_blockPosCenter == blockPosCenter) return;
     _blockPosCenter = blockPosCenter;
     _notifyUpdate();

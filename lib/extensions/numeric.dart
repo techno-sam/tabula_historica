@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:ui';
+
 extension EpsilonDifference on double {
   bool differs(double other, double epsilon) => (this - other).abs() > epsilon;
 }
@@ -27,5 +29,14 @@ extension InfiniteToNull on double {
 extension YearDateUtil on int {
   String yearDateToString() {
     return abs().toString() + (this < 0 ? ' BCE' : ' CE');
+  }
+}
+
+extension ClampableOffset on Offset {
+  Offset clampToRect(Rect rect) {
+    return Offset(
+      dx.clamp(rect.left, rect.right),
+      dy.clamp(rect.top, rect.bottom),
+    );
   }
 }
