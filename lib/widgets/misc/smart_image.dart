@@ -19,7 +19,6 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:http/http.dart' as http;
 import 'package:tabula_historica/util/string.dart';
 

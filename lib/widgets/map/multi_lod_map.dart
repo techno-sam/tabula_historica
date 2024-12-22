@@ -157,8 +157,8 @@ class _MultiLODMapState extends State<_MultiLODMap> {
 
     var projected = camera.getOffset(const Point(0, 0));
     // transform so that the (_centerX, _centerZ) block position is in the center of the screen, taking _scale into account
-    final double offsetX = projected.x + (_debugPadding??0);//camera.size.width / 2 - camera.blockPosCenter.x * widget.tileSize * unadjustedScale;
-    final double offsetY = projected.y + (_debugPadding??0);//camera.size.height / 2 - camera.blockPosCenter.y * widget.tileSize * unadjustedScale;
+    final double offsetX = projected.x;//camera.size.width / 2 - camera.blockPosCenter.x * widget.tileSize * unadjustedScale;
+    final double offsetY = projected.y;//camera.size.height / 2 - camera.blockPosCenter.y * widget.tileSize * unadjustedScale;
 
     //print("Camera: ${camera.blockPosCenter}, ${camera.zoom}");
     //print("Size: ${camera.size}");

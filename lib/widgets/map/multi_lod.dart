@@ -27,11 +27,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:tabula_historica/widgets/map/map_grid_paper.dart';
-import 'package:tabula_historica/widgets/project/all_structures.dart';
-import 'package:tabula_historica/widgets/tool/structures/structure_info_card.dart';
-import 'package:tabula_historica/widgets/tool/structures/structure_pen_selector.dart';
-import 'package:tabula_historica/widgets/tool/structures/structure_sidebar.dart';
+
+import 'map_grid_paper.dart';
+import '../project/all_structures.dart';
+import '../tool/structures/structure_info_card.dart';
+import '../tool/structures/structure_pen_selector.dart';
+import '../tool/structures/structure_sidebar.dart';
 
 import '../../backend/backend.dart' as backend;
 import '../../extensions/pointer_event.dart';
@@ -64,9 +65,6 @@ import 'flutter_map/tile_update_event.dart';
 part 'multi_lod_map.dart';
 part 'multi_lod_controller.dart';
 
-const double? _debugPadding = null;
-
-
 class MultiLODMap extends StatelessWidget {
   const MultiLODMap({super.key});
 
@@ -85,28 +83,12 @@ class MultiLODMap extends StatelessWidget {
             _MapController(
               child: Stack(
                   children: [
-                    if (_debugPadding != null)
-                      Padding(
-                        padding: EdgeInsets.all(_debugPadding!),
-                        child: Container(
-                          color: Colors.black.withValues(alpha: 0.5),
-                          child: const SizedBox.expand(),
-                        ),
-                      ),
                     const MapGridPaper(
                       originOffset: Offset(48.75, -618),
                     ),
                     /******************************/
                     /* Surface positioned widgets */
                     /******************************/
-                    //const DebugMapSurfacePositioned(x: -32, y: 16, baseScale: 1, which: false),
-                    /*MapSurfacePositioned(
-                        x: -32, y: 16, baseScale: 1, child: ElevatedButton(
-                      onPressed: () {
-                        logger.d("Button pressed");
-                      },
-                      child: const Text("Press me"),
-                    )),*/
                     const AllReferences(),
                     MapSurfacePositioned(
                       x: 111,
@@ -118,7 +100,6 @@ class MultiLODMap extends StatelessWidget {
                       ),
                     ),
                     const AllStructures(),
-                    // const PerfectDrawingPad(),
                     /***************/
                     /* UI elements */
                     /***************/
@@ -205,12 +186,12 @@ class _CameraProviderState extends SingleChildState<_CameraProvider> {
           _camera = MapCamera(
             blockPosCenter: const Point(48.75, -618),
             zoom: log2(32),
-            size: Size(constraints.maxWidth - (_debugPadding??0)*2, constraints.maxHeight - (_debugPadding??0)*2)
+            size: Size(constraints.maxWidth, constraints.maxHeight)
           );
           _initialized = true;
           _onCameraInitialized();
         } else {
-          _camera.size = Size(constraints.maxWidth - (_debugPadding??0)*2, constraints.maxHeight - (_debugPadding??0)*2);
+          _camera.size = Size(constraints.maxWidth, constraints.maxHeight);
         }
 
         return ChangeNotifierProvider.value(value: _camera, child: child);

@@ -18,12 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabula_historica/models/project/project.dart';
 import 'package:tabula_historica/models/tools/structures_state.dart';
 
 import '../../../extensions/color_manipulation.dart';
 import '../../../extensions/numeric.dart';
-import '../../../extensions/string.dart';
 import '../../../models/project/structure.dart';
 import '../../../models/tools/tool_selection.dart';
 import '../../misc/smart_image.dart';

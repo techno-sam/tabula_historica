@@ -31,11 +31,6 @@ class _MapController extends SingleChildStatelessWidget {
 
   /// Applies a [deltaScale] zoom change to the [camera], centered around the given screen-space [center].
   void _applyScaleChange(double deltaScale, Offset center, MapCamera camera) {
-
-    if (_debugPadding != null) {
-      center = Offset(center.dx - _debugPadding!, center.dy - _debugPadding!);
-    }
-
     double centerX = camera.blockPosCenter.x;
     double centerZ = camera.blockPosCenter.y;
     double scale = camera.zoom;
