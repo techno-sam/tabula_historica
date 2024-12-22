@@ -190,7 +190,7 @@ class _MapSurfaceStructurePainter extends CustomPainter {
       _paintStroke(canvas, size, paint, currentStroke!, false);
     }
 
-    if (selected) {
+    if (selected && pen != Pen.building) {
       final Paint selectedPaint = Paint()
         ..color = pen.color.withValues(alpha: 1.0).invert().lighten(0.05)
         ..style = PaintingStyle.stroke

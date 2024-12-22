@@ -117,11 +117,23 @@ class StructureListTile extends StatelessWidget {
                                 : Container(
                               alignment: Alignment.centerLeft,
                               height: 20,
-                              child: Text(
-                                key: ValueKey(structure.uuid),
-                                structure.title,
-                                style: theme.textTheme.titleMedium,
-                                overflow: TextOverflow.ellipsis,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    structure.pen.icon,
+                                    color: structure.pen.color,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      key: ValueKey(structure.uuid),
+                                      structure.title,
+                                      style: theme.textTheme.titleMedium,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
