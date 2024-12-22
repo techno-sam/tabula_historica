@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,20 +47,7 @@ import 'widgets/map_surface_positioned.dart';
 
 import 'flutter_map/map_camera.dart';
 import 'flutter_map/extensions/point.dart';
-import 'flutter_map/providers/regular/network_tile_provider.dart';
-import 'flutter_map/tile.dart';
-import 'flutter_map/tile_bounds_at_zoom.dart';
-import 'flutter_map/tile_coordinates.dart';
-import 'flutter_map/tile_image.dart';
-import 'flutter_map/tile_image_manager.dart';
-import 'flutter_map/tile_range.dart';
-import 'flutter_map/tile_range_calculator.dart';
-import 'flutter_map/base_tile_provider.dart';
-import 'flutter_map/tile_builder.dart';
-import 'flutter_map/tile_error_evict_callback.dart';
-import 'flutter_map/tile_update_event.dart';
 
-part 'multi_lod_map.dart';
 part 'multi_lod_controller.dart';
 
 class MultiLODMap extends StatelessWidget {
