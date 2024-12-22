@@ -23,6 +23,7 @@ import 'package:provider/provider.dart';
 import 'package:ring_stack/ring_stack.dart';
 
 import 'package:tabula_historica/extensions/directory.dart';
+import 'package:tabula_historica/extensions/iterables.dart';
 import 'package:tabula_historica/extensions/numeric.dart';
 import 'package:tabula_historica/models/project/reference.dart';
 import '../../logger.dart';
@@ -61,6 +62,11 @@ enum HistoryEntryType {
   modifyStructureTimePeriod(ModifyStructureTimePeriodHistoryEntry.fromJson),
   modifyStructureLastTimePeriod(ModifyStructureLastTimePeriodHistoryEntry.fromJson),
   modifyStructurePen(ModifyStructurePenHistoryEntry.fromJson),
+  modifyStructureBuiltYear(ModifyStructureBuiltYearHistoryEntry.fromJson),
+  modifyStructureBuiltBy(ModifyStructureBuiltByHistoryEntry.fromJson),
+  modifyStructureDestroyedYear(ModifyStructureDestroyedYearHistoryEntry.fromJson),
+  modifyStructureDestroyedBy(ModifyStructureDestroyedByHistoryEntry.fromJson),
+  modifyStructureImageURL(ModifyStructureImageURLHistoryEntry.fromJson),
   addStrokeToStructure(AddStrokeToStructureHistoryEntry.fromJson),
   ;
 

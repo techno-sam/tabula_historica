@@ -19,3 +19,13 @@
 extension EpsilonDifference on double {
   bool differs(double other, double epsilon) => (this - other).abs() > epsilon;
 }
+
+extension InfiniteToNull on double {
+  double? infiniteToNull() => isFinite ? this : null;
+}
+
+extension YearDateUtil on int {
+  String yearDateToString() {
+    return abs().toString() + (this < 0 ? ' BCE' : ' CE');
+  }
+}

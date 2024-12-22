@@ -18,6 +18,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:tabula_historica/extensions/iterables.dart';
 
 import '../project/project.dart';
@@ -66,6 +67,7 @@ class StructuresState extends ChangeNotifier implements EphemeralState {
     notifyListeners();
   }
 
+  Structure? get selectedStructure => _selectedStructure?.target;
   bool isStructureSelected(Structure structure) {
     return _selectedStructure?.target == structure;
   }

@@ -811,6 +811,231 @@ class ModifyStructurePenHistoryEntry extends HistoryEntry {
   }
 }
 
+class ModifyStructureBuiltYearHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final int? _oldBuiltYear;
+  final int? _newBuiltYear;
+
+  ModifyStructureBuiltYearHistoryEntry(this._uuid, this._oldBuiltYear, this._newBuiltYear);
+
+  factory ModifyStructureBuiltYearHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyStructureBuiltYearHistoryEntry(
+        json['uuid'],
+        json['oldBuiltYear'] as int?,
+        json['newBuiltYear'] as int?
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setBuiltYear(project.historyManager, _oldBuiltYear, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setBuiltYear(project.historyManager, _newBuiltYear, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldBuiltYear': _oldBuiltYear,
+      'newBuiltYear': _newBuiltYear,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyStructureBuiltYear;
+
+  @override
+  String toString() {
+    return "ModifyStructureBuiltYearHistoryEntry($_uuid, $_oldBuiltYear -> $_newBuiltYear)";
+  }
+}
+
+class ModifyStructureBuiltByHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final String? _oldBuiltBy;
+  final String? _newBuiltBy;
+
+  ModifyStructureBuiltByHistoryEntry(this._uuid, this._oldBuiltBy, this._newBuiltBy);
+
+  factory ModifyStructureBuiltByHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyStructureBuiltByHistoryEntry(
+        json['uuid'],
+        json['oldBuiltBy'] as String?,
+        json['newBuiltBy'] as String?
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setBuiltBy(project.historyManager, _oldBuiltBy, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setBuiltBy(project.historyManager, _newBuiltBy, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldBuiltBy': _oldBuiltBy,
+      'newBuiltBy': _newBuiltBy,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyStructureBuiltBy;
+
+  @override
+  String toString() {
+    return "ModifyStructureBuiltByHistoryEntry($_uuid, $_oldBuiltBy -> $_newBuiltBy)";
+  }
+}
+
+class ModifyStructureDestroyedYearHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final int? _oldDestroyedYear;
+  final int? _newDestroyedYear;
+
+  ModifyStructureDestroyedYearHistoryEntry(this._uuid, this._oldDestroyedYear, this._newDestroyedYear);
+
+  factory ModifyStructureDestroyedYearHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyStructureDestroyedYearHistoryEntry(
+        json['uuid'],
+        json['oldDestroyedYear'] as int?,
+        json['newDestroyedYear'] as int?
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setDestroyedYear(project.historyManager, _oldDestroyedYear, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setDestroyedYear(project.historyManager, _newDestroyedYear, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldDestroyedYear': _oldDestroyedYear,
+      'newDestroyedYear': _newDestroyedYear,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyStructureDestroyedYear;
+
+  @override
+  String toString() {
+    return "ModifyStructureDestroyedYearHistoryEntry($_uuid, $_oldDestroyedYear -> $_newDestroyedYear)";
+  }
+}
+
+class ModifyStructureDestroyedByHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final String? _oldDestroyedBy;
+  final String? _newDestroyedBy;
+
+  ModifyStructureDestroyedByHistoryEntry(this._uuid, this._oldDestroyedBy, this._newDestroyedBy);
+
+  factory ModifyStructureDestroyedByHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyStructureDestroyedByHistoryEntry(
+        json['uuid'],
+        json['oldDestroyedBy'] as String?,
+        json['newDestroyedBy'] as String?
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setDestroyedBy(project.historyManager, _oldDestroyedBy, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setDestroyedBy(project.historyManager, _newDestroyedBy, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldDestroyedBy': _oldDestroyedBy,
+      'newDestroyedBy': _newDestroyedBy,
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyStructureDestroyedBy;
+
+  @override
+  String toString() {
+    return "ModifyStructureDestroyedByHistoryEntry($_uuid, $_oldDestroyedBy -> $_newDestroyedBy)";
+  }
+}
+
+class ModifyStructureImageURLHistoryEntry extends HistoryEntry {
+  final String _uuid;
+  final Uri? _oldImageURL;
+  final Uri? _newImageURL;
+
+  ModifyStructureImageURLHistoryEntry(this._uuid, this._oldImageURL, this._newImageURL);
+
+  factory ModifyStructureImageURLHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return ModifyStructureImageURLHistoryEntry(
+        json['uuid'],
+        json.mapSingle('oldImageURL', (e) => Uri.parse(e)),
+        json.mapSingle('newImageURL', (e) => Uri.parse(e))
+    );
+  }
+
+  @override
+  Future<void> undo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setImageURL(project.historyManager, _oldImageURL, skipHistory: true);
+  }
+
+  @override
+  Future<void> redo(Project project) async {
+    final structure = project.getStructure(_uuid)!;
+    structure.setImageURL(project.historyManager, _newImageURL, skipHistory: true);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': _uuid,
+      'oldImageURL': _oldImageURL?.toString(),
+      'newImageURL': _newImageURL?.toString(),
+    };
+  }
+
+  @override
+  HistoryEntryType get type => HistoryEntryType.modifyStructureImageURL;
+
+  @override
+  String toString() {
+    return "ModifyStructureImageURLHistoryEntry($_uuid, $_oldImageURL -> $_newImageURL)";
+  }
+}
+
 class AddStrokeToStructureHistoryEntry extends HistoryEntry {
   final String _uuid;
   Map<String, dynamic>? _serializedStroke;

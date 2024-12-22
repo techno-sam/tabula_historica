@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
 import 'dart:math';
 
 String slug(int length) {
@@ -27,3 +28,5 @@ String slug(int length) {
   }
   return result;
 }
+
+const JsonEncoder prettyEncoder = JsonEncoder.withIndent("  ");

@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:math';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
@@ -71,7 +69,7 @@ class MapSurfaceStructureLabel extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 vertical: 4.0, horizontal: 8.0),
             child: Text(
-              structure.titleForDisplay,
+              structure.titleForDisplayNoSubtitle,
               style: theme.textTheme.labelLarge,
             ),
           ),

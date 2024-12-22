@@ -237,6 +237,11 @@ class Structure with NeedsSave, ChangeNotifier {
   Pen _pen;
   List<CompletedStroke> _strokes;
   Stroke? _currentStroke;
+  int? _builtYear;
+  String? _builtBy;
+  int? _destroyedYear;
+  String? _destroyedBy;
+  Uri? _imageURL;
 
   String get title => _title;
   String get description => _description ?? "";
@@ -245,6 +250,11 @@ class Structure with NeedsSave, ChangeNotifier {
   Pen get pen => _pen;
   List<Stroke> get strokes => List<Stroke>.unmodifiable(_strokes);
   Stroke? get currentStroke => _currentStroke;
+  int? get builtYear => _builtYear;
+  String? get builtBy => _builtBy;
+  int? get destroyedYear => _destroyedYear;
+  String? get destroyedBy => _destroyedBy;
+  Uri? get imageURL => _imageURL;
 
   Rect? _cachedFullBounds;
 
@@ -273,17 +283,40 @@ class Structure with NeedsSave, ChangeNotifier {
     RegExp(r"^(.*)\s*{.*}$"),
   ];
 
+  static final _subtitleRegexp = RegExp(r"^(.*)\s*\[(.*)\]$");
+
   String get titleForDisplay {
     // strip out leading "1." (or other number)
     // also strip out trailing "{...}"
     for (final regexp in _regexps) {
       final match = regexp.firstMatch(_title);
       if (match != null) {
-        return match.group(1)!;
+        return match.group(1)!.trim();
       }
     }
-    return _title;
+    return _title.trim();
   }
+
+  String get titleForDisplayNoSubtitle {
+    // strip out trailing " [...]"
+    final tfd = titleForDisplay;
+    final match = _subtitleRegexp.firstMatch(tfd);
+    if (match != null) {
+      return match.group(1)!.trim();
+    }
+    return tfd;
+  }
+
+  String? get titleForDisplaySubtitle {
+    final tfd = titleForDisplay;
+    final match = _subtitleRegexp.firstMatch(tfd);
+    if (match != null) {
+      return match.group(2)!.trim();
+    }
+    return null;
+  }
+
+  bool get hasInfo => [imageURL, builtYear, builtBy, destroyedYear, destroyedBy].any((e) => e != null);
 
   Structure({
     String? uuid,
@@ -379,6 +412,58 @@ class Structure with NeedsSave, ChangeNotifier {
     }
     _pen = newPen;
     logger.d("Changed pen of $this to $newPen");
+    markDirty();
+  }
+
+  void setBuiltYear(HistoryManager history, int? newBuiltYear, {bool skipHistory = false}) {
+    if (newBuiltYear == 0) newBuiltYear = null;
+    if (_builtYear == newBuiltYear) return;
+    if (!skipHistory) {
+      history.record(ModifyStructureBuiltYearHistoryEntry(uuid, _builtYear, newBuiltYear));
+    }
+    _builtYear = newBuiltYear;
+    logger.d("Changed built year of $this to $newBuiltYear");
+    markDirty();
+  }
+
+  void setBuiltBy(HistoryManager history, String? newBuiltBy, {bool skipHistory = false}) {
+    if (_builtBy == newBuiltBy) return;
+    if (!skipHistory) {
+      history.record(ModifyStructureBuiltByHistoryEntry(uuid, _builtBy, newBuiltBy));
+    }
+    _builtBy = newBuiltBy;
+    logger.d("Changed built by of $this to $newBuiltBy");
+    markDirty();
+  }
+
+  void setDestroyedYear(HistoryManager history, int? newDestroyedYear, {bool skipHistory = false}) {
+    if (newDestroyedYear == 0) newDestroyedYear = null;
+    if (_destroyedYear == newDestroyedYear) return;
+    if (!skipHistory) {
+      history.record(ModifyStructureDestroyedYearHistoryEntry(uuid, _destroyedYear, newDestroyedYear));
+    }
+    _destroyedYear = newDestroyedYear;
+    logger.d("Changed destroyed year of $this to $newDestroyedYear");
+    markDirty();
+  }
+
+  void setDestroyedBy(HistoryManager history, String? newDestroyedBy, {bool skipHistory = false}) {
+    if (_destroyedBy == newDestroyedBy) return;
+    if (!skipHistory) {
+      history.record(ModifyStructureDestroyedByHistoryEntry(uuid, _destroyedBy, newDestroyedBy));
+    }
+    _destroyedBy = newDestroyedBy;
+    logger.d("Changed destroyed by of $this to $newDestroyedBy");
+    markDirty();
+  }
+
+  void setImageURL(HistoryManager history, Uri? newImageURL, {bool skipHistory = false}) {
+    if (_imageURL == newImageURL) return;
+    if (!skipHistory) {
+      history.record(ModifyStructureImageURLHistoryEntry(uuid, _imageURL, newImageURL));
+    }
+    _imageURL = newImageURL;
+    logger.d("Changed image URL of $this to $newImageURL");
     markDirty();
   }
 

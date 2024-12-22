@@ -232,11 +232,9 @@ class Project implements NeedsSave {
     logger.d("Disposed $this");
   }
 
-  static const JsonEncoder _prettyEncoder = JsonEncoder.withIndent("  ");
-
   Future<void> save() async {
     File file = File("${root.path}/project.json");
-    await file.writeAsString(_prettyEncoder.convert(toJson()));
+    await file.writeAsString(prettyEncoder.convert(toJson()));
     markClean();
   }
 

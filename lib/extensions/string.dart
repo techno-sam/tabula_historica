@@ -32,4 +32,6 @@ extension StringUtil on String {
   String splitCamelCase() {
     return splitMapJoin(RegExp(r'(?<=[a-z])([A-Z])'), onMatch: (m) => ' ${m.group(1)}');
   }
+
+  String? emptyToNull() => isEmpty ? null : this;
 }

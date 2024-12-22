@@ -29,6 +29,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:tabula_historica/widgets/map/map_grid_paper.dart';
 import 'package:tabula_historica/widgets/project/all_structures.dart';
+import 'package:tabula_historica/widgets/tool/structures/structure_info_card.dart';
 import 'package:tabula_historica/widgets/tool/structures/structure_pen_selector.dart';
 import 'package:tabula_historica/widgets/tool/structures/structure_sidebar.dart';
 
@@ -136,6 +137,7 @@ class MultiLODMap extends StatelessWidget {
             ),
             const ReferenceSidebar(),
             const StructureSidebar(),
+            const StructureInfoCardDebugDisplay(),
           ],
         ),
       ),

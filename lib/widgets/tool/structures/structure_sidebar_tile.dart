@@ -191,6 +191,15 @@ class StructureListTile extends StatelessWidget {
                 ),
                 child: selected ? const _LastTimePeriodSelector() : const SizedBox.shrink(),
               ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  fixedCrossAxisSizeFactor: 1.0,
+                  child: child,
+                ),
+                child: selected ? const _InfoCardDetailsConfigurator() : const SizedBox.shrink(),
+              ),
             ],
           ),
         )
@@ -359,6 +368,194 @@ class _LastTimePeriodSelectorState extends State<_LastTimePeriodSelector> {
               }).toList(),
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+// configure builtYear, builtBy, destroyedYear, destroyedBy, and imageURL
+
+class _InfoCardDetailsConfigurator extends StatefulWidget {
+  const _InfoCardDetailsConfigurator();
+
+  @override
+  State<_InfoCardDetailsConfigurator> createState() => _InfoCardDetailsConfiguratorState();
+}
+
+class _InfoCardDetailsConfiguratorState extends State<_InfoCardDetailsConfigurator> {
+  final FocusNode _focusNode1 = FocusNode(debugLabel: "InfoCardDetailsConfigurator 1");
+  final FocusNode _focusNode2 = FocusNode(debugLabel: "InfoCardDetailsConfigurator 2");
+  final FocusNode _focusNode3 = FocusNode(debugLabel: "InfoCardDetailsConfigurator 3");
+  final FocusNode _focusNode4 = FocusNode(debugLabel: "InfoCardDetailsConfigurator 4");
+  final FocusNode _focusNode5 = FocusNode(debugLabel: "InfoCardDetailsConfigurator 5");
+
+  String? _textFieldValue1;
+  String? _textFieldValue2;
+  String? _textFieldValue3;
+  String? _textFieldValue4;
+  String? _textFieldValue5;
+
+  @override
+  void dispose() {
+    _focusNode1.dispose();
+    _focusNode2.dispose();
+    _focusNode3.dispose();
+    _focusNode4.dispose();
+    _focusNode5.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final history = HistoryManager.of(context);
+    final structure = context.watch<Structure>();
+
+    return Column(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text("Built Year:", style: theme.textTheme.labelLarge),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TapRegion(
+                onTapOutside: (_) {
+                  _focusNode1.unfocus();
+                  if (_textFieldValue1 != null) {
+                    structure.setBuiltYear(history, int.tryParse(_textFieldValue1!) ?? 0);
+                  }
+                },
+                child: TextField(
+                  focusNode: _focusNode1,
+                  controller: TextEditingController(
+                      text: structure.builtYear?.toString() ?? ""),
+                  keyboardType: TextInputType.number,
+                  onChanged: (newBuiltYear) {
+                    _textFieldValue1 = newBuiltYear;
+                  },
+                  onSubmitted: (newBuiltYear) {
+                    structure.setBuiltYear(
+                        history, int.tryParse(newBuiltYear) ?? 0);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text("Built By:", style: theme.textTheme.labelLarge),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TapRegion(
+                onTapOutside: (_) {
+                  _focusNode2.unfocus();
+                  if (_textFieldValue2 != null) {
+                    structure.setBuiltBy(history, _textFieldValue2!.emptyToNull());
+                  }
+                },
+                child: TextField(
+                  focusNode: _focusNode2,
+                  controller: TextEditingController(text: structure.builtBy ?? ""),
+                  onChanged: (newBuiltBy) {
+                    _textFieldValue2 = newBuiltBy;
+                  },
+                  onSubmitted: (newBuiltBy) {
+                    structure.setBuiltBy(history, newBuiltBy.emptyToNull());
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text("Destroyed Year:", style: theme.textTheme.labelLarge),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TapRegion(
+                onTapOutside: (_) {
+                  _focusNode3.unfocus();
+                  if (_textFieldValue3 != null) {
+                    structure.setDestroyedYear(history, int.tryParse(_textFieldValue3!) ?? 0);
+                  }
+                },
+                child: TextField(
+                  focusNode: _focusNode3,
+                  controller: TextEditingController(
+                      text: structure.destroyedYear?.toString() ?? ""),
+                  keyboardType: TextInputType.number,
+                  onChanged: (newDestroyedYear) {
+                    _textFieldValue3 = newDestroyedYear;
+                  },
+                  onSubmitted: (newDestroyedYear) {
+                    structure.setDestroyedYear(
+                        history, int.tryParse(newDestroyedYear) ?? 0);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text("Destroyed By:", style: theme.textTheme.labelLarge),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TapRegion(
+                onTapOutside: (_) {
+                  _focusNode4.unfocus();
+                  if (_textFieldValue4 != null) {
+                    structure.setDestroyedBy(history, _textFieldValue4!.emptyToNull());
+                  }
+                },
+                child: TextField(
+                  focusNode: _focusNode4,
+                  controller: TextEditingController(
+                      text: structure.destroyedBy ?? ""),
+                  onChanged: (newDestroyedBy) {
+                    _textFieldValue4 = newDestroyedBy;
+                  },
+                  onSubmitted: (newDestroyedBy) {
+                    structure.setDestroyedBy(history, newDestroyedBy.emptyToNull());
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text("Image URL:", style: theme.textTheme.labelLarge),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TapRegion(
+                onTapOutside: (_) {
+                  _focusNode5.unfocus();
+                  if (_textFieldValue5 != null) {
+                    structure.setImageURL(history, _textFieldValue5!.isEmpty ? null : Uri.tryParse(_textFieldValue5!));
+                  }
+                },
+                child: TextField(
+                  focusNode: _focusNode5,
+                  controller: TextEditingController(text: structure.imageURL?.toString() ?? ""),
+                  onChanged: (newImageURL) {
+                    _textFieldValue5 = newImageURL;
+                  },
+                  onSubmitted: (newImageURL) {
+                    structure.setImageURL(history, newImageURL.isEmpty ? null : Uri.tryParse(newImageURL));
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
