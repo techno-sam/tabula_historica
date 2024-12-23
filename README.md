@@ -1,16 +1,9 @@
-# tabula_historica
+# Tabula Historica
+![Build status](https://github.com/techno-sam/tabula_historica/actions/workflows/gh-pages.yml/badge.svg)
+[![Static Badge](https://img.shields.io/badge/license-GPLv3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html#license-text)
 
-A new Flutter project.
+A timeline map of the city of Rome.
 
-## Getting Started
+Senior year first semester Latin final.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Open in browser](https://techno-sam.github.io/tabula_historica/)

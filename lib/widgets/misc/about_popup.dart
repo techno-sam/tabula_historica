@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void showAboutPopup(BuildContext context) {
   showAboutDialog(
@@ -57,6 +58,20 @@ class _AboutContents extends StatelessWidget {
         Text("Drag to pan", style: theme.textTheme.bodyLarge,),
         Text("Click any label to view more information", style: theme.textTheme.bodyLarge,),
         Text("Scrub the timeline to view different time periods", style: theme.textTheme.bodyLarge,),
+        const Center(
+          child: SizedBox(
+            width: 64,
+            child: Divider(),
+          ),
+        ),
+        Center(
+          child: OutlinedButton(
+            onPressed: () {
+              launchUrl(Uri.parse("https://github.com/techno-sam/tabula_historica"));
+            },
+            child: const Text("View Source"),
+          ),
+        )
       ],
     );
   }
