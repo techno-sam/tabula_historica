@@ -17,42 +17,14 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:focus_debugger/focus_debugger.dart';
 import 'package:provider/provider.dart';
-import 'package:tabula_historica/logger.dart';
 
 import 'screens/transform_playground.dart';
 import 'screens/map_screen.dart';
 import 'screens/rdp_drawing_screen.dart';
 import 'backend/backend.dart' as backend;
 
-void initFocusDebug() {
-  FocusDebugger.instance.activate();
-  FocusManager.instance.addListener(() {
-    final focused = FocusManager.instance.primaryFocus;
-    if (focused == null) return;
-    String info = "Focused: ${focused.debugLabel} Widget: ${focused.context?.widget}";
-    focused.context?.visitAncestorElements((element) {
-      info += "\nAncestor: ${element.widget}";
-      return false;
-    });
-    int visitedChildren = 0;
-    focused.context?.visitChildElements((element) {
-      if (visitedChildren == 0) {
-        info += "\nChildren:";
-      }
-      if (visitedChildren++ < 5) {
-        info += "\n\t${element.widget}";
-      }
-    });
-    logger.d(info);
-  });
-}
-
 void main() {
-  /*if (kDebugMode) {
-    initFocusDebug();
-  }*/
   runApp(const MyApp());
 }
 

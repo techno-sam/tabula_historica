@@ -38,22 +38,24 @@ class ProjectProvider extends SingleChildStatefulWidget {
 class _ProjectProviderState extends SingleChildState<ProjectProvider> {
 
   late Project? _project;
-  late AsyncTimer _saveTimer;
+  late AsyncTimer? _saveTimer;
 
   @override
   void initState() {
     super.initState();
     _project = Project.load(widget.rootDir);
-    _saveTimer = AsyncTimer(const Duration(seconds: 5), (_) async {
-      if (_project!.needsSave) {
-        await _project!.save();
-      }
-    });
+    if (!_project!.fromStaticAsset) {
+      _saveTimer = AsyncTimer(const Duration(seconds: 5), (_) async {
+        if (_project!.needsSave) {
+          await _project!.save();
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
-    _saveTimer.cancel();
+    _saveTimer?.cancel();
     if (_project!.needsSave) {
       _project!.save();
     }

@@ -272,13 +272,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  focus_debugger:
-    dependency: "direct main"
-    description:
-      path: "../focus_debugger"
-      relative: true
-    source: path
-    version: "0.0.2"
   glob:
     dependency: transitive
     description:
@@ -612,7 +605,7 @@ packages:
     source: hosted
     version: "4.5.1"
   vector_graphics:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: vector_graphics
       sha256: "27d5fefe86fb9aace4a9f8375b56b3c292b64d8c04510df230f849850d912cb7"
@@ -628,7 +621,7 @@ packages:
     source: hosted
     version: "1.1.12"
   vector_graphics_compiler:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: vector_graphics_compiler
       sha256: "1b4b9e706a10294258727674a340ae0d6e64a7231980f9f9a3d12e4b42407aad"

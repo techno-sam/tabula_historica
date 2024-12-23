@@ -22,6 +22,7 @@ import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vector_graphics/vector_graphics.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -63,32 +64,32 @@ class MultiLODMap extends StatelessWidget {
           const _ToolSelectionProvider(),
           const HistoryKeyHandler(),
         ],
-        child: Stack(
+        child: const Stack(
           children: [
             _MapController(
               child: Stack(
                   children: [
-                    const MapGridPaper(
+                    MapGridPaper(
                       originOffset: Offset(48.75, -618),
                     ),
                     /******************************/
                     /* Surface positioned widgets */
                     /******************************/
-                    const AllReferences(),
+                    AllReferences(),
                     MapSurfacePositioned(
                       x: 111,
                       y: -549.75,
                       baseScale: 0.75,
-                      child: SvgPicture.file(
-                        File("/home/sam/Documents/0_latin_map_project/z_topo_mapping/topo_only.svg"),
+                      child: SvgPicture(
+                        AssetBytesLoader("static/topo_only.svg.vec"),
                         // width: 3380,
                       ),
                     ),
-                    const AllStructures(),
+                    AllStructures(),
                     /***************/
                     /* UI elements */
                     /***************/
-                    const Positioned(
+                    Positioned(
                       top: 4,
                       right: 4,
                       child: Column(
@@ -103,9 +104,9 @@ class MultiLODMap extends StatelessWidget {
                   ]
               ),
             ),
-            const ReferenceSidebar(),
-            const StructureSidebar(),
-            const StructureInfoCardDebugDisplay(),
+            ReferenceSidebar(),
+            StructureSidebar(),
+            StructureInfoCardDebugDisplay(),
           ],
         ),
       ),

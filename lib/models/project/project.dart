@@ -22,6 +22,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 
 import '../../extensions/iterables.dart';
@@ -174,6 +175,7 @@ class StructureList extends ReorderableListModel<Structure> {
 
 class Project implements NeedsSave {
   final Directory root;
+  final bool fromStaticAsset;
   final ReferenceList references;
   final StructureList structures;
   late final HistoryManager historyManager;
@@ -185,7 +187,8 @@ class Project implements NeedsSave {
     required this.root,
     List<Reference>? references,
     List<Structure>? structures,
-    HistoryManager? historyManager
+    HistoryManager? historyManager,
+    required this.fromStaticAsset
   }): references = ReferenceList(references), structures = StructureList(structures) {
     this.historyManager = historyManager ?? HistoryManager(getProject: () => this);
   }
@@ -194,13 +197,17 @@ class Project implements NeedsSave {
     logger.d("Loading project from $root");
     File file = File("${root.path}/project.json");
     if (!file.existsSync()) {
-      return Project._(root: root);
+      return Project._(root: root, fromStaticAsset: false);
     }
 
-    return Project._fromJson(root, jsonDecode(file.readAsStringSync()));
+    return Project._fromJson(root, jsonDecode(file.readAsStringSync()), false);
   }
 
-  factory Project._fromJson(Directory root, Map<String, dynamic> json) {
+  Future<Project> loadFromAssets() async {
+    return Project._fromJson(Directory(""), jsonDecode(await rootBundle.loadString("assets/project.json")), true);
+  }
+
+  factory Project._fromJson(Directory root, Map<String, dynamic> json, bool fromStaticAsset) {
     final tmp = <Project?>[null];
     LoadingContext ctx = LoadingContext(
       getProject: () => tmp[0]!,
@@ -211,7 +218,8 @@ class Project implements NeedsSave {
       root: root,
       references: json.mapSingle("references", (refs) => (refs as List).map((e) => Reference.fromJson(ctx, e)).toList()),
       structures: json.mapSingle("structures", (structs) => (structs as List).map((e) => Structure.fromJson(e)).toList()),
-      historyManager: json.mapSingle("historyManager", (hm) => HistoryManager.fromJson(ctx, hm))
+      historyManager: json.mapSingle("historyManager", (hm) => HistoryManager.fromJson(ctx, hm)),
+      fromStaticAsset: fromStaticAsset
     );
     tmp[0] = project;
     return project;
@@ -233,6 +241,9 @@ class Project implements NeedsSave {
   }
 
   Future<void> save() async {
+    if (fromStaticAsset) {
+      throw StateError("Cannot save a project loaded from assets");
+    }
     File file = File("${root.path}/project.json");
     await file.writeAsString(prettyEncoder.convert(toJson()));
     markClean();
