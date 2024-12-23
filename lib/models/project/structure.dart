@@ -325,7 +325,12 @@ class Structure with NeedsSave, ChangeNotifier {
     TimePeriod? timePeriod,
     TimePeriod? lastTimePeriod,
     Pen pen = Pen.building,
-    List<CompletedStroke>? strokes
+    List<CompletedStroke>? strokes,
+    int? builtYear,
+    String? builtBy,
+    int? destroyedYear,
+    String? destroyedBy,
+    Uri? imageURL,
   }):
         _pen = pen,
         _description = description,
@@ -333,7 +338,12 @@ class Structure with NeedsSave, ChangeNotifier {
         _lastTimePeriod = (lastTimePeriod ?? TimePeriod.earlyRepublic).max(timePeriod ?? TimePeriod.earlyRepublic),
         _title = title ?? "Unnamed Structure",
         uuid = uuid ?? const Uuid().v4(),
-        _strokes = strokes ?? [];
+        _strokes = strokes ?? [],
+        _builtYear = builtYear,
+        _builtBy = builtBy,
+        _destroyedYear = destroyedYear,
+        _destroyedBy = destroyedBy,
+        _imageURL = imageURL;
 
   factory Structure.fromJson(Map<String, dynamic> json) {
     return Structure(
@@ -343,7 +353,12 @@ class Structure with NeedsSave, ChangeNotifier {
       timePeriod: json.mapSingle("timePeriod", (tp) => TimePeriod.fromJson(tp)),
       lastTimePeriod: json.mapSingle("lastTimePeriod", (tp) => TimePeriod.fromJson(tp)),
       pen: Pen.fromJson(json["pen"]),
-      strokes: (json["strokes"] as List).map((e) => CompletedStroke.fromJson(e)).toList()
+      strokes: (json["strokes"] as List).map((e) => CompletedStroke.fromJson(e)).toList(),
+      builtYear: json["builtYear"],
+      builtBy: json["builtBy"],
+      destroyedYear: json["destroyedYear"],
+      destroyedBy: json["destroyedBy"],
+      imageURL: json.mapSingle<Uri?>("imageURL", (url) => Uri.tryParse(url)),
     );
   }
 
@@ -355,7 +370,12 @@ class Structure with NeedsSave, ChangeNotifier {
       "timePeriod": _timePeriod.toJson(),
       "lastTimePeriod": _lastTimePeriod.toJson(),
       "pen": _pen.toJson(),
-      "strokes": _strokes.map((e) => e.toJson()).toList()
+      "strokes": _strokes.map((e) => e.toJson()).toList(),
+      "builtYear": _builtYear,
+      "builtBy": _builtBy,
+      "destroyedYear": _destroyedYear,
+      "destroyedBy": _destroyedBy,
+      "imageURL": _imageURL?.toString(),
     };
   }
 
