@@ -18,21 +18,52 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabula_historica/models/tools/structures_state.dart';
+import 'package:tabula_historica/models/structure_info_selection.dart';
 
 import '../../../extensions/color_manipulation.dart';
 import '../../../extensions/numeric.dart';
 import '../../../models/project/structure.dart';
 import '../../../models/tools/tool_selection.dart';
+import '../../../models/tools/structures_state.dart';
 import '../../misc/smart_image.dart';
 
 class StructureInfoCard extends StatelessWidget {
-  const StructureInfoCard({super.key});
+  final bool closeButton;
+
+  const StructureInfoCard({super.key, this.closeButton = false});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final structure = context.watch<Structure>();
+
+    Widget title;
+    if (closeButton) {
+      title = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Center(
+              child: Text(
+                structure.titleForDisplayNoSubtitle,
+                style: theme.textTheme.titleLarge,
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              StructureInfoSelection.of(context, listen: false).selectedStructure = null;
+            },
+          ),
+        ],
+      );
+    } else {
+      title = Text(
+        structure.titleForDisplayNoSubtitle,
+        style: theme.textTheme.titleLarge,
+      );
+    }
 
     return SizedBox(
       width: 350.0,
@@ -51,10 +82,7 @@ class StructureInfoCard extends StatelessWidget {
               vertical: 4.0, horizontal: 8.0),
           child: Column(
             children: [
-              Text(
-                structure.titleForDisplayNoSubtitle,
-                style: theme.textTheme.titleLarge,
-              ),
+              title,
               if (structure.titleForDisplaySubtitle != null)
                 Text(
                   structure.titleForDisplaySubtitle!,
@@ -149,6 +177,24 @@ class StructureInfoCardDebugDisplay extends StatelessWidget {
         value: selected,
         child: const StructureInfoCard(),
       ),
+    );
+  }
+}
+
+class StructureInfoCardDisplay extends StatelessWidget {
+  const StructureInfoCardDisplay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selection = StructureInfoSelection.of(context);
+
+    if (selection.selectedStructure == null) {
+      return const SizedBox.shrink();
+    }
+
+    return ChangeNotifierProvider.value(
+      value: selection.selectedStructure!,
+      child: const StructureInfoCard(closeButton: true),
     );
   }
 }

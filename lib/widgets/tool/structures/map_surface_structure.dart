@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' hide Point;
 import 'package:provider/provider.dart';
 import 'package:tabula_historica/extensions/color_manipulation.dart';
+import 'package:tabula_historica/models/structure_info_selection.dart';
 import 'package:tabula_historica/widgets/map/widgets/map_surface_positioned.dart';
 
 import '../../../extensions/pointer_event.dart';
@@ -32,7 +33,8 @@ import '../../map/flutter_map/map_camera.dart';
 import '../../map/flutter_map/extensions/point.dart';
 
 class MapSurfaceStructureLabel extends StatelessWidget {
-  const MapSurfaceStructureLabel({super.key});
+  final bool infoButton;
+  const MapSurfaceStructureLabel({super.key, this.infoButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -55,31 +57,44 @@ class MapSurfaceStructureLabel extends StatelessWidget {
       position = structure.fullBounds.topCenter - const Offset(0, 2);
     }
 
+    final contents = Padding(
+      padding: const EdgeInsets.symmetric(
+          vertical: 4.0, horizontal: 8.0),
+      child: Text(
+        structure.titleForDisplayNoSubtitle,
+        style: theme.textTheme.labelLarge,
+      ),
+    );
+
+    final card = Card.outlined(
+      color: theme.colorScheme.surfaceContainerLowest,
+      // black outline
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        side: BorderSide(
+          color: theme.colorScheme.surfaceContainerLowest.invert(),
+          width: 1.0,
+        ),
+      ),
+      child: infoButton ?
+      InkWell(
+        onTap: () {
+          StructureInfoSelection.of(context, listen: false).selectedStructure = structure;
+        },
+        borderRadius: BorderRadius.circular(8.0),
+        child: contents,
+      ) :
+      contents,
+    );
+
     return MapSurfacePositioned(
       x: position.dx,
       y: position.dy,
       baseScale: 0.25,
-      child: IgnorePointer(
-        child: Card.outlined(
-          color: theme.colorScheme.surfaceContainerLowest,
-          // black outline
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            side: BorderSide(
-              color: theme.colorScheme.surfaceContainerLowest.invert(),
-              width: 1.0,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: 4.0, horizontal: 8.0),
-            child: Text(
-              structure.titleForDisplayNoSubtitle,
-              style: theme.textTheme.labelLarge,
-            ),
-          ),
-        ),
-      ),
+      halfHeight: 20,
+      // determine halfWidth based on length of title
+      halfWidth: 20 + structure.titleForDisplayNoSubtitle.length * 4,
+      child: infoButton ? card : IgnorePointer(child: card),
     );
   }
 }
@@ -167,6 +182,28 @@ class MapSurfaceStructure extends StatelessWidget {
       );
     }
     return selected ? out : IgnorePointer(child: out,);
+  }
+}
+
+class StaticMapSurfaceStructure extends StatelessWidget {
+  const StaticMapSurfaceStructure({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final camera = MapCamera.of(context);
+    final structure = context.watch<Structure>();
+
+    return SizedBox.expand(
+      child: CustomPaint(
+        painter: _MapSurfaceStructurePainter(
+          pen: structure.pen,
+          strokes: structure.strokes,
+          currentStroke: structure.currentStroke,
+          selected: false,
+          camera: camera,
+        ),
+      ),
+    );
   }
 }
 

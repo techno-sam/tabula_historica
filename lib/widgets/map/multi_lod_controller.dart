@@ -60,7 +60,7 @@ class _MapController extends SingleChildStatelessWidget {
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
     final camera = MapCamera.of(context, listen: false);
-    final toolSelection = ToolSelection.of(context, listen: false);
+    final toolSelection = ToolSelection.maybeOf(context, listen: false);
 
     final List<Offset> communicatedCenter = [const Offset(0, 0)];
 
@@ -75,7 +75,7 @@ class _MapController extends SingleChildStatelessWidget {
         },
         onPointerMove: (details) {
           communicatedCenter[0] = details.localPosition;
-          if (details.down && (toolSelection.selectedTool == Tool.pan ||
+          if (details.down && ((toolSelection?.selectedTool ?? Tool.pan) == Tool.pan ||
               details.matches(primary: false, secondary: true))) {
             double unadjustedScale = pow(2, camera.zoom).toDouble();
             Point<double> offset = Point(

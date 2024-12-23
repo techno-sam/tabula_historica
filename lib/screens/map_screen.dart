@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tabula_historica/extensions/color_manipulation.dart';
+import 'package:tabula_historica/widgets/misc/about_popup.dart';
 import 'package:tabula_historica/widgets/providers/keyboard_event.dart';
 import '../widgets/map/multi_lod.dart';
 
@@ -37,6 +38,26 @@ class MapScreen extends StatelessWidget {
       ),*/
       backgroundColor: const Color(0xFFFCF5E5).lighten(0.025), // parchment
       body: const KeyboardEventProvider(child: MultiLODMap()),
+    );
+  }
+}
+
+class DisplayMapScreen extends StatelessWidget {
+  const DisplayMapScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // final theme = Theme.of(context);
+
+    return Scaffold(
+      /*appBar: AppBar(
+        backgroundColor: theme.colorScheme.secondary,
+        title: const Text('Demo Map'),
+      ),*/
+      backgroundColor: const Color(0xFFFCF5E5).lighten(0.025), // parchment
+      body: const AboutPopupShower(child: AssetBasedMap()),
     );
   }
 }

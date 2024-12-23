@@ -31,8 +31,18 @@ class MapSurfacePositioned extends StatelessWidget {
   final double baseScale;
   /// The widget to position.
   final Widget child;
+  final double halfWidth;
+  final double halfHeight;
 
-  const MapSurfacePositioned({super.key, required this.x, required this.y, required this.baseScale, required this.child});
+  const MapSurfacePositioned({
+    super.key,
+    required this.x,
+    required this.y,
+    required this.baseScale,
+    required this.child,
+    this.halfWidth = 50,
+    this.halfHeight = 50,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,17 +51,17 @@ class MapSurfacePositioned extends StatelessWidget {
     final projected = camera.getOffset(Point(x, y));
     final scale = baseScale * pow(2, camera.zoom).toDouble() / 32;
 
-    const double halfSize = 50;
-    final double scaledHalfSize = halfSize * scale;
+    final double scaledHalfWidth = halfWidth * scale;
+    final double scaledHalfHeight = halfHeight * scale;
 
     return Positioned(
-      left: projected.x - scaledHalfSize,
-      top: projected.y - scaledHalfSize,
-      child: Container(
-        color: Colors.transparent,//Colors.lightBlueAccent.withValues(alpha: 0.2),
+      left: projected.x - scaledHalfWidth,
+      top: projected.y - scaledHalfHeight,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         child: SizedBox(
-          width: scaledHalfSize*2,
-          height: scaledHalfSize*2,
+          width: scaledHalfWidth*2,
+          height: scaledHalfHeight*2,
           child: Align(
             alignment: Alignment.center,
             child: OverflowBox(

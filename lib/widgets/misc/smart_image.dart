@@ -136,6 +136,7 @@ Future<Image> _fetchWikimediaImage(String fileInfoUrl, {double? width, double? h
       'prop': 'imageinfo',
       'iiprop': 'url|size',
       'format': 'json',
+      'origin': '*',
       if (width != null) 'iiurlwidth': width.toInt().toString(),
       if (width == null && height != null) 'iiurlheight': height.toInt().toString(),
     };

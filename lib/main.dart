@@ -24,6 +24,8 @@ import 'screens/map_screen.dart';
 import 'screens/rdp_drawing_screen.dart';
 import 'backend/backend.dart' as backend;
 
+const bool displayMode = true;
+
 void main() {
   runApp(const MyApp());
 }
@@ -60,7 +62,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MapScreen(),
+      home: displayMode ? const DisplayMapScreen() : const MapScreen(),
     );
   }
 }

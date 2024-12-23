@@ -92,6 +92,14 @@ enum Pen {
   road(Icons.add_road, color: Color(0xFF607D8B)),
   walls(Icons.security_outlined, color: Color(0xFF393939)),
   ;
+
+  static const List<Pen> displayValues = [
+    building,
+    aqueduct,
+    road,
+    walls
+  ];
+
   final IconData icon;
   final Color color;
   final double _streamline;

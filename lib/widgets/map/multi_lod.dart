@@ -27,6 +27,12 @@ import 'package:vector_graphics/vector_graphics.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../../models/timeline.dart';
+import '../misc/about_button.dart';
+import '../tool/structures/pen_key.dart';
+import '../../models/project/structure.dart';
+import '../../models/structure_info_selection.dart';
+import '../misc/timeline.dart';
 import 'map_grid_paper.dart';
 import '../project/all_structures.dart';
 import '../tool/structures/structure_info_card.dart';
@@ -111,6 +117,177 @@ class MultiLODMap extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AssetBasedMap extends StatelessWidget {
+  const AssetBasedMap({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: MultiProvider(
+        providers: const [
+          AssetBasedProjectProvider(),
+          _CameraProvider(),
+          _TimelineProvider(minYear: -550, maxYear: 150),
+          _StructureInfoSelectionProvider(),
+        ],
+        child: const Stack(
+          children: [
+            _MapController(
+              child: Stack(
+                children: [
+                  MapGridPaper(
+                    originOffset: Offset(48.75, -618),
+                  ),
+                  /******************************/
+                  /* Surface positioned widgets */
+                  /******************************/
+                  MapSurfacePositioned(
+                    x: 111,
+                    y: -549.75,
+                    baseScale: 0.75,
+                    child: SvgPicture(
+                      AssetBytesLoader("static/topo_only.svg.vec"),
+                      // width: 3380,
+                    ),
+                  ),
+                  AllStaticStructures(),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
+                child: TimelineCard(),
+              ),
+            ),
+            Positioned(
+              bottom: 4.0,
+              right: 4.0,
+              child: StructureInfoCardDisplay(),
+            ),
+            Positioned(
+              bottom: 4.0,
+              left: 4.0,
+              child: PenKey(
+                extraWidgets: [
+                  AboutButton(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      )
+    );
+  }
+}
+
+
+class _TimelineProvider extends SingleChildStatefulWidget {
+  final int minYear;
+  final int maxYear;
+
+  const _TimelineProvider({required this.minYear, required this.maxYear});
+
+  @override
+  State<_TimelineProvider> createState() => _TimelineProviderState();
+}
+
+class _TimelineProviderState extends SingleChildState<_TimelineProvider> {
+  late final Timeline _timeline;
+
+  void _onTimelineInitialized() {
+    _timeline.addListener(_onTimelineUpdate);
+  }
+
+  void _onTimelineUpdate() {
+    PageStorage.maybeOf(context)?.writeState(
+        context,
+        _timeline.selectedYear,
+        identifier: const ValueKey('TimelineProvider#selectedYear')
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    int selectedYear = (PageStorage.maybeOf(context)?.readState(
+        context,
+        identifier: const ValueKey('TimelineProvider#selectedYear')
+    ) as int?) ?? widget.minYear;
+    _timeline = Timeline(
+      minYear: widget.minYear,
+      maxYear: widget.maxYear,
+      selectedYear: selectedYear,
+    );
+    _onTimelineInitialized();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timeline.dispose();
+  }
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget? child) {
+    return ChangeNotifierProvider.value(value: _timeline, child: child);
+  }
+}
+
+
+class _StructureInfoSelectionProvider extends SingleChildStatefulWidget {
+  const _StructureInfoSelectionProvider();
+
+  @override
+  State<_StructureInfoSelectionProvider> createState() => _StructureInfoSelectionProviderState();
+}
+
+class _StructureInfoSelectionProviderState extends SingleChildState<_StructureInfoSelectionProvider> {
+  late final StructureInfoSelection _structureInfoSelection;
+
+  void _onStructureInfoSelectionInitialized() {
+    _structureInfoSelection.addListener(_onStructureInfoSelectionUpdate);
+  }
+
+  void _onStructureInfoSelectionUpdate() {
+    PageStorage.maybeOf(context)?.writeState(
+        context,
+        _structureInfoSelection.selectedStructure?.uuid,
+        identifier: const ValueKey('StructureInfoSelectionProvider#selectedStructure')
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    String? selectedUUID = PageStorage.maybeOf(context)?.readState(
+        context,
+        identifier: const ValueKey('StructureInfoSelectionProvider#selectedStructure')
+    );
+    Structure? selectedStructure = selectedUUID == null
+        ? null
+        : context.read<Project>().getStructure(selectedUUID);
+    _structureInfoSelection = StructureInfoSelection(
+      selectedStructure: selectedStructure,
+    );
+    _onStructureInfoSelectionInitialized();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _structureInfoSelection.dispose();
+  }
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget? child) {
+    return ChangeNotifierProvider.value(value: _structureInfoSelection, child: child);
   }
 }
 

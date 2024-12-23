@@ -112,6 +112,14 @@ class ToolSelection extends ChangeNotifier with KeyedChangeNotifier {
   static ToolSelection of(BuildContext context, {bool listen = true}) {
     return Provider.of(context, listen: listen);
   }
+
+  static ToolSelection? maybeOf(BuildContext context, {bool listen = true}) {
+    try {
+      return Provider.of(context, listen: listen);
+    } on ProviderNotFoundException {
+      return null;
+    }
+  }
 }
 
 class ToolSelectionSnapshot {

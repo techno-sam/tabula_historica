@@ -203,8 +203,8 @@ class Project implements NeedsSave {
     return Project._fromJson(root, jsonDecode(file.readAsStringSync()), false);
   }
 
-  Future<Project> loadFromAssets() async {
-    return Project._fromJson(Directory(""), jsonDecode(await rootBundle.loadString("assets/project.json")), true);
+  static Future<Project> loadFromAssets() async {
+    return Project._fromJson(Directory(""), jsonDecode(await rootBundle.loadString("static/static-project.json")), true);
   }
 
   factory Project._fromJson(Directory root, Map<String, dynamic> json, bool fromStaticAsset) {

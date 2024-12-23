@@ -94,7 +94,7 @@ class _WidthButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _PenPreview(width: width),
+              PenPreview(width: width),
               const SizedBox(width: 8),
               Text(
                 width.toString().split('.').last.splitCamelCase().toTitleCase(),
@@ -107,18 +107,25 @@ class _WidthButton extends StatelessWidget {
   }
 }
 
-class _PenPreview extends StatelessWidget {
+class PenPreview extends StatelessWidget {
   final Width width;
+  final Color color;
+  final double size;
 
-  const _PenPreview({required this.width});
+  const PenPreview({
+    super.key,
+    required this.width,
+    this.color = Colors.black,
+    this.size = 36
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 36,
-      height: 36,
+      width: size,
+      height: size,
       child: CustomPaint(
-        painter: _PenPreviewPainter(width: width),
+        painter: _PenPreviewPainter(width: width, color: color),
       ),
     );
   }
@@ -126,13 +133,14 @@ class _PenPreview extends StatelessWidget {
 
 class _PenPreviewPainter extends CustomPainter {
   final Width width;
+  final Color color;
 
-  _PenPreviewPainter({required this.width});
+  _PenPreviewPainter({required this.width, required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black;
+      ..color = color;
 
     const extraScale = 2.5;
     const margin = 0.15;
