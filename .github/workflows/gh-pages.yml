@@ -28,7 +28,7 @@ jobs:
         run: flutter pub get
 
       - name: Build
-        run: flutter build web --release
+        run: flutter build web --release --base-href /tabula_historica/
 
       - name: Upload as Artifact
         id: deployment
