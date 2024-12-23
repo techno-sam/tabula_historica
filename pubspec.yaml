@@ -57,6 +57,7 @@ dependencies:
   dotted_border: ^2.1.0
   flutter_svg: ^2.0.16
   vector_graphics: ^1.1.15
+  web: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,7 @@ flutter:
   assets:
     - static/topo_only.svg.vec
     - static/static-project.json
+    - web/icons/Icon-192.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

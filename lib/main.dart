@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,17 @@ import 'backend/backend.dart' as backend;
 const bool displayMode = true;
 
 void main() {
+  // add license
+  LicenseRegistry.addLicense(() async* {
+    yield const LicenseEntryWithLineBreaks(
+      ["flaticon"],
+      '''
+      Medieval icons created by max.icons - Flaticon
+
+      https://www.flaticon.com/free-icons/medieval
+      '''
+    );
+  });
   runApp(const MyApp());
 }
 
@@ -37,7 +49,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Tabula Historica',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.

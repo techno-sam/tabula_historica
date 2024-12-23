@@ -25,6 +25,11 @@ void showAboutPopup(BuildContext context) {
   showAboutDialog(
     context: context,
     applicationName: "Tabula Historica",
+    applicationIcon: Image.asset(
+      "web/icons/Icon-192.png",
+      width: 32,
+      height: 32,
+    ),
     children: const [
       _AboutContents(),
     ]

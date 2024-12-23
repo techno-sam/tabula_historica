@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:tabula_historica/extensions/color_manipulation.dart';
+import 'package:tabula_historica/util/splash_control.dart';
 
 import '../../util/async_timer.dart';
 import '../../models/project/project.dart';
@@ -125,6 +126,7 @@ class _AssetBasedProjectProviderState extends SingleChildState<AssetBasedProject
         future: _project,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            getSplashControl().sendSplashClearEvent();
             if (snapshot.hasError) {
               return Center(
                 child: Column(
